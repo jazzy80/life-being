@@ -21,7 +21,7 @@ if (get_the_title() === "Life being Inspirations") {
 			<li><a href="#">Link 5</a></li>
 			</ul>
 	</div>
-	EOL;
+EOL;
 }
 ?>
 <div class="entry-content">
@@ -50,4 +50,4 @@ if (get_the_title() === "Life being Inspirations") {
 	?>
 </div><!-- .entry-content -->
 
-<script src="/life-being/scripts/dist/app.js"></script>
+<script src="/scripts/dist/app.js"></script>

@@ -3,37 +3,38 @@ export function setUpSlideShow(
     header: HTMLDivElement,
     prevButton: HTMLButtonElement,
     nextButton: HTMLButtonElement,
-    files: String[]
+    images: HTMLImageElement[]
   ): void
   {
 
-    if (files.length == 0) return;
-    if (files.length == 1) {
+    console.log(images);
+    if (images.length == 0) return;
+    if (images.length == 1) {
       prevButton.style.display = 'none';
       nextButton.style.display = 'none';
-      setImage(header, files[0]);
+      setImage(header, images[0]);
     }
     else {
-      resetSlideShow(header, files);
+      resetSlideShow(header, images);
       let index = 0;
       prevButton.addEventListener('click', () => {
-        if (index == 0) index = files.length - 1;
+        if (index == 0) index = images.length - 1;
         else --index;
-        setImage(header, files[index]);
+        setImage(header, images[index]);
       });
 
       nextButton.addEventListener('click', () => {
-        if (index == files.length - 1) index = 0;
+        if (index == images.length - 1) index = 0;
         else ++index;
-        setImage(header, files[index]);
+        setImage(header, images[index]);
       });
     }
 };
 
-function resetSlideShow(header: HTMLDivElement, files: String[]): void {
-  header.style.backgroundImage = `url(/life-being/${files[0]}`;
+function resetSlideShow(header: HTMLDivElement, images: HTMLImageElement[]): void {
+  header.style.backgroundImage = `url(${images[0].src}`;
 }
 
-function setImage(header: HTMLDivElement, file: String): void {
-  header.style.backgroundImage = `url(/life-being/${file})`;
+function setImage(header: HTMLDivElement, image: HTMLImageElement): void {
+  header.style.backgroundImage = `url(${image.src})`;
 }

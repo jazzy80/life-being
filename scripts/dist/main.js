@@ -5,8 +5,12 @@ var header = document.querySelector('.header');
 var prevButton = document.querySelector('.prev-button');
 var nextButton = document.querySelector('.next-button');
 var page = window.location.href.split('/')[4] || 'home';
-var files = fetch("/life-being/gallery/?page=".concat(page));
+var files = fetch("/gallery/?page=" + page);
 files.then(function (resp) { return resp.json(); }).then(function (json) {
     if (header && prevButton && nextButton)
-        (0, slideshow_1.setUpSlideShow)(header, prevButton, nextButton, json.imageFiles);
+        slideshow_1.setUpSlideShow(header, prevButton, nextButton, json.imageFiles.map(function (f) {
+            var image = new Image();
+            image.src = f;
+            return image;
+        }));
 });

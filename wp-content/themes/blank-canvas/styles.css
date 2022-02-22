@@ -37,9 +37,6 @@ body {
 .header {
   display: flex;
   flex-direction: column;
-
-  /* background-image: url(../resources/IMG_3569.JPG); */
-
   background-size: cover;
   background-position: 0 39%;
   background-repeat: no-repeat;
