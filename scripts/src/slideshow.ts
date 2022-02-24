@@ -49,7 +49,7 @@ export function setUpSlideShow(): void {
 // Wrapping the imageNames into a Image obj forces the browser to precache the images.
 function preCacheImage(image: string): HTMLImageElement {
         const prefetchImage = new Image;
-        prefetchImage.src = image;
+        prefetchImage.src = `/${image}`;
         return prefetchImage;
       }
 

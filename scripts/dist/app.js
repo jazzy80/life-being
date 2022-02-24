@@ -56,7 +56,7 @@ exports.setUpSlideShow = setUpSlideShow;
 // Wrapping the imageNames into a Image obj forces the browser to precache the images.
 function preCacheImage(image) {
     var prefetchImage = new Image;
-    prefetchImage.src = image;
+    prefetchImage.src = "/" + image;
     return prefetchImage;
 }
 // Initialize the gallery/slideshow with the first image

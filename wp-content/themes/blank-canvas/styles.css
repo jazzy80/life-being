@@ -2,7 +2,9 @@
   --title-color: #ddb737;
   --subtitle-color: #2f2a1c;
   --lower-navbar-color: #506536;
-  --lower-navbar-link-color: #fd90fd;
+  --lower-navbar-link-color: #c3b5c3;
+  --upper-navbar-link-underline-color: #e189cf;
+  --upper-navbar-background-color: rgba(255, 255, 255, 0.4);
 }
 
 html,
@@ -59,12 +61,14 @@ body {
 
 .nav-links > li > a {
   text-decoration: none;
+  font-size: 1.2rem;
   color: var(--lower-navbar-link-color);
+  border-bottom-color: var(--upper-navbar-link-underline-color);
 }
 
 .upper > li > a {
-  color: #fff;
-  text-decoration: underline;
+  color: #060505;
+  border-bottom-color: #0693e3;
 }
 
 .nav-links > li > a:hover {
@@ -72,7 +76,7 @@ body {
 }
 
 .upper-navbar {
-  background-color: rgba(255, 255, 255, 0);
+  background-color: var(--upper-navbar-background-color);
   margin: 0 1px;
 }
 
