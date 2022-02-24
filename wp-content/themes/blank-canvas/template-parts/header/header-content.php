@@ -15,24 +15,23 @@ $pagesWithUrl = array_reduce($mainPages, function($acc, $page){
 },
     []);
 ?>
-<div class="header">
-    <div class="navbar upper-navbar">
-      <ul class="nav-links upper">
-        <li><a href="#">Life Being Inspiration</a></li>
-        <li><a href="#">Being Child Illustrations</a></li>
-        <li><a href="#">Life Being Atelier</a></li>
-      </ul>
-    </div>
-    <div class="title-with-btns">
-      <button class="prev-button">Vorige</button>
-      <div class="titles">
-        <h1 class="title">Life Being</h1>
-        <h3 class="subtitle">Spirit of Being You</h3>
-      </div>
-      <button class="next-button">Volgende</button>
-    </div>
+<header class="header">
+  <div class="navbar upper-navbar">
+    <ul class="nav-links upper">
+      <li><a href="#">Life Being Inspiration</a></li>
+      <li><a href="#">Being Child Illustrations</a></li>
+      <li><a href="#">Life Being Atelier</a></li>
+    </ul>
   </div>
-  <div class="navbar">
+  <div class="title-with-btns">
+    <i class="fas fa-chevron-left prev-button"></i>
+    <div class="titles">
+      <h1 class="title">Life Being</h1>
+      <h3 class="subtitle">Spirit of Being You</h3>
+    </div>
+    <i class="fas fa-chevron-right next-button"></i>
+  </div>
+  <div class="navbar lower">
     <ul class="nav-links">
         <?php foreach ($pagesWithUrl as $title => $url){
         echo "<li><a href=" . $url . ">" . $title . "</a></li>";
@@ -40,3 +39,4 @@ $pagesWithUrl = array_reduce($mainPages, function($acc, $page){
         ?>
     </ul>
   </div>
+</header>

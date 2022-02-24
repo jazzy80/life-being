@@ -80,7 +80,7 @@ body {
   margin: 0 1px;
 }
 
-.upper {
+.navbar.upper {
   justify-content: space-between;
   padding: 0 20px;
   background-color: #d7c8c833;
@@ -89,9 +89,23 @@ body {
   height: 2rem;
 }
 
+.lower {
+  height: 2.5rem;
+}
+
 .prev-button,
 .next-button {
   align-self: center;
+  font-size: 33pt;
+  color: white;
+  cursor: pointer;
+  transition: all 333ms ease-in-out;
+}
+
+.prev-button:hover,
+.next-button:hover {
+  color: var(--lower-navbar-link-color);
+  transform: scale(1.1);
 }
 
 .title-with-btns {
