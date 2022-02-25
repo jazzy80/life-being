@@ -9,10 +9,10 @@
  */
 
 $show_post_and_page_titles = get_theme_mod( 'show_post_and_page_titles', false );
-if (get_the_title() === "Life being Inspirations") {
+if (strtolower(get_the_title()) === "life being inspirations") {
 	echo <<< EOL
 	<div class="sidebar">
-		<h4>Vitality</h4>
+		<h4 class="sidebar-title">Vitality</h4>
 		<ul>
 			<li><a href="#">Link 1</a></li>
 			<li><a href="#">Link 2</a></li>
@@ -21,7 +21,7 @@ if (get_the_title() === "Life being Inspirations") {
 			<li><a href="#">Link 5</a></li>
 			</ul>
 	</div>
-	EOL;
+EOL;
 }
 ?>
 <div class="entry-content">
@@ -50,4 +50,4 @@ if (get_the_title() === "Life being Inspirations") {
 	?>
 </div><!-- .entry-content -->
 
-<script src="/life-being/scripts/dist/app.js"></script>
+<script src="/scripts/dist/app.js"></script>
