@@ -27,4 +27,5 @@ resources/
 *.sql
 *.sqlite
 
-**/.htaccess
+.htaccess
+wp-config.php

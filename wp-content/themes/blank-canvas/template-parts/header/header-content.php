@@ -17,6 +17,9 @@ $pagesWithUrl = array_reduce($mainPages, function($acc, $page){
 ?>
 <header class="header">
   <div class="navbar upper-navbar">
+    <a href="/">
+      <object class="logo" data="/resources/heartscan2.svg" width="80" height="60"> </object>
+    </a>
     <ul class="nav-links upper">
       <li><a href="#">Life Being Inspiration</a></li>
       <li><a href="#">Being Child Illustrations</a></li>

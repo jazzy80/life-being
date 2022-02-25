@@ -12,7 +12,7 @@ $show_post_and_page_titles = get_theme_mod( 'show_post_and_page_titles', false )
 if (strtolower(get_the_title()) === "life being inspirations") {
 	echo <<< EOL
 	<div class="sidebar">
-		<h4 class="sidebar-title">Vitality</h4>
+		<h5 class="sidebar-title">Vitality</h4>
 		<ul>
 			<li><a href="#">Link 1</a></li>
 			<li><a href="#">Link 2</a></li>
