@@ -10,18 +10,15 @@
 
 $show_post_and_page_titles = get_theme_mod( 'show_post_and_page_titles', false );
 if (strtolower(get_the_title()) === "life being inspirations") {
-	echo <<< EOL
-	<div class="sidebar">
-		<h5 class="sidebar-title">Vitality</h4>
-		<ul>
-			<li><a href="#">Link 1</a></li>
-			<li><a href="#">Link 2</a></li>
-			<li><a href="#">Link 3</a></li>
-			<li><a href="#">Link 4</a></li>
-			<li><a href="#">Link 5</a></li>
-			</ul>
-	</div>
-EOL;
+	$child_pages = get_pages(['parent' => get_the_ID()]);
+	$output = '<div class="sidebar">
+		<h5 class="sidebar-title">Vitality</h5>
+		<ul>';
+	foreach ($child_pages as $page) {
+		$output .= '<li><a href="' . get_permalink($page) . '">' . $page -> post_title . '</a></li>';
+	}
+		$output .= '</ul></div>';
+		echo $output;
 }
 ?>
 <div class="entry-content">
