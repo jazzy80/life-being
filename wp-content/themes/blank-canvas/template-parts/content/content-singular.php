@@ -24,9 +24,10 @@ $show_post_and_page_titles = get_theme_mod( 'show_post_and_page_titles', false )
 $current_post = get_post();
 // life being inspirations is special, since it requires a sidebar
 // Retrieve its ID
-$life_being_insp_id = find_if(get_pages(), function($page) {
+$life_being_insp_page= find_if(get_pages(), function($page) {
 	return strtolower($page -> post_title) === LIFE_BEING_INSPR_TITLE;
-}) -> ID;
+});
+$life_being_insp_id = $life_being_insp_page ? $life_being_insp_page -> ID : null;
 // If current page is the life being inspirations page or a child of that page
 if (
 		$current_post -> ID === $life_being_insp_id ||

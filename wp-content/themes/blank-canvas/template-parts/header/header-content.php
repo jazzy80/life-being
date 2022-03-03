@@ -1,19 +1,11 @@
 <?php
+
+// Retrieve all published root(parent = null) pages, to set on navbar.
 $args = [
-    'post_status' => 'publish'
+    'post_status' => 'publish',
+    'parent' => 0
 ];
 $pages = get_pages($args);
-
-// MainPages are pages without a parent
-$mainPages = array_filter($pages, function($page) {
-    return $page -> post_parent == 0;
-});
-
-$pagesWithUrl = array_reduce($mainPages, function($acc, $page){
-    $acc[$page -> post_title] = get_permalink($page);
-    return $acc;
-},
-    []);
 ?>
 <header class="header">
   <div class="navbar upper-navbar">
@@ -34,8 +26,8 @@ $pagesWithUrl = array_reduce($mainPages, function($acc, $page){
   </div>
   <div class="navbar lower">
     <ul class="nav-links">
-        <?php foreach ($pagesWithUrl as $title => $url){
-        echo "<li><a href=" . $url . ">" . $title . "</a></li>";
+        <?php foreach ($pages as $page){
+        echo "<li><a href=" . get_permalink($page) . ">" . $page -> post_title . "</a></li>";
             }
         ?>
     </ul>
