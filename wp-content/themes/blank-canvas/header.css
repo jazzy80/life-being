@@ -1,9 +1,11 @@
+/* Common variables used throughout the page */
 :root {
-  --title-color: #fbd95a;
+  --title-color: #f7b500;
   --subtitle-color: #efefef;
   --lower-navbar-color: #506536;
   --lower-navbar-link-color: #c3b5c3;
-  --upper-navbar-link-underline-color: #e189cf;
+  --navbar-link-underline-color: #ca70a5;
+  --upper-navbar-link-color: #525a4a;
   --upper-navbar-background-color: rgba(255, 255, 255, 0.5);
 }
 
@@ -24,7 +26,7 @@ body {
   font-family: "Cinzel Decorative", sans-serif;
 }
 
-/* Title (life arts */
+/* Title (life-being)  */
 .title {
   text-shadow: 1px 3px 1px #2f2a1c;
   font-size: 50pt;
@@ -33,12 +35,12 @@ body {
   width: max-content;
 }
 
+/* svg-logo in top navbar */
 .logo {
   margin-left: 25%;
   z-index: 1;
 }
 
-/* Subtitle (arts of begin you) */
 .subtitle {
   text-align: center;
   color: var(--subtitle-color);
@@ -48,7 +50,7 @@ body {
   width: max-content;
 }
 
-/* Block for the complete header, navbars + titles */
+/* Block for the complete header = background image, navbars and titles */
 .header {
   position: relative;
   display: flex;
@@ -59,56 +61,7 @@ body {
   height: 310px;
 }
 
-/* Navbar beneath the header */
-.navbar {
-  display: flex;
-  background-color: var(--lower-navbar-color);
-  z-index: 1;
-}
-
-/* links in the lower navbar */
-.nav-links {
-  display: flex;
-  width: 100%;
-  justify-content: space-evenly;
-  align-items: center;
-  list-style: none;
-}
-
-.nav-links > li > a {
-  text-decoration: none;
-  font-size: 1rem;
-  color: var(--lower-navbar-link-color);
-  border-bottom-color: var(--upper-navbar-link-underline-color);
-}
-
-.upper {
-  justify-content: flex-end;
-}
-
-.upper > li {
-  margin: 0 1rem;
-}
-
-.upper > li > a {
-  color: #060505;
-  border-bottom-color: #0693e3;
-}
-
-.nav-links > li > a:hover {
-  color: var(--title-color);
-}
-
-.upper-navbar {
-  background-color: var(--upper-navbar-background-color);
-  margin: 0 1px;
-  justify-content: space-between;
-}
-
-.lower {
-  height: 2.5rem;
-}
-
+/* Gallery buttons */
 .prev-button,
 .next-button {
   align-self: center;
@@ -125,12 +78,14 @@ body {
   transform: scale(1.1);
 }
 
+/* Subcontainer with title and the gallery buttons */
 .title-with-btns {
   display: flex;
   margin: auto;
   width: 85%;
 }
 
+/* Dark overlay over background image, to improve contrast of titles */
 .header::after {
   content: '';
   position: absolute;
@@ -142,6 +97,7 @@ body {
   opacity: 0.3;
 }
 
+/* Mobile(small screen)-specific styles */
 @media screen and (max-width: 700px) {
   .title {
     font-size: 25pt;

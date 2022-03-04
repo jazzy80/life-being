@@ -8,7 +8,7 @@
   border-right: 1px #6969a5 solid;
 }
 
-.sidebar > ul {
+.sidebar ul {
   list-style: none;
   text-align: center;
   padding: 0 1rem;
@@ -19,20 +19,29 @@
   align-items: center;
 }
 
-.sidebar > ul > li {
+.sidebar-back-link li a {
+  margin-left: 0.5rem;
+}
+
+.sidebar ul li {
   margin-top: 1.6rem;
   transition: all 300ms ease-in-out;
 }
 
-.sidebar > ul > li > a {
+.sidebar ul li a {
   color: white;
 }
 
-.sidebar > ul > li > a:hover {
+.sidebar ul li a:hover {
   color: var(--title-color);
 }
 
 .sidebar-title {
   align-self: center;
   font-size: 1.2rem;
+}
+
+.sidebar-back-link {
+  display: flex;
+  align-items: baseline;
 }

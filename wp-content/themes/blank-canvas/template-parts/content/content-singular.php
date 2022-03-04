@@ -19,6 +19,12 @@ function find_if($arr, callable $p) {
 	return null;
 };
 
+function is_child_of($child, $parent) {
+	if ($child === null) return false;
+	return $child -> post_parent === $parent -> ID;
+}
+
+
 $show_post_and_page_titles = get_theme_mod( 'show_post_and_page_titles', false );
 // Get the current post/page
 $current_post = get_post();
@@ -31,16 +37,31 @@ $life_being_insp_id = $life_being_insp_page ? $life_being_insp_page -> ID : null
 // If current page is the life being inspirations page or a child of that page
 if (
 		$current_post -> ID === $life_being_insp_id ||
-		$current_post -> post_parent === $life_being_insp_id
+		is_child_of($current_post, $life_being_insp_page)
 	) {
-	// get child pages of life being inspirations
-	$child_pages = get_pages(['parent' => $life_being_insp_id]);
+	// Use menu items defined for life being inspirations submenu
+	$menus = wp_get_nav_menus();
+	$menu_items = [];
+	// If there are menus defined
+	if (sizeof($menus) > 0) {
+		// Get the menus, filter on life being inspirations submenu items
+	  $menu_items = array_filter(wp_get_nav_menu_items($menus[0]), function($item) use ($life_being_insp_page) {
+	    return is_child_of($item, $life_being_insp_page);
+	  });
+	}
 	// Use links of child pages to auto populare the sidebar.
 	$output = '<div class="sidebar">
 		<h5 class="sidebar-title">Vitality</h5>
 		<ul>';
-	foreach ($child_pages as $page) {
-		$output .= '<li><a href="' . get_permalink($page) . '">' . $page -> post_title . '</a></li>';
+	// create a backlink if on childpage of lif-being-inspirations
+	if ($current_post -> post_parent === $life_being_insp_id) {
+		$output .= '<span class="sidebar-back-link">';
+		$output .= '<i class="fas fa-angle-double-left"></i>';
+		$output .= '<li><a href="'. get_permalink($life_being_insp_page) . '">' .  'Terug' . '</a></li>';
+		$output .= '</span>';
+	}
+	foreach ($menu_items as $item) {
+		$output .= '<li><a href="' . $item -> url . '">' . $item -> title . '</a></li>';
 	}
 		$output .= '</ul></div>';
 		echo $output;

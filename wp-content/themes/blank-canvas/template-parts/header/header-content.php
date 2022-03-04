@@ -1,16 +1,18 @@
 <?php
 
-// Retrieve all published root(parent = null) pages, to set on navbar.
-$args = [
-    'post_status' => 'publish',
-    'parent' => 0
-];
-$pages = get_pages($args);
+// Retrieve all published menu items.
+$menus = wp_get_nav_menus();
+$menu_items = [];
+if (sizeof($menus) > 0) {
+  $menu_items = array_filter(wp_get_nav_menu_items($menus[0]), function($item) {
+    return $item -> post_parent == 0;
+  });
+}
 ?>
 <header class="header">
   <div class="navbar upper-navbar">
     <object class="logo" data="/resources/heartscan2.svg" width="60" height="40"> </object>
-    <ul class="nav-links upper">
+    <ul class="nav-links upper-navbar-links">
       <li><a href="#">Life Being Inspiration</a></li>
       <li><a href="#">Being Child Illustrations</a></li>
       <li><a href="#">Life Being Atelier</a></li>
@@ -24,10 +26,10 @@ $pages = get_pages($args);
     </div>
     <i class="fas fa-chevron-right next-button"></i>
   </div>
-  <div class="navbar lower">
-    <ul class="nav-links">
-        <?php foreach ($pages as $page){
-        echo "<li><a href=" . get_permalink($page) . ">" . $page -> post_title . "</a></li>";
+  <div class="navbar lower-navbar">
+    <ul class="nav-links lower-navbar-links">
+        <?php foreach ($menu_items as $item){
+        echo "<li><a href=" . $item -> url . ">" . $item -> title . "</a></li>";
             }
         ?>
     </ul>

@@ -54,15 +54,16 @@ https://github.com/googlefonts/noto-emoji/blob/master/svg/emoji_u1f354.svg
 Modified and used as a block pattern image.
 */
 
+@import "navbar.css";
 @import "variables.css";
-@import "styles.css";
+@import "header.css";
 @import "sidebarstyles.css";
 
 /* Remove extra margin from articles on single post pages. */
 
 .single .site-main > article,
 .page .site-main > article {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 /* Remove some top padding if the first block on the page is a full-width image, cover, media & text, or group block. */
@@ -75,7 +76,7 @@ Modified and used as a block pattern image.
 .page.hide-post-and-page-titles .entry-content > .wp-block-media-text.alignfull:first-child,
 .single.hide-post-and-page-titles .entry-content > .wp-block-group.has-background.alignfull:first-child,
 .page.hide-post-and-page-titles .entry-content > .wp-block-group.has-background.alignfull:first-child {
-	margin-top: calc(-1 * var(--global--spacing-vertical));
+  margin-top: calc(-1 * var(--global--spacing-vertical));
 }
 
 /* Remove some bottom padding if the last block on the page is a full-width image, cover, media & text, or group block. */
@@ -88,7 +89,7 @@ Modified and used as a block pattern image.
 .single.hide-site-footer.hide-comments .entry-content > .wp-block-cover.alignfull:last-child,
 .single.hide-site-footer.hide-comments .entry-content > .wp-block-media-text.alignfull:last-child,
 .single.hide-site-footer.hide-comments .entry-content > .wp-block-group.has-background.alignfull:last-child {
-	margin-bottom: calc(-1 * var(--global--spacing-vertical));
+  margin-bottom: calc(-1 * var(--global--spacing-vertical));
 }
 
 /* Center-align headers and footers. */
@@ -98,7 +99,7 @@ Modified and used as a block pattern image.
 .entry-footer,
 .site-info,
 .footer-menu {
-	text-align: center;
+  text-align: center;
 }
 
 #content {
@@ -118,7 +119,7 @@ Modified and used as a block pattern image.
 #main {
   display: flex;
   height: 100%;
-	color: white;
+  color: white;
 }
 
 #primary {
