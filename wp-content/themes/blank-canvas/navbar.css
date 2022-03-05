@@ -18,7 +18,6 @@
   text-decoration: none;
   font-size: 1rem;
   color: var(--lower-navbar-link-color);
-  border-bottom-color: var(--navbar-link-underline-color);
 }
 
 .upper-navbar-links {
