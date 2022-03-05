@@ -58,8 +58,11 @@ function initSlideShow(header, buttons, images) {
     // Buttons should be visible and initialized when there are 2 or more buttons.
     if (images.length > 1) {
         buttons.forEach(function (b) { return b.style.display = 'block'; });
-        // Set up the vanshing buttons effect. Start the hiding effect.
-        manipulateButtons(buttons, ButtonMode.HIDE);
+        // Set up the vanshing buttons effect. Start the hiding effect, 
+        // if the mouse is not over the header.
+        if (document.querySelector('.header:hover') === null) {
+            manipulateButtons(buttons, ButtonMode.HIDE);
+        }
         // Show the gallery buttons when entering the heading area.
         header.addEventListener('mouseenter', function () {
             manipulateButtons(buttons, ButtonMode.SHOW);
