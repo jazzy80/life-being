@@ -73,6 +73,7 @@ a {
 /* Gallery buttons */
 .prev-button,
 .next-button {
+  display: none;
   align-self: center;
   z-index: 1;
   font-size: 33pt;
