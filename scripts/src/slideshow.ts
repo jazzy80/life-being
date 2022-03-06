@@ -16,11 +16,10 @@ export function setUpSlideShow(): void {
     // If there is nothing after the hostName default to home.
     const files = fetch(`/gallery/?page=${page || "home"}`);
 
-    //TODO maybe a fallback image if the http request failes.
     files.then(resp => resp.json()).then( ({ imageFiles: rawImages}) => {
       // Precache images in the browser.
       const images = rawImages.map(preCacheImage);
-      // No images, nothing to do
+      // No images, nothing to do, TODO show a default image.
       if (images.length === 0) return;
 
       // Load the fist image, set some eventListeners for the vanishing gallery buttons effect.
@@ -58,19 +57,22 @@ function initSlideShow(header: HTMLDivElement, buttons: HTMLButtonElement[], ima
   // Buttons should be visible and initialized when there are 2 or more buttons.
   if (images.length > 1) {
       buttons.forEach(b => b.style.display = 'block');
-      // Set up the vanshing buttons effect. Start the hiding effect, 
+      // Set up the vanshing buttons effect. Start the hiding effect,
       // if the mouse is not over the header.
+      // The fading effects work with timer, we need to keep track of the current Ono
+      // because only one can be active, it another one becomes active, cancel the previous one.
+      let currentActiveTimers: number[] = [];
       if (document.querySelector('.header:hover') === null) {
-        manipulateButtons(buttons, ButtonMode.HIDE);
+        manipulateButtons(buttons, ButtonMode.HIDE, currentActiveTimers);
       }
 
       // Show the gallery buttons when entering the heading area.
       header.addEventListener('mouseenter', () => {
-        manipulateButtons(buttons, ButtonMode.SHOW);
+        manipulateButtons(buttons, ButtonMode.SHOW, currentActiveTimers);
       });
       // Smooth vanishing when leaving the header with the mouse.
       header.addEventListener('mouseleave', () => {
-        manipulateButtons(buttons, ButtonMode.HIDE);
+        manipulateButtons(buttons, ButtonMode.HIDE, currentActiveTimers);
       });
     }
 }
@@ -80,17 +82,11 @@ function setImage(header: HTMLDivElement, image: HTMLImageElement): void {
   header.style.backgroundImage = `url(${image.src})`;
 }
 
-// TODO somehow make this work in clean code.
-class IntervalQueue {
-  intervalQueue: number[] = []
-  addTimer(timer: number): void { this.intervalQueue.push(timer); }
-  removeAll(): void {this.intervalQueue.forEach(t => clearTimeout(t)); this.intervalQueue.length = 0;}
-  isEmpty(): Boolean {return this.intervalQueue.length === 0;}
-}
-
-const intervalQueue = new IntervalQueue;
-
-function manipulateButtons(buttons: HTMLButtonElement[], mode: ButtonMode): void {
+function manipulateButtons(
+  buttons: HTMLButtonElement[],
+  mode: ButtonMode,
+  currentActiveTimers: number[]
+): void {
   // Start opacity as 0 if the buttons need to be shown else start at 1.
   let opacity = mode === ButtonMode.SHOW ? 0.0 : 1.0;
   // Hide after 3s but start showing immediately.
@@ -98,15 +94,17 @@ function manipulateButtons(buttons: HTMLButtonElement[], mode: ButtonMode): void
   // Define a isDone, for a shown button the opacity is 1 for a hidden the button, it should be 0.
   const isDone = (value: number) => mode === ButtonMode.SHOW ? value >= 1.0 : value <= 0.0;
 
+  // Kill the current active timers if activated, so that only one will always be running.
+  currentActiveTimers.forEach(timer => clearTimeout(timer));
+  currentActiveTimers.length = 0;
   // Outer timeout makes sure the vanishing of buttons goes after T seconds.
-  intervalQueue.removeAll();
   const timeoutTimer = setTimeout(() => {
     const timer = setInterval(() => {
       opacity = mode === ButtonMode.SHOW ? opacity + 0.1 : opacity - 0.1;
       buttons.forEach(b => b.style.opacity = opacity.toString());
       if (isDone(opacity)) clearInterval(timer);
     }, 30)
-    intervalQueue.removeAll()
   }, timeoutTime);
-  intervalQueue.addTimer(timeoutTimer);
+  // mark this timer as active.
+  currentActiveTimers.push(timeoutTimer)
 }

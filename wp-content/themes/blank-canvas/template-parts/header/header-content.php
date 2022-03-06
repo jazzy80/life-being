@@ -12,11 +12,15 @@ if (sizeof($menus) > 0) {
 <header class="header">
   <div class="navbar upper-navbar">
     <object class="logo" data="/resources/heartscan2.svg" width="60" height="40"> </object>
+    <input id="menu-toggle" type="checkbox"/>
     <ul class="nav-links upper-navbar-links">
       <li><a href="#">Life Being Inspiration</a></li>
       <li><a href="#">Being Child Illustrations</a></li>
       <li><a href="#">Life Being Atelier</a></li>
     </ul>
+    <label for="menu-toggle" class="hamburger-container upper-navbar">
+      <span class="hamburger-menu upper-navbar"></span>
+    </label>
   </div>
   <div class="title-with-btns">
     <i class="fas fa-chevron-left prev-button"></i>
