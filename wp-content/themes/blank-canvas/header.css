@@ -117,14 +117,6 @@ a {
     font-size: 10pt;
   }
 
-  li > a {
-    font-size: 5pt !important;
-  }
-
-  .upper {
-    justify-content: center;
-  }
-
   .logo {
     margin-left: 5px;
   }

@@ -17,12 +17,11 @@ function setUpSlideShow() {
     var page = /[A-Za-z-_]+/.exec(window.location.pathname);
     // If there is nothing after the hostName default to home.
     var files = fetch("/gallery/?page=" + (page || "home"));
-    //TODO maybe a fallback image if the http request failes.
     files.then(function (resp) { return resp.json(); }).then(function (_a) {
         var rawImages = _a.imageFiles;
         // Precache images in the browser.
         var images = rawImages.map(preCacheImage);
-        // No images, nothing to do
+        // No images, nothing to do, TODO show a default image.
         if (images.length === 0)
             return;
         // Load the fist image, set some eventListeners for the vanishing gallery buttons effect.
@@ -58,18 +57,21 @@ function initSlideShow(header, buttons, images) {
     // Buttons should be visible and initialized when there are 2 or more buttons.
     if (images.length > 1) {
         buttons.forEach(function (b) { return b.style.display = 'block'; });
-        // Set up the vanshing buttons effect. Start the hiding effect, 
+        // Set up the vanshing buttons effect. Start the hiding effect,
         // if the mouse is not over the header.
+        // The fading effects work with timer, we need to keep track of the current Ono
+        // because only one can be active, it another one becomes active, cancel the previous one.
+        var currentActiveTimers_1 = [];
         if (document.querySelector('.header:hover') === null) {
-            manipulateButtons(buttons, ButtonMode.HIDE);
+            manipulateButtons(buttons, ButtonMode.HIDE, currentActiveTimers_1);
         }
         // Show the gallery buttons when entering the heading area.
         header.addEventListener('mouseenter', function () {
-            manipulateButtons(buttons, ButtonMode.SHOW);
+            manipulateButtons(buttons, ButtonMode.SHOW, currentActiveTimers_1);
         });
         // Smooth vanishing when leaving the header with the mouse.
         header.addEventListener('mouseleave', function () {
-            manipulateButtons(buttons, ButtonMode.HIDE);
+            manipulateButtons(buttons, ButtonMode.HIDE, currentActiveTimers_1);
         });
     }
 }
@@ -77,26 +79,17 @@ function initSlideShow(header, buttons, images) {
 function setImage(header, image) {
     header.style.backgroundImage = "url(" + image.src + ")";
 }
-// TODO somehow make this work in clean code.
-var IntervalQueue = /** @class */ (function () {
-    function IntervalQueue() {
-        this.intervalQueue = [];
-    }
-    IntervalQueue.prototype.addTimer = function (timer) { this.intervalQueue.push(timer); };
-    IntervalQueue.prototype.removeAll = function () { this.intervalQueue.forEach(function (t) { return clearTimeout(t); }); this.intervalQueue.length = 0; };
-    IntervalQueue.prototype.isEmpty = function () { return this.intervalQueue.length === 0; };
-    return IntervalQueue;
-}());
-var intervalQueue = new IntervalQueue;
-function manipulateButtons(buttons, mode) {
+function manipulateButtons(buttons, mode, currentActiveTimers) {
     // Start opacity as 0 if the buttons need to be shown else start at 1.
     var opacity = mode === ButtonMode.SHOW ? 0.0 : 1.0;
     // Hide after 3s but start showing immediately.
     var timeoutTime = mode === ButtonMode.HIDE ? 2000 : 1;
     // Define a isDone, for a shown button the opacity is 1 for a hidden the button, it should be 0.
     var isDone = function (value) { return mode === ButtonMode.SHOW ? value >= 1.0 : value <= 0.0; };
+    // Kill the current active timers if activated, so that only one will always be running.
+    currentActiveTimers.forEach(function (timer) { return clearTimeout(timer); });
+    currentActiveTimers.length = 0;
     // Outer timeout makes sure the vanishing of buttons goes after T seconds.
-    intervalQueue.removeAll();
     var timeoutTimer = setTimeout(function () {
         var timer = setInterval(function () {
             opacity = mode === ButtonMode.SHOW ? opacity + 0.1 : opacity - 0.1;
@@ -104,7 +97,7 @@ function manipulateButtons(buttons, mode) {
             if (isDone(opacity))
                 clearInterval(timer);
         }, 30);
-        intervalQueue.removeAll();
     }, timeoutTime);
-    intervalQueue.addTimer(timeoutTimer);
+    // mark this timer as active.
+    currentActiveTimers.push(timeoutTimer);
 }

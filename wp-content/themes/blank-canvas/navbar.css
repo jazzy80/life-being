@@ -3,6 +3,12 @@
   display: flex;
   background-color: var(--lower-navbar-color);
   z-index: 1;
+  font-size: 1.2rem;
+}
+
+.navbar li {
+  min-width: fit-content;
+  margin: 0 1rem;
 }
 
 /* links in the navbars */
@@ -14,9 +20,8 @@
   list-style: none;
 }
 
-.nav-links > li > a {
+.nav-links a {
   text-decoration: none;
-  font-size: 1rem;
   color: var(--lower-navbar-link-color);
 }
 
@@ -24,15 +29,11 @@
   justify-content: flex-end;
 }
 
-.upper-navbar-links > li {
-  margin: 0 1rem;
-}
-
-.upper-navbar-links > li > a {
+.upper-navbar-links a {
   color: var(--upper-navbar-link-color);
 }
 
-.nav-links > li > a:hover {
+.nav-links a:hover {
   color: var(--title-color);
 }
 
@@ -44,4 +45,76 @@
 
 .lower-navbar {
   height: 2.5rem;
+}
+
+.hamburger-container {
+  display: none;
+}
+
+#menu-toggle {
+  display: none;
+}
+
+/* Mobile(small screen)-specific styles */
+@media screen and (max-width: 700px) {
+  .upper {
+    justify-content: center;
+  }
+
+  .navbar {
+    font-size: 0.8rem;
+  }
+
+  .hamburger-container {
+    background-color: rgba(255, 255, 255, 0);
+    align-self: center;
+    margin: 0 0.5rem;
+    height: 100%;
+    min-width: 30px;
+    position: relative;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .hamburger-menu,
+  .hamburger-menu::before,
+  .hamburger-menu::after {
+    min-width: 30px;
+    position: absolute;
+    min-height: 4px;
+    background-color: #fff;
+    border-radius: 15px;
+  }
+
+  .hamburger-menu::before {
+    content: '';
+    top: 9px;
+  }
+
+  .hamburger-menu::after {
+    content: '';
+    top: -9px;
+  }
+
+  .upper-navbar-links {
+    position: absolute;
+    top: 1.9rem;
+    display: flex;
+    font-size: 0;
+    flex-direction: column;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.3);
+    justify-content: center;
+    align-items: center;
+    transition: all 400ms ease-in-out;
+    z-index: 2;
+  }
+
+  #menu-toggle:checked ~ .upper-navbar-links {
+    font-size: 1rem;
+    transform: translate(0, 0.3rem);
+  }
 }
