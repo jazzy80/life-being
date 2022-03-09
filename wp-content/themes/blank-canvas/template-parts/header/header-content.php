@@ -18,8 +18,8 @@ if (sizeof($menus) > 0) {
       <li><a href="#">Being Child Illustrations</a></li>
       <li><a href="#">Life Being Atelier</a></li>
     </ul>
-    <label for="menu-toggle" class="hamburger-container upper-navbar">
-      <span class="hamburger-menu upper-navbar"></span>
+    <label for="menu-toggle" class="hamburger-container">
+      <span class="hamburger-menu"></span>
     </label>
   </div>
   <div class="title-with-btns">

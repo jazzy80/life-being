@@ -108,16 +108,12 @@ a {
 }
 
 /* Mobile(small screen)-specific styles */
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
   .title {
     font-size: 25pt;
   }
 
   .subtitle {
     font-size: 10pt;
-  }
-
-  .logo {
-    margin-left: 5px;
   }
 }

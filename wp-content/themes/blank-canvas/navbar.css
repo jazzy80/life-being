@@ -3,7 +3,7 @@
   display: flex;
   background-color: var(--lower-navbar-color);
   z-index: 1;
-  font-size: 1.2rem;
+  font-size: 1.125rem;
 }
 
 .navbar li {
@@ -41,6 +41,8 @@
   background-color: var(--upper-navbar-background-color);
   margin: 0 1px;
   justify-content: space-between;
+  display: grid;
+  grid-template-columns: 33% 67%;
 }
 
 .lower-navbar {
@@ -56,25 +58,20 @@
 }
 
 /* Mobile(small screen)-specific styles */
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
   .upper {
     justify-content: center;
   }
 
-  .navbar {
-    font-size: 0.8rem;
-  }
-
   .hamburger-container {
     background-color: rgba(255, 255, 255, 0);
-    align-self: center;
-    margin: 0 0.5rem;
+    justify-self: flex-end;
+    margin: 0 0.8rem;
     height: 100%;
-    min-width: 30px;
+    width: 1.5rem;
     position: relative;
     display: flex !important;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
     cursor: pointer;
   }
@@ -83,6 +80,7 @@
   .hamburger-menu::before,
   .hamburger-menu::after {
     min-width: 30px;
+    align-self: flex-end;
     position: absolute;
     min-height: 4px;
     background-color: #fff;
@@ -102,6 +100,7 @@
   .upper-navbar-links {
     position: absolute;
     top: 1.9rem;
+    left: 0;
     display: flex;
     font-size: 0;
     flex-direction: column;
@@ -109,7 +108,7 @@
     background-color: rgba(255, 255, 255, 0.3);
     justify-content: center;
     align-items: center;
-    transition: all 400ms ease-in-out;
+    transition: transform, font-size 200ms ease-in;
     z-index: 2;
   }
 
