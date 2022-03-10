@@ -7,7 +7,6 @@
 }
 
 .navbar li {
-  min-width: fit-content;
   margin: 0 1rem;
 }
 
@@ -39,8 +38,10 @@
 
 .upper-navbar {
   background-color: var(--upper-navbar-background-color);
+  font-size: clamp(0.7rem, 2vw, 1.125rem);
   margin: 0 1px;
   justify-content: space-between;
+  align-items: center;
   display: grid;
   grid-template-columns: 33% 67%;
 }
@@ -58,9 +59,15 @@
 }
 
 /* Mobile(small screen)-specific styles */
+@media screen and (min-width: 550px) {
+  .upper-navbar-links li {
+    min-width: fit-content;
+  }
+}
+
 @media screen and (max-width: 800px) {
-  .upper {
-    justify-content: center;
+  .lower-navbar {
+    position: relative;
   }
 
   .hamburger-container {
@@ -97,23 +104,34 @@
     top: -9px;
   }
 
-  .upper-navbar-links {
+  .lower-navbar-links {
     position: absolute;
     top: 1.9rem;
     left: 0;
+    padding: 0.5rem 0;
     display: flex;
-    font-size: 0;
     flex-direction: column;
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: var(--lower-navbar-color-transparant);
     justify-content: center;
     align-items: center;
-    transition: transform, font-size 200ms ease-in;
+    transition: transform 400ms ease-in-out;
+    transform-origin: top;
+    transform: scale(1, 0);
     z-index: 2;
   }
 
-  #menu-toggle:checked ~ .upper-navbar-links {
-    font-size: 1rem;
-    transform: translate(0, 0.3rem);
+  .lower-navbar-links li {
+    margin-top: 1rem;
+  }
+
+  #menu-toggle:checked ~ .lower-navbar-links {
+    transform: scale(1, 1);
+  }
+
+  #menu-toggle:checked ~ .hamburger-container > .hamburger-menu,
+  #menu-toggle:checked ~ .hamburger-container > .hamburger-menu::before,
+  #menu-toggle:checked ~ .hamburger-container > .hamburger-menu::after {
+    background-color: var(--link-underline-color);
   }
 }

@@ -3,10 +3,12 @@
   --title-color: #f7b500;
   --subtitle-color: #efefef;
   --lower-navbar-color: #506536;
+  --lower-navbar-color-transparant: #506536f2;
   --lower-navbar-link-color: #c3b5c3;
   --link-underline-color: #bc6fff;
   --upper-navbar-link-color: #525a4a;
   --upper-navbar-background-color: rgba(255, 255, 255, 0.5);
+  --main-background-color: #3b533b;
 }
 
 * {
