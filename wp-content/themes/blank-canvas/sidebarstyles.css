@@ -6,13 +6,13 @@
   width: max-content;
   margin-right: 0.5rem;
   border-right: 1px #6969a5 solid;
+  font-size: var(--navbar-font-size);
 }
 
 .sidebar ul {
   list-style: none;
   text-align: center;
   padding: 0 1rem;
-  width: max-content;
   display: flex;
   flex-direction: column;
   align-content: center;

@@ -109,7 +109,8 @@ Modified and used as a block pattern image.
 
 .entry-content {
   display: inline-block;
-  margin-left: 4rem;
+  margin: 0;
+  padding: 0 1rem;
 }
 
 #page {
