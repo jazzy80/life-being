@@ -3,10 +3,12 @@
   --title-color: #f7b500;
   --subtitle-color: #efefef;
   --lower-navbar-color: #506536;
+  --lower-navbar-color-transparant: #506536f2;
   --lower-navbar-link-color: #c3b5c3;
   --link-underline-color: #bc6fff;
   --upper-navbar-link-color: #525a4a;
   --upper-navbar-background-color: rgba(255, 255, 255, 0.5);
+  --main-background-color: #3b533b;
 }
 
 * {
@@ -108,16 +110,12 @@ a {
 }
 
 /* Mobile(small screen)-specific styles */
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
   .title {
     font-size: 25pt;
   }
 
   .subtitle {
     font-size: 10pt;
-  }
-
-  .logo {
-    margin-left: 5px;
   }
 }

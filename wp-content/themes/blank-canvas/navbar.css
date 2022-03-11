@@ -3,11 +3,10 @@
   display: flex;
   background-color: var(--lower-navbar-color);
   z-index: 1;
-  font-size: 1.2rem;
+  font-size: 1.125rem;
 }
 
 .navbar li {
-  min-width: fit-content;
   margin: 0 1rem;
 }
 
@@ -29,6 +28,10 @@
   justify-content: flex-end;
 }
 
+.upper-navbar-links li {
+  min-width: fit-content;
+}
+
 .upper-navbar-links a {
   color: var(--upper-navbar-link-color);
 }
@@ -39,8 +42,12 @@
 
 .upper-navbar {
   background-color: var(--upper-navbar-background-color);
+  font-size: clamp(0.7rem, 2vw, 1.125rem);
   margin: 0 1px;
   justify-content: space-between;
+  align-items: center;
+  display: grid;
+  grid-template-columns: 33% 66%;
 }
 
 .lower-navbar {
@@ -56,25 +63,28 @@
 }
 
 /* Mobile(small screen)-specific styles */
-@media screen and (max-width: 700px) {
-  .upper {
-    justify-content: center;
+@media screen and (max-width: 450px) {
+  .upper-navbar-links {
+    flex-direction: column;
+    min-height: fit-content;
+    padding-left: 0;
   }
+}
 
-  .navbar {
-    font-size: 0.8rem;
+@media screen and (max-width: 800px) {
+  .lower-navbar {
+    position: relative;
   }
 
   .hamburger-container {
     background-color: rgba(255, 255, 255, 0);
-    align-self: center;
-    margin: 0 0.5rem;
+    justify-self: flex-end;
+    margin: 0 0.8rem;
     height: 100%;
-    min-width: 30px;
+    width: 1.5rem;
     position: relative;
     display: flex !important;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
     cursor: pointer;
   }
@@ -83,6 +93,7 @@
   .hamburger-menu::before,
   .hamburger-menu::after {
     min-width: 30px;
+    align-self: flex-end;
     position: absolute;
     min-height: 4px;
     background-color: #fff;
@@ -99,22 +110,34 @@
     top: -9px;
   }
 
-  .upper-navbar-links {
+  .lower-navbar-links {
     position: absolute;
     top: 1.9rem;
+    left: 0;
+    padding: 0.5rem 0;
     display: flex;
-    font-size: 0;
     flex-direction: column;
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: var(--lower-navbar-color-transparant);
     justify-content: center;
     align-items: center;
-    transition: all 400ms ease-in-out;
+    transition: transform 400ms ease-in-out;
+    transform-origin: top;
+    transform: scale(1, 0);
     z-index: 2;
   }
 
-  #menu-toggle:checked ~ .upper-navbar-links {
-    font-size: 1rem;
-    transform: translate(0, 0.3rem);
+  .lower-navbar-links li {
+    margin-top: 1rem;
+  }
+
+  #menu-toggle:checked ~ .lower-navbar-links {
+    transform: scale(1, 1);
+  }
+
+  #menu-toggle:checked ~ .hamburger-container > .hamburger-menu,
+  #menu-toggle:checked ~ .hamburger-container > .hamburger-menu::before,
+  #menu-toggle:checked ~ .hamburger-container > .hamburger-menu::after {
+    background-color: var(--link-underline-color);
   }
 }
