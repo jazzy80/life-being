@@ -63,7 +63,7 @@ if (
 	foreach ($menu_items as $item) {
 		$output .= '<li><a href="' . $item -> url . '">' . $item -> title . '</a></li>';
 	}
-		$output .= '</ul></div>';
+		$output .= '</ul><div class="recent-recipe"><p>Meest recente recept</p></div></div>';
 		echo $output;
 }
 ?>
@@ -92,5 +92,27 @@ if (
 	);
 	?>
 </div><!-- .entry-content -->
+<?php
+if ($current_post -> ID == $life_being_insp_id) {
+	echo <<< EOL
+	<div class="right-side-container">
+		<div class="most-recent-blog">
+			<p class="recent-blog-heading"> Meest recente blog</p>
+			<img src="/gallery/background photo/beukenlaan.jpg" width="50px" height="50px" />
+			<a class="right-side-title"><p>Genezen kan iedereen</p></a>
+		</div>
+		<div class="inspire-block">
+			<p> Inspire </p>
+			<img src="/gallery/background photo/herfstboom.lichtvlek.jpg" />
+		</div>
+		<div class="recent-poem">
+			<p>Meest recente gedicht</p>
+			<img src="/gallery/background photo/herfstboom.lichtvlek.jpg" />
+			<a href="#"><p class="right-side-title">Titel van gedicht</p></a>
+		</div>
+</div>
+EOL;
+}
+?>
 
 <script src="/scripts/dist/app.js"></script>

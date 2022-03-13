@@ -11,7 +11,7 @@ if (sizeof($menus) > 0) {
 ?>
 <header class="header">
   <div class="navbar upper-navbar">
-    <object class="logo" data="/resources/heartscan2.svg" width="60" height="40"> </object>
+    <object class="logo" data="/resources/logo lifebeing.title.svg"> </object>
     <ul class="nav-links upper-navbar-links">
       <li><a href="#">Life Being Inspiration</a></li>
       <li><a href="#">Being Child Illustrations</a></li>

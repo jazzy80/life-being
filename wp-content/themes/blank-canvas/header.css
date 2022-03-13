@@ -9,7 +9,8 @@
   --upper-navbar-link-color: #525a4a;
   --upper-navbar-background-color: rgba(255, 255, 255, 0.5);
   --main-background-color: #3b533b;
-  --navbar-font-size: clamp(0.95rem, 2vw, 1.125rem);
+  --navbar-font-size: clamp(1rem, 2vw, 1.2rem);
+  --sidebar-font-size: calc(var(--navbar-font-size) - 0.2rem);
 }
 
 * {
@@ -27,6 +28,11 @@ a {
   border-bottom-color: var(--link-underline-color);
 }
 
+a:hover {
+  color: var(--title-color) !important;
+  transition: color 400ms ease-in-out;
+}
+
 /* Block for the title and subtitle */
 .titles {
   margin: auto;
@@ -41,7 +47,7 @@ a {
 /* Title (life-being)  */
 .title {
   text-shadow: 1px 3px 1px #2f2a1c;
-  font-size: 50pt;
+  font-size: 7rem;
   color: var(--title-color);
   margin: 1px;
   width: max-content;
@@ -49,15 +55,17 @@ a {
 
 /* svg-logo in top navbar */
 .logo {
-  margin-left: 25%;
+  margin: 0.3rem 0 0.3rem 15%;
   z-index: 1;
+  width: 50%;
+  max-height: 3.5rem;
 }
 
 .subtitle {
   text-align: center;
   color: var(--subtitle-color);
   margin: 1px;
-  font-size: 25pt;
+  font-size: 2.5rem;
   text-shadow: 1px 1px 1px #2f2a1c;
   width: max-content;
 }
@@ -70,7 +78,7 @@ a {
   background-size: cover;
   background-position: 0 39%;
   background-repeat: no-repeat;
-  height: 310px;
+  min-height: 23rem;
 }
 
 /* Gallery buttons */

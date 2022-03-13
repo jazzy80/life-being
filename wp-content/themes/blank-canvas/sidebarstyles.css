@@ -1,12 +1,12 @@
 .sidebar {
   display: inline-flex;
   flex-direction: column;
+  align-items: center;
   background-color: #3b533b;
   height: 100%;
-  width: max-content;
   margin-right: 0.5rem;
-  border-right: 1px #6969a5 solid;
-  font-size: var(--navbar-font-size);
+  font-size: var(--sidebar-font-size);
+  border-right: 1px var(--link-underline-color) solid;
 }
 
 .sidebar ul {
@@ -32,13 +32,10 @@
   color: white;
 }
 
-.sidebar a:hover {
-  color: var(--title-color);
-}
-
 .sidebar-title {
   align-self: center;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
+  color: var(--title-color);
 }
 
 .sidebar-back-link {
