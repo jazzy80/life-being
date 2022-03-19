@@ -2,12 +2,10 @@
 
 // Retrieve all published menu items.
 $menus = wp_get_nav_menus();
-$menu_items = [];
-if (sizeof($menus) > 0) {
-  $menu_items = array_filter(wp_get_nav_menu_items($menus[0]), function($item) {
+  $menu_items = sizeof($menus > 0)
+    ? array_filter(wp_get_nav_menu_items($menus[0]), function($item) {
     return $item -> post_parent == 0;
-  });
-}
+  }) : [];
 ?>
 <header class="header">
   <div class="navbar upper-navbar">
