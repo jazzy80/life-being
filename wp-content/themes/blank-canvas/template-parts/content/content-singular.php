@@ -10,7 +10,7 @@
 
  //Define which pages should get a sidebar.
 define('PAGES_WITH_SIDEBAR', ['life being inspirations']);
-define('PAGES_WITH_MOST_RECENT_BAR', ['life being inspirations']);
+define('PAGES_WITH_MOST_RECENT_BAR', ['home']);
 
 // Check if a page is a child of one of the parents.
 function is_child_of($child, $parents) {
@@ -63,12 +63,7 @@ if (
 	foreach ($menu_items as $item) {
 		$output .= '<li><a href="' . $item -> url . '">' . $item -> title . '</a></li>';
 	}
-
-	// Most recent recipe only on sidebar parent page.
-	if(in_array($current_post -> ID, $sidebar_page_ids)) {
-		$output .= '</ul><div class="recent-recipe"><p>Meest recente recept</p></div>';
-	}
-
+	// Close off the container.
 	$output .= '</div>';
 	echo $output;
 }
