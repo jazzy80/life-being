@@ -2,7 +2,7 @@
 
 // Retrieve all published menu items.
 $menus = wp_get_nav_menus();
-  $menu_items = sizeof($menus > 0)
+  $menu_items = sizeof($menus) > 0
     ? array_filter(wp_get_nav_menu_items($menus[0]), function($item) {
     return $item -> post_parent == 0;
   }) : [];
