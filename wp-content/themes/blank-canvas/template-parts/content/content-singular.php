@@ -10,7 +10,10 @@
 
  //Define which pages should get a sidebar.
 define('PAGES_WITH_SIDEBAR', ['life being inspirations']);
-define('PAGES_WITH_MOST_RECENT_BAR', ['life being inspirations']);
+define('PAGES_WITH_MOST_RECENT_BAR', ['home']);
+// Define the blogs parent page title.
+define('BLOG_PAGE', 'being blogs');
+define('POETRY_PAGE', 'poetry');
 
 // Check if a page is a child of one of the parents.
 function is_child_of($child, $parents) {
@@ -18,6 +21,32 @@ function is_child_of($child, $parents) {
 		if ($child -> post_parent === $parent -> ID) return true;
 	}
 	return false;
+}
+
+//find_if, use a predicate to retrieve an element from an array or null if not found.
+function find_if($array, $predicate) {
+	foreach($array as $element) {
+		if ($predicate($element)) return $element;
+	}
+	return null;
+}
+
+function get_page_from_title($title) {
+	return find_if(get_pages(), function($page) use($title) {
+		return strtolower($page -> post_title) === strtolower($title);
+	});
+}
+
+function find_most_recent_article($parent) {
+	$child_pages = get_pages(
+		array(
+			'parent' => $parent -> ID,
+			'sort_order' => 'DESC',
+			'sort_column' => 'post_date'
+		)
+	);
+	if (sizeof($child_pages) > 0) return $child_pages[0];
+	return null;
 }
 
 $show_post_and_page_titles = get_theme_mod( 'show_post_and_page_titles', false );
@@ -63,12 +92,7 @@ if (
 	foreach ($menu_items as $item) {
 		$output .= '<li><a href="' . $item -> url . '">' . $item -> title . '</a></li>';
 	}
-
-	// Most recent recipe only on sidebar parent page.
-	if(in_array($current_post -> ID, $sidebar_page_ids)) {
-		$output .= '</ul><div class="recent-recipe"><p>Meest recente recept</p></div>';
-	}
-
+	// Close off the container.
 	$output .= '</div>';
 	echo $output;
 }
@@ -100,24 +124,35 @@ if (
 </div><!-- .entry-content -->
 <?php
 if (in_array(strtolower($current_post -> post_title), PAGES_WITH_MOST_RECENT_BAR)) {
-	echo <<< EOL
-	<div class="right-side-container">
-		<div class="most-recent-blog">
-			<p class="recent-blog-heading"> Meest recente blog</p>
-			<img src="/gallery/background photo/beukenlaan.jpg" width="50px" height="50px" />
-			<a class="right-side-title"><p>Genezen kan iedereen</p></a>
-		</div>
-		<div class="inspire-block">
-			<p> Inspire </p>
-			<img src="/gallery/background photo/herfstboom.lichtvlek.jpg" />
-		</div>
-		<div class="recent-poem">
-			<p>Meest recente gedicht</p>
-			<img src="/gallery/background photo/herfstboom.lichtvlek.jpg" />
-			<a href="#"><p class="right-side-title">Titel van gedicht</p></a>
-		</div>
-</div>
-EOL;
+	// Retrieve the blog page.
+	$most_recent_blog = find_most_recent_article(get_page_from_title(BLOG_PAGE));
+	$most_recent_poem = find_most_recent_article(get_page_from_title(POETRY_PAGE));
+	if ($most_recent_blog && $most_recent_poem) {
+			$output =
+			'<div class="right-side-container">
+				<div class="most-recent-blog">
+					<p class="recent-blog-heading">Meest recent Blog</p>
+					<img src="/gallery/background photo/beukenlaan.jpg" width="50px" height="50px" />
+					<p>' . $most_recent_blog -> post_title . '
+					<a class="right-side-title" href="' . get_permalink($recent_blog) . '">
+						<p>Lees Blog</p>
+					</a>
+				</div>
+				<div class="inspire-block">
+					<p> Inspire </p>
+					<img src="/gallery/background photo/herfstboom.lichtvlek.jpg" width="50px" height="50px" />
+				</div>
+				<div class="recent-poem">
+					<p>Meest recent gedicht</p>
+					<img src="/gallery/background photo/herfstboom.lichtvlek.jpg" width="50px" heigth="50px" />
+					<p class="right-side-title">' . $most_recent_poem -> post_title . '</p>
+					<a href="' . get_permalink($most_recent_poem) . '">
+						<p>Lees Gedicht</p>
+					</a>
+				</div>
+		</div>';
+		echo $output;
+	}
 }
 ?>
 

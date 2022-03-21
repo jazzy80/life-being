@@ -20,7 +20,7 @@
 html,
 body {
   height: 100vh;
-  width: 100%;
+  max-width: 100%;
   color: white;
 }
 
@@ -30,7 +30,7 @@ a {
 
 a:hover {
   color: var(--title-color) !important;
-  transition: color 400ms ease-in-out;
+  transition: color 300ms ease-in-out;
 }
 
 /* Block for the title and subtitle */
