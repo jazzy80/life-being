@@ -19,9 +19,14 @@ function setUpSlideShow() {
     var prevButton = document.querySelector('.prev-button');
     var nextButton = document.querySelector('.next-button');
     var buttons = [prevButton, nextButton];
-    // Get the current page by stripping slashes from the path.
-    // e.g. /currentPage/ becomes currentPage.
-    var page = /[A-Za-z-_]+/.exec(window.location.pathname);
+    // Get the current page as a relative path.
+    // e.g. https://life-being/life-being-inspirations/art becomes
+    // life-begin-inspirations/art
+    var page = window.location.pathname
+        .split('/')
+        // url must be a non-empty string.
+        .filter(function (url) { return url; })
+        .join('/');
     // If there is nothing after the hostName default to home.
     var files = fetch("/gallery/?page=" + (page || "home"));
     files.then(function (resp) { return resp.json(); }).then(function (_a) {
