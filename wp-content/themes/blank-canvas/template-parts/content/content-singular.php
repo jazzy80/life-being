@@ -131,9 +131,9 @@ if (in_array(strtolower($current_post -> post_title), PAGES_WITH_MOST_RECENT_BAR
 			$output =
 			'<div class="right-side-container">
 				<div class="most-recent-blog">
-					<p class="recent-blog-heading">Meest recent Blog</p>
-					<img src="/gallery/background photo/beukenlaan.jpg" width="50px" height="50px" />
-					<p>' . $most_recent_blog -> post_title . '
+					<p class="recent-blog-heading">Meest recent Blog</p>'
+					. get_the_post_thumbnail($most_recent_blog -> ID) .
+					'<p>' . $most_recent_blog -> post_title . '
 					<a class="right-side-title" href="' . get_permalink($recent_blog) . '">
 						<p>Lees Blog</p>
 					</a>
@@ -143,9 +143,9 @@ if (in_array(strtolower($current_post -> post_title), PAGES_WITH_MOST_RECENT_BAR
 					<img src="/gallery/background photo/herfstboom.lichtvlek.jpg" width="50px" height="50px" />
 				</div>
 				<div class="recent-poem">
-					<p>Meest recent gedicht</p>
-					<img src="/gallery/background photo/herfstboom.lichtvlek.jpg" width="50px" heigth="50px" />
-					<p class="right-side-title">' . $most_recent_poem -> post_title . '</p>
+					<p>Meest recent gedicht</p>'
+					. get_the_post_thumbnail($most_recent_poem -> ID) .
+					'<p class="right-side-title">' . $most_recent_poem -> post_title . '</p>
 					<a href="' . get_permalink($most_recent_poem) . '">
 						<p>Lees Gedicht</p>
 					</a>
