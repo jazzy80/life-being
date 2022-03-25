@@ -10,7 +10,7 @@
 
  //Define which pages should get a sidebar and a "most recent" bar.
 define('PAGES_WITH_SIDEBAR', ['life being inspirations']);
-define('PAGES_WITH_MOST_RECENT_BAR', ['home']);
+define('PAGES_WITH_MOST_RECENT_BAR', ['be home']);
 // Define the blogs parent page title.
 define('BLOG_PAGE', 'being blogs');
 define('POETRY_PAGE', 'poetry');
