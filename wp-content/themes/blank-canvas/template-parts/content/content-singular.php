@@ -10,7 +10,7 @@
 
  //Define which pages should get a sidebar and a "most recent" bar.
 define('PAGES_WITH_SIDEBAR', ['life being inspirations']);
-define('PAGES_WITH_MOST_RECENT_BAR', ['home']);
+define('PAGES_WITH_MOST_RECENT_BAR', ['be home']);
 // Define the blogs parent page title.
 define('BLOG_PAGE', 'being blogs');
 define('POETRY_PAGE', 'poetry');
@@ -140,7 +140,8 @@ if (in_array(strtolower($current_post -> post_title), PAGES_WITH_MOST_RECENT_BAR
 				</div>
 				<div class="inspire-block">
 					<p> Inspire </p>
-					<img src="/gallery/background photo/herfstboom.lichtvlek.jpg" width="50px" height="50px" />
+					<img src="/gallery/background photo/herfstboom.lichtvlek.jpg"/>
+					<p> Inspire </p>
 				</div>
 				<div class="recent-poem">
 					<p>Meest recent gedicht</p>'

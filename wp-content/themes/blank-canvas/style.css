@@ -175,10 +175,9 @@ Modified and used as a block pattern image.
 }
 
 .right-side-container img {
-  min-width: 50%;
-  max-width: 75%;
+  width: 63%;
   max-height: 40%;
-  margin: 0 auto 0.5rem auto;
+  margin: auto;
   object-fit: cover;
   object-position: 0 60%;
 }
