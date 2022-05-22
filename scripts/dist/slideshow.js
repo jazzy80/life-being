@@ -24,7 +24,8 @@ function setUpSlideShow() {
         .split('/')
         // url must be a non-empty string.
         .filter(function (url) { return url !== undefined || url !== ''; })
-        .join('/');
+        .join('/')
+        .replace(/^\/$/, 'home');
     // If there is nothing after the hostName default to home.
     var files = fetch("/gallery/?page=".concat(page || "home"));
     files.then(function (resp) { return resp.json(); }).then(function (_a) {

@@ -20,7 +20,8 @@ export function setUpSlideShow(): void {
       .split('/')
       // url must be a non-empty string.
       .filter((url) => url !== undefined || url !== '')
-      .join('/');
+      .join('/')
+      .replace(/^\/$/, 'home');
 
     // If there is nothing after the hostName default to home.
     const files = fetch(`/gallery/?page=${page || "home"}`);

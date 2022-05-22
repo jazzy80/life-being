@@ -61,12 +61,15 @@ $pages_with_sidebar = array_filter(get_pages(), function($page) {
 $sidebar_page_ids = array_map(function($page) {
 	return $page -> ID;
 }, $pages_with_sidebar);
-// if current page is a sidebar page, or a child of a sidebar page, render the sidebar.
+
+$output = '<div class="sidebar">
+	<ul>';
 if (
 		in_array($current_post -> ID, $sidebar_page_ids) ||
 		// if its a child of the current page, the sidebar also needs to be rendered.
 		is_child_of($current_post, $pages_with_sidebar)
 	) {
+	$output .= '<h5 class="sidebar-title">Vitality</h5>';
 	// Use menu items defined for life being inspirations submenu
 	$menus = wp_get_nav_menus();
 	// Get the menus, filter on life being inspirations submenu items
@@ -75,9 +78,6 @@ if (
 	    return is_child_of($item, $pages_with_sidebar);
 	  }) : [];
 	// Use links of child pages to auto populare the sidebar.
-	$output = '<div class="sidebar">
-		<h5 class="sidebar-title">Vitality</h5>
-		<ul>';
 
 	// If on a child page of a sidebar page.
 	if (in_array($current_post -> post_parent, $sidebar_page_ids)) {
@@ -92,10 +92,11 @@ if (
 	foreach ($menu_items as $item) {
 		$output .= '<li><a href="' . $item -> url . '">' . $item -> title . '</a></li>';
 	}
-	// Close off the container.
-	$output .= '</div>';
-	echo $output;
 }
+
+// Close off the container.
+$output .= '</ul></div>';
+echo $output;
 ?>
 <div class="entry-content">
 	<?php
@@ -123,38 +124,40 @@ if (
 	?>
 </div><!-- .entry-content -->
 <?php
+$output = '<div class="right-side-container">';
 if (in_array(strtolower($current_post -> post_title), PAGES_WITH_MOST_RECENT_BAR)) {
 	// Retrieve the blog page.
 	$most_recent_blog = find_most_recent_article(get_page_from_title(BLOG_PAGE));
 	$most_recent_poem = find_most_recent_article(get_page_from_title(POETRY_PAGE));
 	if ($most_recent_blog && $most_recent_poem) {
-			$output =
-			'<div class="right-side-container">
-				<div class="most-recent-blog">
-					<p class="recent-blog-heading">Meest recent Blog</p>'
+			$output .=
+				'<div class="most-recent-blog">
+					<p class="recent-blog-heading">Meest recente Blog</p>'
 					. get_the_post_thumbnail($most_recent_blog -> ID) .
-					'<p>' . $most_recent_blog -> post_title . '
-					<a class="right-side-title" href="' . get_permalink($most_recent_blog) . '">
-						<p>Lees Blog</p>
+					'<p>' . $most_recent_blog -> post_title . '</p>' .
+					'<a href="' . get_permalink($most_recent_blog) . '">
+						Lees Blog
 					</a>
 				</div>
 				<div class="inspire-block">
 					<p> Inspire </p>
 					<img src="/gallery/background photo/herfstboom.lichtvlek.jpg"/>
 					<p> Inspire </p>
+					<a href="#">Ga naar inspire</a>
 				</div>
 				<div class="recent-poem">
-					<p>Meest recent gedicht</p>'
+					<p>Meest recente gedicht</p>'
 					. get_the_post_thumbnail($most_recent_poem -> ID) .
 					'<p class="right-side-title">' . $most_recent_poem -> post_title . '</p>
 					<a href="' . get_permalink($most_recent_poem) . '">
-						<p>Lees Gedicht</p>
+						Lees Gedicht
 					</a>
 				</div>
 		</div>';
-		echo $output;
 	}
 }
+$output .= '</div>';
+echo $output;
 ?>
 
 <script src="/scripts/dist/app.js"></script>

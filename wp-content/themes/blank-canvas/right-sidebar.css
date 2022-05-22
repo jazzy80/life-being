@@ -1,12 +1,10 @@
 .right-side-container {
   margin: 0;
-  min-width: 20%;
-  max-height: 80vh;
+  color: var(--lower-navbar-link-color);
   display: grid;
-  grid-template-rows: 33% 33% 33%;
-  min-height: 80vh;
-  padding: 0 1rem;
-  border-left: 1px var(--link-underline-color) solid;
+  grid-template-rows: 1fr 1fr 1fr;
+  background-color: var(--secondary-background-color);
+  border-radius: 10px;
 }
 
 .right-side-container > div {
@@ -19,7 +17,7 @@
 
 .right-side-container a {
   color: var(--lower-navbar-link-color);
-  border: none;
+  margin: 0.5rem 0;
 }
 
 .right-side-container > div + div {
@@ -34,18 +32,9 @@
   margin: 0;
 }
 
-.right-side-title {
-  font-size: 1rem;
-  max-width: fit-content;
-  border: none;
-  text-align: center;
-  margin: 0 auto;
-}
-
 .right-side-container img {
   width: 63%;
-  max-height: 40%;
-  margin: auto;
+  height: 40%;
   object-fit: cover;
   object-position: 0 60%;
 }
