@@ -203,7 +203,6 @@ function blank_canvas_body_classes( $classes ) {
 	if ( false === get_theme_mod( 'show_comments', false ) ) {
 		$classes[] = 'hide-comments';
 	}
-
 	return $classes;
 }
 add_filter( 'body_class', 'blank_canvas_body_classes' );

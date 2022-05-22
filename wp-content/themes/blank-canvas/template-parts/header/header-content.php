@@ -6,17 +6,24 @@ $menus = wp_get_nav_menus();
     ? array_filter(wp_get_nav_menu_items($menus[0]), function($item) {
     return $item -> post_parent == 0;
   }) : [];
-// Retrieve the featured image from a post.
-$thumbnail_url = wp_get_attachment_url(get_post_thumbnail_id(get_post() -> ID), 'thumbnail');
 ?>
-<header class="header"
+
 <?php
   // If a featured image exists, use it as the header background.
+  // Use an inline script to use php variables directly.
+  // TODO find a more elegant solution.
+  $thumbnail_url = get_the_post_thumbnail_url();
   if($thumbnail_url) {
-    echo 'style="background-image: url(' . $thumbnail_url . ')"';
+    echo <<< EOL
+    <script>
+      const body = document.querySelector('body');
+      body.style.backgroundImage = "url($thumbnail_url)";
+    </script>
+EOL;
   }
-  ?>
->
+?>
+
+<header class="header">
   <div class="navbar upper-navbar">
     <object class="logo" data="/resources/logo lifebeing.title.svg"> </object>
     <ul class="nav-links upper-navbar-links">

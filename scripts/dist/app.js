@@ -2,7 +2,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var slideshow_1 = require("./slideshow");
-(0, slideshow_1.setUpSlideShow)();
+slideshow_1.setUpSlideShow();
 
 },{"./slideshow":2}],2:[function(require,module,exports){
 "use strict";
@@ -20,7 +20,7 @@ var GalleryCycleMode;
     GalleryCycleMode[GalleryCycleMode["BACKWARD"] = 1] = "BACKWARD";
 })(GalleryCycleMode || (GalleryCycleMode = {}));
 function setUpSlideShow() {
-    var header = document.querySelector('body');
+    var body = document.querySelector('body');
     var prevButton = document.querySelector('.prev-button');
     var nextButton = document.querySelector('.next-button');
     var buttons = [prevButton, nextButton];
@@ -34,16 +34,16 @@ function setUpSlideShow() {
         .join('/')
         .replace(/^\/$/, 'home');
     // If there is nothing after the hostName default to home.
-    var files = fetch("/gallery/?page=".concat(page || "home"));
+    var files = fetch("/gallery/?page=" + (page || "home"));
     files.then(function (resp) { return resp.json(); }).then(function (_a) {
         var rawImages = _a.imageFiles;
+        // No images, nothing to do, TODO show a default image.
+        if (rawImages.length === 0)
+            return;
         // Precache images in the browser.
         var images = rawImages.map(preCacheImage);
-        // No images, nothing to do, TODO show a default image.
-        if (images.length === 0)
-            return;
         // Load the fist image, set some eventListeners for the vanishing gallery buttons effect.
-        initSlideShow(header, buttons, images);
+        initSlideShow(body, buttons, images);
         // Next and previous buttons can cycle through the images by manipulating
         // an index pointer, the gallery is cyclic.
         var index = 0;
@@ -58,7 +58,7 @@ function setUpSlideShow() {
                 //  if at the start of the gallery, go the the end, else go to the previous image.
                 index = (index === 0 ? images.length - 1 : index - 1);
             }
-            setImage(header, images[index]);
+            setImage(body, images[index]);
         };
         prevButton.addEventListener('click', function () {
             cycleImage(GalleryCycleMode.BACKWARD);
@@ -73,14 +73,14 @@ exports.setUpSlideShow = setUpSlideShow;
 // Wrapping the imageNames into a Image obj forces the browser to precache the images.
 function preCacheImage(imageUrl) {
     var prefetchImage = new Image;
-    prefetchImage.src = "/".concat(imageUrl);
+    prefetchImage.src = "/" + imageUrl;
     return prefetchImage;
 }
 // Initialize the gallery/slideshow with the first image
 function initSlideShow(body, buttons, images) {
     // Initialize the gallery using the first image in the `images` array.
     if (images.length > 0) {
-        body.style.backgroundImage = "url(".concat(images[0].src);
+        body.style.backgroundImage = "url(" + images[0].src;
     }
     // Buttons should be visible and initialized when there are 2 or more buttons.
     if (images.length > 1) {
@@ -108,7 +108,7 @@ function initSlideShow(body, buttons, images) {
 }
 // General image setter function.
 function setImage(header, image) {
-    header.style.backgroundImage = "url(".concat(image.src, ")");
+    header.style.backgroundImage = "url(" + image.src + ")";
 }
 function manipulateButtons(buttons, mode, currentActiveTimers) {
     // Start opacity as 0 if the buttons need to be shown else start at 1.
