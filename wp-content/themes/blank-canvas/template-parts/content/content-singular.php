@@ -12,7 +12,7 @@
 define('PAGES_WITH_SIDEBAR', ['life being inspirations']);
 define('PAGES_WITH_MOST_RECENT_BAR', ['be home']);
 // Define the blogs parent page title.
-define('BLOG_PAGE', 'being blogs');
+define('BLOG_PAGE', 'Being Blogs');
 define('POETRY_PAGE', 'poetry');
 
 // Check if a page is a child of one of the parents.
@@ -37,14 +37,18 @@ function get_page_from_title($title) {
 	});
 }
 
-function find_most_recent_article($parent) {
-	$child_pages = get_pages(
+function find_child_pages_of_parent($parent) {
+	return get_pages(
 		array(
 			'parent' => $parent -> ID,
 			'sort_order' => 'DESC',
 			'sort_column' => 'post_date'
 		)
 	);
+}
+
+function find_most_recent_article($parent) {
+	$child_pages = find_child_pages_of_parent($parent);
 	if (sizeof($child_pages) > 0) return $child_pages[0];
 	return null;
 }
@@ -62,14 +66,13 @@ $sidebar_page_ids = array_map(function($page) {
 	return $page -> ID;
 }, $pages_with_sidebar);
 
-$output = '<div class="sidebar">
-	<ul>';
+$output = '<div class="sidebar">';
 if (
 		in_array($current_post -> ID, $sidebar_page_ids) ||
 		// if its a child of the current page, the sidebar also needs to be rendered.
 		is_child_of($current_post, $pages_with_sidebar)
 	) {
-	$output .= '<h5 class="sidebar-title">Vitality</h5>';
+	$output .= '<ul><h5 class="sidebar-title">Vitality</h5>';
 	// Use menu items defined for life being inspirations submenu
 	$menus = wp_get_nav_menus();
 	// Get the menus, filter on life being inspirations submenu items
@@ -90,37 +93,55 @@ if (
 
 	// Create all the menu items.
 	foreach ($menu_items as $item) {
-		$output .= '<li><a href="' . $item -> url . '">' . $item -> title . '</a></li>';
+		$output .= '<li>
+		<object class="heart-icon" data="/resources/hearticon.svg"></object>
+		<a href="' . $item -> url . '">' . $item -> title . '</a></li>';
 	}
+	$output .= '</ul>';
 }
 
 // Close off the container.
-$output .= '</ul></div>';
+$output .= '</div>';
 echo $output;
 ?>
 <div class="entry-content">
 	<?php
-	the_content(
-		sprintf(
-			wp_kses(
-				/* translators: %s: Name of current post. Only visible to screen readers */
-				__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', 'blank-canvas' ),
-				array(
-					'span' => array(
-						'class' => array(),
-					),
-				)
-			),
-			get_the_title()
-		)
-	);
+	if ($current_post -> post_title === BLOG_PAGE) {
+		$blogs = find_child_pages_of_parent($current_post);
+		$output = '<ul class="blogs">';
+		foreach($blogs as $blog) {
+			if ($blog -> post_excerpt !== '') {
+				$output .= '<li><div class="blog">' . '<p class="blog-title">' . $blog -> post_title . '</p>' .
+				'<p class="blog-summary">' . $blog -> post_excerpt . '</p>' .
+				'</div></li>';
+			}
+		}
+		$output .= '</ul>';
+		echo $output;
+	}
+	else {
+		the_content(
+			sprintf(
+				wp_kses(
+					/* translators: %s: Name of current post. Only visible to screen readers */
+					__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', 'blank-canvas' ),
+					array(
+						'span' => array(
+							'class' => array(),
+						),
+					)
+				),
+				get_the_title()
+			)
+		);
 
-	wp_link_pages(
-		array(
-			'before' => '<div class="page-links">' . __( 'Pages:', 'blank-canvas' ),
-			'after'  => '</div>',
-		)
-	);
+		wp_link_pages(
+			array(
+				'before' => '<div class="page-links">' . __( 'Pages:', 'blank-canvas' ),
+				'after'  => '</div>',
+			)
+		);
+	}
 	?>
 </div><!-- .entry-content -->
 <?php
@@ -159,5 +180,4 @@ if (in_array(strtolower($current_post -> post_title), PAGES_WITH_MOST_RECENT_BAR
 $output .= '</div>';
 echo $output;
 ?>
-
 <script src="/scripts/dist/app.js"></script>

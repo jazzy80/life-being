@@ -20,7 +20,7 @@ var GalleryCycleMode;
     GalleryCycleMode[GalleryCycleMode["BACKWARD"] = 1] = "BACKWARD";
 })(GalleryCycleMode || (GalleryCycleMode = {}));
 function setUpSlideShow() {
-    var header = document.querySelector('.header');
+    var header = document.querySelector('body');
     var prevButton = document.querySelector('.prev-button');
     var nextButton = document.querySelector('.next-button');
     var buttons = [prevButton, nextButton];
@@ -77,10 +77,10 @@ function preCacheImage(imageUrl) {
     return prefetchImage;
 }
 // Initialize the gallery/slideshow with the first image
-function initSlideShow(header, buttons, images) {
+function initSlideShow(body, buttons, images) {
     // Initialize the gallery using the first image in the `images` array.
     if (images.length > 0) {
-        header.style.backgroundImage = "url(".concat(images[0].src);
+        body.style.backgroundImage = "url(".concat(images[0].src);
     }
     // Buttons should be visible and initialized when there are 2 or more buttons.
     if (images.length > 1) {
@@ -93,14 +93,17 @@ function initSlideShow(header, buttons, images) {
         if (document.querySelector('.header:hover') === null) {
             manipulateButtons(buttons, ButtonMode.HIDE, currentActiveTimers_1);
         }
-        // Show the gallery buttons when entering the heading area.
-        header.addEventListener('mouseenter', function () {
-            manipulateButtons(buttons, ButtonMode.SHOW, currentActiveTimers_1);
-        });
-        // Smooth vanishing when leaving the header with the mouse.
-        header.addEventListener('mouseleave', function () {
-            manipulateButtons(buttons, ButtonMode.HIDE, currentActiveTimers_1);
-        });
+        // Show the gallery buttons when entering the header area.
+        var header = body.querySelector('.header');
+        if (header !== null) {
+            header.addEventListener('mouseenter', function () {
+                manipulateButtons(buttons, ButtonMode.SHOW, currentActiveTimers_1);
+            });
+            // Smooth vanishing when leaving the header with the mouse.
+            header.addEventListener('mouseleave', function () {
+                manipulateButtons(buttons, ButtonMode.HIDE, currentActiveTimers_1);
+            });
+        }
     }
 }
 // General image setter function.

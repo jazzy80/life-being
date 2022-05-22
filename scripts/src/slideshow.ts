@@ -8,7 +8,7 @@ enum GalleryCycleMode {
 }
 
 export function setUpSlideShow(): void {
-    const header = document.querySelector('.header') as HTMLDivElement;
+    const header = document.querySelector('body') as HTMLElement;
     const prevButton = document.querySelector('.prev-button') as HTMLButtonElement;
     const nextButton = document.querySelector('.next-button') as HTMLButtonElement;
     const buttons = [prevButton, nextButton];
@@ -70,13 +70,13 @@ function preCacheImage(imageUrl: string): HTMLImageElement {
 
 // Initialize the gallery/slideshow with the first image
 function initSlideShow(
-  header: HTMLDivElement,
+  body: HTMLElement,
   buttons: HTMLButtonElement[],
   images: HTMLImageElement[]
 ): void {
   // Initialize the gallery using the first image in the `images` array.
   if (images.length > 0) {
-    header.style.backgroundImage = `url(${images[0].src}`;
+    body.style.backgroundImage = `url(${images[0].src}`;
     }
   // Buttons should be visible and initialized when there are 2 or more buttons.
   if (images.length > 1) {
@@ -90,19 +90,22 @@ function initSlideShow(
         manipulateButtons(buttons, ButtonMode.HIDE, currentActiveTimers);
       }
 
-      // Show the gallery buttons when entering the heading area.
-      header.addEventListener('mouseenter', () => {
-        manipulateButtons(buttons, ButtonMode.SHOW, currentActiveTimers);
-      });
-      // Smooth vanishing when leaving the header with the mouse.
-      header.addEventListener('mouseleave', () => {
-        manipulateButtons(buttons, ButtonMode.HIDE, currentActiveTimers);
-      });
+      // Show the gallery buttons when entering the header area.
+      const header = body.querySelector('.header');
+      if (header !== null) {
+        header.addEventListener('mouseenter', () => {
+          manipulateButtons(buttons, ButtonMode.SHOW, currentActiveTimers);
+        });
+        // Smooth vanishing when leaving the header with the mouse.
+        header.addEventListener('mouseleave', () => {
+          manipulateButtons(buttons, ButtonMode.HIDE, currentActiveTimers);
+        });
+      }
     }
 }
 
 // General image setter function.
-function setImage(header: HTMLDivElement, image: HTMLImageElement): void {
+function setImage(header: HTMLElement, image: HTMLImageElement): void {
   header.style.backgroundImage = `url(${image.src})`;
 }
 

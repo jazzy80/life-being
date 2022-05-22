@@ -207,3 +207,4 @@ function blank_canvas_body_classes( $classes ) {
 	return $classes;
 }
 add_filter( 'body_class', 'blank_canvas_body_classes' );
+add_post_type_support( 'page', 'excerpt' );

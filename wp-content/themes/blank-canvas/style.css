@@ -104,7 +104,6 @@ Modified and used as a block pattern image.
 }
 
 #content {
-  background-color: var(--main-background-color);
   min-height: 90vh;
   max-width: 100%;
 }
