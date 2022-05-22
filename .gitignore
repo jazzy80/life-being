@@ -26,8 +26,10 @@ node_modules/
 # Ignore resources such as images etc.
 resources/
 
+# Ignore the gallery
+gallery/
+
 # ignore log files and databases
 *.log
 *.sql
 *.sqlite
-
