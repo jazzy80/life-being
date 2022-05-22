@@ -7,6 +7,11 @@ var ButtonMode;
     ButtonMode[ButtonMode["SHOW"] = 0] = "SHOW";
     ButtonMode[ButtonMode["HIDE"] = 1] = "HIDE";
 })(ButtonMode || (ButtonMode = {}));
+var GalleryCycleMode;
+(function (GalleryCycleMode) {
+    GalleryCycleMode[GalleryCycleMode["FORWARD"] = 0] = "FORWARD";
+    GalleryCycleMode[GalleryCycleMode["BACKWARD"] = 1] = "BACKWARD";
+})(GalleryCycleMode || (GalleryCycleMode = {}));
 function setUpSlideShow() {
     var header = document.querySelector('.header');
     var prevButton = document.querySelector('.prev-button');
@@ -18,10 +23,10 @@ function setUpSlideShow() {
     var page = window.location.pathname
         .split('/')
         // url must be a non-empty string.
-        .filter(function (url) { return url; })
+        .filter(function (url) { return url !== undefined || url !== ''; })
         .join('/');
     // If there is nothing after the hostName default to home.
-    var files = fetch("/gallery/?page=" + (page || "home"));
+    var files = fetch("/gallery/?page=".concat(page || "home"));
     files.then(function (resp) { return resp.json(); }).then(function (_a) {
         var rawImages = _a.imageFiles;
         // Precache images in the browser.
@@ -34,37 +39,47 @@ function setUpSlideShow() {
         // Next and previous buttons can cycle through the images by manipulating
         // an index pointer, the gallery is cyclic.
         var index = 0;
-        prevButton.addEventListener('click', function () {
-            // if the index is at zero, start at the end
-            index = index === 0 ? images.length - 1 : index - 1;
+        var cycleImage = function (cycleMode) {
+            // If cycling forwards through the gallery
+            if (cycleMode === GalleryCycleMode.FORWARD) {
+                //  if at the end of the gallery, start at the front, else just go to the next image.
+                index = (index === images.length - 1 ? 0 : index + 1);
+            }
+            // if cycling backwards through the gallery.
+            else {
+                //  if at the start of the gallery, go the the end, else go to the previous image.
+                index = (index === 0 ? images.length - 1 : index - 1);
+            }
             setImage(header, images[index]);
+        };
+        prevButton.addEventListener('click', function () {
+            cycleImage(GalleryCycleMode.BACKWARD);
         });
         nextButton.addEventListener('click', function () {
-            // if the index is at the end, start at the beginning.
-            index = index === images.length - 1 ? 0 : index + 1;
-            setImage(header, images[index]);
+            cycleImage(GalleryCycleMode.FORWARD);
         });
     });
 }
 exports.setUpSlideShow = setUpSlideShow;
 ;
 // Wrapping the imageNames into a Image obj forces the browser to precache the images.
-function preCacheImage(image) {
+function preCacheImage(imageUrl) {
     var prefetchImage = new Image;
-    prefetchImage.src = "/" + image;
+    prefetchImage.src = "/".concat(imageUrl);
     return prefetchImage;
 }
 // Initialize the gallery/slideshow with the first image
 function initSlideShow(header, buttons, images) {
+    // Initialize the gallery using the first image in the `images` array.
     if (images.length > 0) {
-        header.style.backgroundImage = "url(" + images[0].src;
+        header.style.backgroundImage = "url(".concat(images[0].src);
     }
     // Buttons should be visible and initialized when there are 2 or more buttons.
     if (images.length > 1) {
         buttons.forEach(function (b) { return b.style.display = 'block'; });
         // Set up the vanshing buttons effect. Start the hiding effect,
         // if the mouse is not over the header.
-        // The fading effects work with timer, we need to keep track of the current Ono
+        // The fading effects work with a timer, we need to keep track of the current One,
         // because only one can be active, it another one becomes active, cancel the previous one.
         var currentActiveTimers_1 = [];
         if (document.querySelector('.header:hover') === null) {
@@ -82,14 +97,16 @@ function initSlideShow(header, buttons, images) {
 }
 // General image setter function.
 function setImage(header, image) {
-    header.style.backgroundImage = "url(" + image.src + ")";
+    header.style.backgroundImage = "url(".concat(image.src, ")");
 }
 function manipulateButtons(buttons, mode, currentActiveTimers) {
     // Start opacity as 0 if the buttons need to be shown else start at 1.
-    var opacity = mode === ButtonMode.SHOW ? 0.0 : 1.0;
-    // Hide after 3s but start showing immediately.
-    var timeoutTime = mode === ButtonMode.HIDE ? 2000 : 1;
-    // Define a isDone, for a shown button the opacity is 1 for a hidden the button, it should be 0.
+    var opacity = (mode === ButtonMode.SHOW ? 0.0 : 1.0);
+    // Hide after 2s but start showing immediately.
+    var timeoutTime = (mode === ButtonMode.HIDE ? 2000 : 1);
+    // Define a isDone func, for a button that is beign shown,
+    // the animation is done whem opacity reaches 1.0, else when the button is being
+    // vanished, the animation is done when opacity reaches 0.0.
     var isDone = function (value) { return mode === ButtonMode.SHOW ? value >= 1.0 : value <= 0.0; };
     // Kill the current active timers if activated, so that only one will always be running.
     currentActiveTimers.forEach(function (timer) { return clearTimeout(timer); });
@@ -97,12 +114,13 @@ function manipulateButtons(buttons, mode, currentActiveTimers) {
     // Outer timeout makes sure the vanishing of buttons goes after T seconds.
     var timeoutTimer = setTimeout(function () {
         var timer = setInterval(function () {
-            opacity = mode === ButtonMode.SHOW ? opacity + 0.1 : opacity - 0.1;
+            opacity = (mode === ButtonMode.SHOW ? opacity + 0.1 : opacity - 0.1);
             buttons.forEach(function (b) { return b.style.opacity = opacity.toString(); });
+            // Clear the timer when the fading animation is done.
             if (isDone(opacity))
                 clearInterval(timer);
         }, 30);
     }, timeoutTime);
-    // mark this timer as active.
+    // mark this timer as active. Keep track of it.
     currentActiveTimers.push(timeoutTimer);
 }

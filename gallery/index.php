@@ -6,6 +6,11 @@
     // Gallery dir contains subdir which corresponds to the requested page
     // variable. All image files with the png or jpeg extension are retrieved
     $real_path = realpath('.') . '/' . $_GET['page'] . '/';
+    // if Directory not exists, just return empty array and exit.
+    if (!is_dir($real_path)) {
+      echo '{"imageFiles": []}';
+      return;
+    }
     $dir_contents = scandir($real_path);
     $images = $dir_contents ? array_filter($dir_contents, function($x){
       $file_info = pathinfo($x);

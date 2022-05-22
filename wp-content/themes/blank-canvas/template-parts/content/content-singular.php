@@ -134,7 +134,7 @@ if (in_array(strtolower($current_post -> post_title), PAGES_WITH_MOST_RECENT_BAR
 					<p class="recent-blog-heading">Meest recent Blog</p>'
 					. get_the_post_thumbnail($most_recent_blog -> ID) .
 					'<p>' . $most_recent_blog -> post_title . '
-					<a class="right-side-title" href="' . get_permalink($recent_blog) . '">
+					<a class="right-side-title" href="' . get_permalink($most_recent_blog) . '">
 						<p>Lees Blog</p>
 					</a>
 				</div>
