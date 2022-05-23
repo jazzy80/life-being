@@ -8,7 +8,7 @@ enum GalleryCycleMode {
 }
 
 export function setUpSlideShow(): void {
-    const header = document.querySelector('body') as HTMLElement;
+    const body = document.querySelector('body') as HTMLElement;
     const prevButton = document.querySelector('.prev-button') as HTMLButtonElement;
     const nextButton = document.querySelector('.next-button') as HTMLButtonElement;
     const buttons = [prevButton, nextButton];
@@ -27,13 +27,14 @@ export function setUpSlideShow(): void {
     const files = fetch(`/gallery/?page=${page || "home"}`);
 
     files.then(resp => resp.json()).then( ({ imageFiles: rawImages}) => {
+      // No images, nothing to do, TODO show a default image.
+      if (rawImages.length === 0) return;
+
       // Precache images in the browser.
       const images = rawImages.map(preCacheImage);
-      // No images, nothing to do, TODO show a default image.
-      if (images.length === 0) return;
 
       // Load the fist image, set some eventListeners for the vanishing gallery buttons effect.
-      initSlideShow(header, buttons, images);
+      initSlideShow(body, buttons, images);
 
       // Next and previous buttons can cycle through the images by manipulating
       // an index pointer, the gallery is cyclic.
@@ -49,7 +50,7 @@ export function setUpSlideShow(): void {
           //  if at the start of the gallery, go the the end, else go to the previous image.
           index = (index === 0 ? images.length - 1 : index - 1);
         }
-        setImage(header, images[index]);
+        setImage(body, images[index]);
       };
       prevButton.addEventListener('click', () => {
         cycleImage(GalleryCycleMode.BACKWARD);
