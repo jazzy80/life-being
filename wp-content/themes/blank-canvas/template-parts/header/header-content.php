@@ -16,7 +16,7 @@ $menus = wp_get_nav_menus();
   if($thumbnail_url) {
     echo <<< EOL
     <script>
-      const body = document.querySelector('body');
+      var body = document.querySelector('body');
       body.style.backgroundImage = "url($thumbnail_url)";
     </script>
 EOL;

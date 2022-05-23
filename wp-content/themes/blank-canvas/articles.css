@@ -1,0 +1,21 @@
+.blogs {
+  list-style: none;
+}
+
+.blog {
+  display: flex;
+  flex-direction: column;
+}
+
+.blog a {
+  width: fit-content;
+}
+
+.blog-image {
+  max-width: 40%;
+  max-height: 40%;
+}
+
+.image-container {
+  display: flex;
+}

@@ -21,13 +21,11 @@
 
 html,
 body {
-  max-height: 100vh;
-  max-width: 100vw;
   color: white;
   margin: 0;
   padding: 0;
   background-repeat: no-repeat;
-  background-position: 50% 50%;
+  background-position: 50% 75%;
 }
 
 a {
@@ -81,9 +79,6 @@ a:hover {
   position: relative;
   display: flex;
   flex-direction: column;
-  background-size: cover;
-  background-position: 0 39%;
-  background-repeat: no-repeat;
   min-height: 23rem;
 }
 

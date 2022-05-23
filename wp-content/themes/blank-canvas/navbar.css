@@ -41,6 +41,7 @@
 
 .lower-navbar {
   height: 2.5rem;
+  border-radius: 10px;
 }
 
 .hamburger-container {

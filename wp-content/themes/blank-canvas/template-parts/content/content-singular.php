@@ -111,9 +111,17 @@ echo $output;
 		$output = '<ul class="blogs">';
 		foreach($blogs as $blog) {
 			if ($blog -> post_excerpt !== '') {
-				$output .= '<li><div class="blog">' . '<p class="blog-title">' . $blog -> post_title . '</p>' .
-				'<p class="blog-summary">' . $blog -> post_excerpt . '</p>' .
-				'</div></li>';
+				$output .=
+				'<li>
+					<div class="blog">' .
+						'<div class="image-container">' .
+							'<image class="blog-image" src="' . get_the_post_thumbnail_url() . '" >' .
+							'<p class="blog-title">' . $blog -> post_title . '</p>' .
+						'</div>' .
+						'<p class="blog-summary">' . $blog -> post_excerpt . '</p>' .
+						'<a href="' . get_permalink($blog) . '">Lees Verder</a>' .
+						'</div>
+					</li>';
 			}
 		}
 		$output .= '</ul>';

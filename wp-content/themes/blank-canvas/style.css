@@ -59,6 +59,7 @@ Modified and used as a block pattern image.
 @import "header.css";
 @import "sidebarstyles.css";
 @import "right-sidebar.css";
+@import "articles.css";
 
 /* Remove extra margin from articles on single post pages. */
 
@@ -125,9 +126,9 @@ Modified and used as a block pattern image.
   display: grid;
   grid-template-columns: 1fr 3fr 1fr;
   color: white;
-  padding: 0.5rem;
+  padding: 0.9rem;
   min-height: 90vh;
-  grid-gap: 0.5rem;
+  grid-gap: 0.9rem;
   max-width: 100%;
 }
 
