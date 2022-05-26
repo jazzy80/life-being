@@ -8,51 +8,6 @@
  * @since 1.0
  */
 
- //Define which pages should get a sidebar and a "most recent" bar.
-define('PAGES_WITH_SIDEBAR', ['life being inspirations']);
-define('PAGES_WITH_MOST_RECENT_BAR', ['be home']);
-// Define the blogs parent page title.
-define('BLOG_PAGE', 'Being Blogs');
-define('POETRY_PAGE', 'poetry');
-
-// Check if a page is a child of one of the parents.
-function is_child_of($child, $parents) {
-	foreach($parents as $parent)  {
-		if ($child -> post_parent === $parent -> ID) return true;
-	}
-	return false;
-}
-
-//find_if, use a predicate to retrieve an element from an array or null if not found.
-function find_if($array, $predicate) {
-	foreach($array as $element) {
-		if ($predicate($element)) return $element;
-	}
-	return null;
-}
-
-function get_page_from_title($title) {
-	return find_if(get_pages(), function($page) use($title) {
-		return strtolower($page -> post_title) === strtolower($title);
-	});
-}
-
-function find_child_pages_of_parent($parent) {
-	return get_pages(
-		array(
-			'parent' => $parent -> ID,
-			'sort_order' => 'DESC',
-			'sort_column' => 'post_date'
-		)
-	);
-}
-
-function find_most_recent_article($parent) {
-	$child_pages = find_child_pages_of_parent($parent);
-	if (sizeof($child_pages) > 0) return $child_pages[0];
-	return null;
-}
-
 $show_post_and_page_titles = get_theme_mod( 'show_post_and_page_titles', false );
 // Get the current post/page
 $current_post = get_post();
@@ -111,14 +66,17 @@ echo $output;
 		$output = '<ul class="blogs">';
 		foreach($blogs as $blog) {
 			if ($blog -> post_excerpt !== '') {
+				$publish_date = date_create($blog -> post_date);
 				$output .=
 				'<li>' .
 					'<div class="blog">' .
-						'<image class="blog-image" src="' . get_the_post_thumbnail_url($blog) . '" >' .
+						'<image width="180" height="135" class="blog-image" src="' . get_the_post_thumbnail_url($blog) . '" >' .
 						'<div class="blog-text">' .
-							'<p class="blog-title">' . $blog -> post_title . '</p>' .
-							'<p class="blog-summary">' . $blog -> post_excerpt . '</p>' .
-							'<a href="' . get_permalink($blog) . '">Lees Verder</a>' .
+							'<p class="blog-date">' . date_format($publish_date, 'd-M-Y') . '</p>' .
+							'<a class="blog-title" href="' . get_permalink($blog) . '">'. $blog -> post_title . '</a>' .
+							'<p class="blog-summary">' .
+								$blog -> post_excerpt . '...' .
+							'</p>' .
 						'</div>' .
 					'</div>' .
 				'</li>';

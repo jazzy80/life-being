@@ -9,6 +9,18 @@
  * @since 1.0
  */
 
+ // adding a rest api for retrieving all blogs.
+ @require_once('api/blogs.php');
+
+ //Define which pages should get a sidebar and a "most recent" bar.
+define('PAGES_WITH_SIDEBAR', ['life being inspirations']);
+define('PAGES_WITH_MOST_RECENT_BAR', ['be home']);
+// Define the blogs parent page title.
+define('BLOG_PAGE', 'Being Blogs');
+define('POETRY_PAGE', 'poetry');
+
+define('PAGINATION_SIZE', 5);
+
 if ( ! function_exists( 'blank_canvas_setup' ) ) :
 	/**
 	 * Sets up theme defaults and registers support for various WordPress features.
@@ -205,5 +217,55 @@ function blank_canvas_body_classes( $classes ) {
 	}
 	return $classes;
 }
+
+// Check if a page is a child of one of the parents.
+function is_child_of($child, $parents) {
+	foreach($parents as $parent)  {
+		if ($child -> post_parent === $parent -> ID) return true;
+	}
+	return false;
+}
+
+//find_if, use a predicate to retrieve an element from an array or null if not found.
+function find_if($array, $predicate) {
+	foreach($array as $element) {
+		if ($predicate($element)) return $element;
+	}
+	return null;
+}
+
+/*
+Using a title, find the corresponding page having that title or `null` if not found.
+*/
+function get_page_from_title($title) {
+	return find_if(get_pages(), function($page) use($title) {
+		return strtolower($page -> post_title) === strtolower($title);
+	});
+}
+
+/*
+Retrieve all child page of `parent`.
+Return an array of child page objects sorted by date, descending order.
+*/
+function find_child_pages_of_parent($parent) {
+	return get_pages(
+		array(
+			'parent' => $parent -> ID,
+			'sort_order' => 'DESC',
+			'sort_column' => 'post_date'
+		)
+	);
+}
+
+/*
+Find the most recent child by date.
+*/
+function find_most_recent_article($parent) {
+	$child_pages = find_child_pages_of_parent($parent);
+	if (sizeof($child_pages) > 0) return $child_pages[0];
+	return null;
+}
+
 add_filter( 'body_class', 'blank_canvas_body_classes' );
+// Adding excerpt support in the wp-admin.
 add_post_type_support( 'page', 'excerpt' );

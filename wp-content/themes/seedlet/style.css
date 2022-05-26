@@ -1570,6 +1570,7 @@ object {
 
 .wp-block-gallery {
 	margin: 0 auto;
+	height: 100%;
 }
 
 .wp-block-gallery .blocks-gallery-image figcaption,
@@ -1707,7 +1708,6 @@ h6, .h6 {
 }
 
 img {
-	height: auto;
 	max-width: 100%;
 	vertical-align: middle;
 }
