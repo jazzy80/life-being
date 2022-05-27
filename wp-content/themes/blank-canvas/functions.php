@@ -10,7 +10,7 @@
  */
 
  // adding a rest api for retrieving all blogs.
- @require_once('api/blogs.php');
+require_once __DIR__ . '/api/blogs.php';
 
  //Define which pages should get a sidebar and a "most recent" bar.
 define('PAGES_WITH_SIDEBAR', ['life being inspirations']);

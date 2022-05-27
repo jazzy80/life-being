@@ -62,28 +62,7 @@ echo $output;
 <div class="entry-content">
 	<?php
 	if ($current_post -> post_title === BLOG_PAGE) {
-		$blogs = find_child_pages_of_parent($current_post);
-		$output = '<ul class="blogs">';
-		foreach($blogs as $blog) {
-			if ($blog -> post_excerpt !== '') {
-				$publish_date = date_create($blog -> post_date);
-				$output .=
-				'<li>' .
-					'<div class="blog">' .
-						'<image width="180" height="135" class="blog-image" src="' . get_the_post_thumbnail_url($blog) . '" >' .
-						'<div class="blog-text">' .
-							'<p class="blog-date">' . date_format($publish_date, 'd-M-Y') . '</p>' .
-							'<a class="blog-title" href="' . get_permalink($blog) . '">'. $blog -> post_title . '</a>' .
-							'<p class="blog-summary">' .
-								$blog -> post_excerpt . '...' .
-							'</p>' .
-						'</div>' .
-					'</div>' .
-				'</li>';
-			}
-		}
-		$output .= '</ul>';
-		echo $output;
+		echo '<script src="/scripts/dist/blogs.js"></script>';
 	}
 	else {
 		the_content(

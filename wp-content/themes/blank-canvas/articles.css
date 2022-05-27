@@ -1,4 +1,4 @@
-.blogs {
+.articles {
   list-style: none;
   padding: 0.5rem;
   margin: 0.5rem;
@@ -8,63 +8,63 @@
   flex-grow: 0;
 }
 
-.blogs li {
+.articles li {
   min-width: 100%;
   min-height: 100%;
 }
 
-.blog-text {
+.article-text {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
 }
 
-.blog {
+.article {
   display: flex;
   margin-bottom: 3rem;
   min-width: 100%;
   min-height: 100%;
 }
 
-.blog-date{
+.article-date{
   font-size: 11pt;
 }
 
-.blog-title {
+.article-title {
   font-size: 20pt;
   text-decoration: none;
   color: white;
 }
 
-.blog a {
+.article a {
   width: fit-content;
 }
 
-.blog-image {
+.article-image {
   margin-right: 1.5rem;
   max-width: 100%;
 }
 
-.image-container {
+.article-container {
   display: flex;
 }
 
 @media screen and (max-width: 860px) {
-  .blog {
+  .article {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
-  .blog-text {
+  .article-text {
     align-items: center;
   }
 
-  .blog-summary {
+  .article-summary {
     display: none;
   }
 
-  .blog-image {
+  .article-image {
     margin: 0;
   }
 }
