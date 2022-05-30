@@ -55,6 +55,11 @@
   text-align: center;
 }
 
+.paginator-btn-disabled {
+  background-color: #838387;
+  pointer-events: none;
+}
+
 @media screen and (max-width: 860px) {
   .article {
     display: flex;

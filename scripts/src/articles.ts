@@ -1,4 +1,7 @@
 import { IArticle } from './interfaces/Iarticle';
+import { IPage } from './interfaces/ipage';
+import { PreviousPage } from './classes/previouspage';
+import { NextPage } from './classes/nextpage';
 
 /*
 Setup function, to generate a list page for articles with pagination,
@@ -9,30 +12,30 @@ export function setUpArticles(url: string): void {
   fetchArticles(url, 0, (articles: IArticle[], count: number) => {
     // From the articles create a list view in the DOM.
     createListFromArticles(articles);
-    // Add the paginator buttons, to navigate through the articles.
-    const buttons = createPaginatorButtons();
-    attachButtons(buttons);
+    const totalPages = Math.ceil(count / articles.length);
     // Add the event listeners for the buttons, clicking them will refectch articles from the next batch.
-    addPaginatorEventListeners(
-      buttons,
-      // calculate the total amount of pages.
-      Math.ceil(count / articles.length),
-      (pageNumber: number) => {
-        // refetch articles for the next of previous page, after a click.
-        fetchArticles(url, pageNumber, createListFromArticles);
-      }
+    setUpPaginatorButtons(
+      new PreviousPage(0, totalPages),
+      new NextPage(0, totalPages),
+        // refetch articles for the next or previous page, after a click.
+      (pageNumber: number) => fetchArticles(url, pageNumber, createListFromArticles)
     );
   });
-};
+}
 
 function createListFromArticles(articles: IArticle[]) {
   const anchor = getDomAnchor();
-  let articleList = document.querySelector('.articles');
-  if (articleList) articleList.innerHTML = '';
-  else {
-    articleList = createArticleList();
-    if (anchor) anchor.appendChild(articleList);
-  }
+  // Get the article list if exists else create one and
+  // attach the list to the Dom via the anchor element.
+  // IIF pattern is used to avoid using a mutable variable.
+  const articleList = (document.querySelector('.articles') || createArticleList()) as HTMLUListElement;
+  //  if the aricleList was created, it has no parent, in that case it needs to be atached to the DOM.
+
+  if (anchor && articleList.parentNode === null) attachElementToAnchor(articleList, anchor);
+  // Make sure the list is empty at the start.
+  articleList.innerHTML = '';
+
+  // Fill the list with the actual articles.
   articles.forEach((article: IArticle) => {
     const {date, excerpt, featured_image_url: imageUrl, title, url} = article;
     const articleListElement = createArticleListItem(
@@ -46,10 +49,9 @@ function createListFromArticles(articles: IArticle[]) {
   });
 }
 
-function attachButtons(buttons: HTMLDivElement): void {
-  const anchor = getDomAnchor();
+function attachElementToAnchor(element: HTMLElement, anchor: HTMLElement | null): void {
   if (anchor) {
-    anchor.appendChild(buttons);
+    anchor.appendChild(element);
   }
 }
 
@@ -73,13 +75,40 @@ function createArticleList(): HTMLUListElement {
   return el;
 }
 
-function createPaginatorButtons(): HTMLDivElement {
+/*
+Factory function to create buttons for the paginator, the prevPage and nextPage
+inputs are used to determine wheter the buttons is disabled, e.g. if there are no pages to fetch.
+*/
+function createPaginatorButtonsWithContainer(prevPage: IPage, nextPage: IPage): HTMLDivElement {
+  const hasPrevPage = prevPage.nextPredicate(prevPage.pageNumber);
+  const hasNextPage = nextPage.nextPredicate(nextPage.pageNumber);
   const el = document.createElement('div');
   el.classList.add('paginator-btns');
   el.innerHTML =
-  `<button class="paginator-prev-btn">Prev</button>
-   <button class="paginator-next-btn">Next</button>`;
+  `<button
+    ${!hasPrevPage ? 'disabled': ''}
+    class="paginator-prev-btn ${!hasPrevPage? 'paginator-btn-disabled': ''}"
+    >
+      Prev
+  </button>
+   <button
+    ${!hasNextPage ? 'disabled': ''}
+    class="paginator-next-btn ${!hasNextPage? 'paginator-btn-disabled': ''}"
+  >
+      Next
+  </button>`;
   return el;
+}
+
+function getPaginatorButtonsContainer(): HTMLDivElement | null {
+  return document.querySelector('.paginator-btns') as HTMLDivElement;
+}
+
+function getPaginatorButtons(container: HTMLDivElement): HTMLButtonElement[] {
+  return [
+    container.querySelector('.paginator-prev-btn') as HTMLButtonElement,
+    container.querySelector('.paginator-next-btn') as HTMLButtonElement
+  ];
 }
 
 function createArticleListItem(
@@ -103,24 +132,51 @@ function createArticleListItem(
   return el;
 }
 
-function addPaginatorEventListeners(
-  paginatorButtons: HTMLDivElement,
-  totalPages: number,
+function setUpPaginatorButtons(
+  prevPage: IPage,
+  nextPage: IPage,
   fetchArticlesFn: (pageNumber: number) => void
 ): void {
-  let pageNumber = 0;
-  const prevButton = paginatorButtons.querySelector('.paginator-prev-btn') as HTMLButtonElement;
-  const nextButton = paginatorButtons.querySelector('.paginator-next-btn') as HTMLButtonElement;
-  prevButton.addEventListener('click', () => {
-    if (pageNumber > 0) {
-      pageNumber -= 1;
-      fetchArticlesFn(pageNumber);
+  // Create a new set of prev/next buttons for the paginator.
+  const buttonsContainer = createPaginatorButtonsWithContainer(prevPage, nextPage);
+  // Get the previous attached buttons if they exist.
+  const previousButtonsContainer = getPaginatorButtonsContainer();
+  // If it already exists swap the old buttons with the new buttons to reset their state.
+  // and previous attached eventlisteners.
+  if (previousButtonsContainer) {
+    const p = previousButtonsContainer.parentNode;
+    if (p) p.replaceChild(buttonsContainer, previousButtonsContainer);
+  }
+  // Else attach the new buttons to the DOM.
+  else attachElementToAnchor(buttonsContainer, getDomAnchor());
+  // Get the individual buttons from its container.
+  const buttons = getPaginatorButtons(buttonsContainer);
+  const [prevButton, nextButton] = buttons;
+  // Attach the event listeners.
+  prevButton.addEventListener('click', getButtonEventCb(prevPage, fetchArticlesFn));
+  nextButton.addEventListener('click', getButtonEventCb(nextPage, fetchArticlesFn));
+}
+
+/*
+This function will generate the callback function for the paginator buttons
+*/
+function getButtonEventCb(
+  page: IPage,
+  fetchArticlesFn: (pageNumber: number) => void,
+): () => void {
+  return () => {
+    if (page.nextPredicate(page.pageNumber)) {
+      // If there is a next page available in the pagination.
+      const nextPageNumber = page.nextPage(page.pageNumber);
+      // Fetch the next batch of articles by the new pageNumber.
+      fetchArticlesFn(nextPageNumber);
+      // Update the eventlisteners with new the page information, so
+      // with the next click, the correct batch of articles will be fetched.
+      setUpPaginatorButtons(
+        new PreviousPage(nextPageNumber, page.totalPages),
+        new NextPage(nextPageNumber, page.totalPages),
+        fetchArticlesFn
+      );
     }
-  });
-  nextButton.addEventListener('click', () => {
-    if (pageNumber < totalPages - 1) {
-      pageNumber += 1;
-      fetchArticlesFn(pageNumber);
-    }
-  });
+  }
 }
