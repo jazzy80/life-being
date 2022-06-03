@@ -44,8 +44,8 @@ EOL;
     <input id="menu-toggle" type="checkbox"/>
     <ul class="nav-links lower-navbar-links">
         <?php foreach ($menu_items as $item){
-        echo "<li><a href=" . $item -> url . ">" . $item -> title . "</a></li>";
-            }
+          echo "<li><a href=" . $item -> url . ">" . $item -> title . "</a></li>";
+        }
         ?>
     </ul>
     <label for="menu-toggle" class="hamburger-container">

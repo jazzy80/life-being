@@ -13,13 +13,15 @@ export function setUpArticles(url: string): void {
     // From the articles create a list view in the DOM.
     createListFromArticles(articles);
     const totalPages = Math.ceil(count / articles.length);
-    // Add the event listeners for the buttons, clicking them will refectch articles from the next batch.
-    setUpPaginatorButtons(
-      new PreviousPage(0, totalPages),
-      new NextPage(0, totalPages),
-        // refetch articles for the next or previous page, after a click.
-      (pageNumber: number) => fetchArticles(url, pageNumber, createListFromArticles)
-    );
+    if (count > articles.length) {
+      // Add the event listeners for the buttons, clicking them will refectch articles from the next batch.
+      setUpPaginatorButtons(
+        new PreviousPage(0, totalPages),
+        new NextPage(0, totalPages),
+          // refetch articles for the next or previous page, after a click.
+        (pageNumber: number) => fetchArticles(url, pageNumber, createListFromArticles)
+      );
+    }
   });
 }
 

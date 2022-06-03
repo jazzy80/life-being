@@ -11,66 +11,18 @@
 $show_post_and_page_titles = get_theme_mod( 'show_post_and_page_titles', false );
 // Get the current post/page
 $current_post = get_post();
-
-// Retrieve the pages that need a sidebar
-$pages_with_sidebar = array_filter(get_pages(), function($page) {
-	return in_array(strtolower($page -> post_title), PAGES_WITH_SIDEBAR);
-});
-// Retrieve its ID, set to null if it does not require a sidebar.
-$sidebar_page_ids = array_map(function($page) {
-	return $page -> ID;
-}, $pages_with_sidebar);
-
-$output = '<div class="sidebar">';
-if (
-		in_array($current_post -> ID, $sidebar_page_ids) ||
-		// if its a child of the current page, the sidebar also needs to be rendered.
-		is_child_of($current_post, $pages_with_sidebar)
-	) {
-	$output .= '<ul><h5 class="sidebar-title">Vitality</h5>';
-	// Use menu items defined for life being inspirations submenu
-	$menus = wp_get_nav_menus();
-	// Get the menus, filter on life being inspirations submenu items
-  $menu_items = sizeof($menus) > 0
-		? array_filter(wp_get_nav_menu_items($menus[0]), function($item) use ($pages_with_sidebar) {
-	    return is_child_of($item, $pages_with_sidebar);
-	  }) : [];
-
-	// If on a child page of a sidebar page.
-	if (in_array($current_post -> post_parent, $sidebar_page_ids)) {
-		$output .= '<span class="sidebar-back-link">';
-		$output .= '<i class="fas fa-angle-double-left"></i>';
-		// create a backlink if on childpage of lif-being-inspirations
-		$output .= '<li>' .
-			'<a href="'. filter_var(get_permalink($current_post -> post_parent), FILTER_SANITIZE_URL) . '">' .
-				'Terug' .
-			'</a>' .
-		'</li>';
-		$output .= '</span>';
-	}
-
-	// Create all the menu items.
- // Use links of child pages to auto populate the sidebar.
-	foreach ($menu_items as $item) {
-		$output .= '<li>
-		<object class="heart-icon" data="/resources/hearticon.svg"></object>
-		<a href="' . filter_var($item -> url, FILTER_SANITIZE_URL) . '">' .
-			filter_var($item -> title, FILTER_SANITIZE_STRING) .
-	 '</a>' .
- '</li>';
-	}
-	$output .= '</ul>';
-}
-
-// Close off the container.
-$output .= '</div>';
-echo $output;
+// Render the left side bar.
+echo get_left_side_bar($current_post);
 ?>
 <div class="entry-content">
 	<?php
 	//  Init script to generate the blog list and the pagination.
 	if ($current_post -> post_title === BLOG_PAGE) {
 		echo '<script src="/scripts/dist/blogs.js"></script>';
+	}
+	//  Same for the poetry page.
+	elseif ($current_post -> post_title === POETRY_PAGE) {
+		echo '<script src="/scripts/dist/poetry.js"></script>';
 	}
 	// Otherwise show the page/post using default WP/theme functionality.
 	else {
