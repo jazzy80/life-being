@@ -58,7 +58,7 @@ Modified and used as a block pattern image.
 @import "variables.css";
 @import "header.css";
 @import "sidebarstyles.css";
-@import "right-sidebar.css";
+@import "most-recent-sidebar.css";
 @import "articles.css";
 
 /* Remove extra margin from articles on single post pages. */

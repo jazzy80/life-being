@@ -51,42 +51,36 @@ echo get_left_side_bar($current_post);
 	?>
 </div><!-- .entry-content -->
 <?php
-//  Generate the right sidebar for pages eligable.
-$output = '<div class="right-side-container">';
 // Check if the current page should have a rigth sidebar.
-if (in_array(strtolower($current_post -> post_title), PAGES_WITH_MOST_RECENT_BAR)) {
+if (!is_on_home($current_post)) {
 	// Retrieve the most recent blog and poem.
 	$most_recent_blog = find_most_recent_article(get_page_from_title(BLOG_PAGE));
 	$most_recent_poem = find_most_recent_article(get_page_from_title(POETRY_PAGE));
-	if ($most_recent_blog && $most_recent_poem) {
-			$output .=
-				'<div class="most-recent-blog">
-					<p class="recent-blog-heading">Meest recente Blog</p>' .
-					'<img src="' . filter_var(get_the_post_thumbnail_url($most_recent_blog -> ID), FILTER_SANITIZE_URL) . '"' .
-					'<p>' . filter_var($most_recent_blog -> post_title, FILTER_SANITIZE_STRING) . '</p>' .
-					'<a href="' . filter_var(get_permalink($most_recent_blog), FILTER_SANITIZE_URL) . '">
-						Lees Blog
-					</a>
-				</div>
-				<div class="inspire-block">
-					<p> Inspire </p>
-					<img src="/gallery/background photo/herfstboom.lichtvlek.jpg"/>
-					<p> Inspire </p>
-					<a href="#">Ga naar inspire</a>
-				</div>
-				<div class="recent-poem">
-					<p>Meest recente gedicht</p>
-					<img src="' . filter_var(get_the_post_thumbnail_url($most_recent_poem -> ID), FILTER_SANITIZE_URL) . '"' .
-					'<p class="right-side-title">' . filter_var($most_recent_poem -> post_title, FILTER_SANITIZE_STRING) . '</p>
-					 <a href="' . filter_var(get_permalink($most_recent_poem), FILTER_SANITIZE_URL) . '">
-						Lees Gedicht
-					</a>
-				</div>
-		</div>';
-	}
+	$most_recent_inspire = find_most_recent_article(get_page_from_title(INSPIRE_PAGE));
+	echo create_container_with_most_recent_articles(
+		'most-recent-container',
+		[
+			get_most_recent_article(
+			$most_recent_blog,
+			'Meest recente Blog',
+			'most-recent-blog',
+			'recent_blog_heading'
+			),
+			get_most_recent_article(
+				$most_recent_inspire,
+				'Inspire',
+				'inspire-block',
+				'recent-inspire'
+			),
+			get_most_recent_article(
+				$most_recent_poem,
+				'Meest recente gedicht',
+				'recent-poem',
+				'most-recent-poem'
+			)
+		]
+	);
 }
-$output .= '</div>';
-echo $output;
 ?>
 <!-- Add the main script for the site -->
 <script src="/scripts/dist/app.js"></script>

@@ -14,13 +14,16 @@ require_once __DIR__ . '/api/blogs.php';
 require_once __DIR__ . '/api/poetry.php';
 // adding the html string generation functions for the leftsidebar.
 require_once __DIR__ . '/htmlfunctions/leftsidebar.php';
+require_once __DIR__ . '/htmlfunctions/mostrecentarticle.php';
 
+ //Define home page.
+ define('HOME_PAGE', 'be home');
  //Define which pages should get a sidebar and a "most recent" bar.
-define('PAGES_WITH_SIDEBAR', ['life being inspirations']);
-define('PAGES_WITH_MOST_RECENT_BAR', ['be home']);
+define('PAGES_WITH_SIDEBAR', ['vitality']);
 // Define the blogs parent page title.
 define('BLOG_PAGE', 'Being Blogs');
 define('POETRY_PAGE', 'Poetry');
+define('INSPIRE_PAGE', 'Inspire');
 
 define('PAGINATION_SIZE', 5);
 
@@ -262,7 +265,7 @@ function find_child_pages_of_parent(WP_Post $parent): array {
 /*
 Find the most recent child from a parent.
 */
-function find_most_recent_article(WP_Post $parent): WP_Post {
+function find_most_recent_article(WP_Post $parent): ?WP_Post {
 	$child_pages = find_child_pages_of_parent($parent);
 	if (sizeof($child_pages) > 0) return $child_pages[0];
 	return null;
@@ -273,6 +276,10 @@ function get_id_from_pages(array $pages): array {
 	return array_map(function($page) {
 		return $page -> ID;
 	}, $pages);
+}
+
+function is_on_home(WP_Post $current_post): bool {
+	return strtolower($current_post -> post_title) === strtolower(HOME_PAGE);
 }
 
 add_filter( 'body_class', 'blank_canvas_body_classes' );

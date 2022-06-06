@@ -1,4 +1,4 @@
-.right-side-container {
+.most-recent-container {
   margin: 0;
   color: var(--lower-navbar-link-color);
   display: grid;
@@ -7,7 +7,7 @@
   border-radius: 10px;
 }
 
-.right-side-container > div {
+.most-recent-container > div {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,12 +15,12 @@
   padding: 1rem;
 }
 
-.right-side-container a {
+.most-recent-container a {
   color: var(--lower-navbar-link-color);
   margin: 0.5rem 0;
 }
 
-.right-side-container > div + div {
+.most-recent-container > div + div {
   border-top: 1px grey solid;
   padding-top: 0.5rem;
 }
@@ -32,7 +32,7 @@
   margin: 0;
 }
 
-.right-side-container img {
+.most-recent-container img {
   width: 63%;
   height: 40%;
   object-fit: cover;
