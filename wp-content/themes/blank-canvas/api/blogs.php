@@ -7,7 +7,6 @@ add_action( 'rest_api_init', function () {
 } );
 
 function get_blogs ($data) {
-  // Get the page number, start with 0.
   $blog_page = get_page_from_title(BLOG_PAGE);
   require_once 'articles.php';
   return get_articles($data, $blog_page);

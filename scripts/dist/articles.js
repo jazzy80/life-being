@@ -1,4 +1,3 @@
-(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setUpArticles = void 0;
@@ -130,41 +129,3 @@ function getButtonEventCb(page, fetchArticlesFn) {
         }
     };
 }
-
-},{"./classes/nextpage":3,"./classes/previouspage":4}],2:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var articles_1 = require("./articles");
-articles_1.setUpArticles('/wp-json/api/blogs');
-
-},{"./articles":1}],3:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.NextPage = void 0;
-var NextPage = /** @class */ (function () {
-    function NextPage(pageNumber, totalPages) {
-        this.pageNumber = pageNumber;
-        this.totalPages = totalPages;
-        this.nextPage = function (pageNumber) { return pageNumber + 1; };
-        this.nextPredicate = function (pageNumber) { return pageNumber < totalPages - 1; };
-    }
-    return NextPage;
-}());
-exports.NextPage = NextPage;
-
-},{}],4:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.PreviousPage = void 0;
-var PreviousPage = /** @class */ (function () {
-    function PreviousPage(pageNumber, totalPages) {
-        this.pageNumber = pageNumber;
-        this.totalPages = totalPages;
-        this.nextPage = function (pageNumber) { return pageNumber - 1; };
-        this.nextPredicate = function (pageNumber) { return pageNumber > 0; };
-    }
-    return PreviousPage;
-}());
-exports.PreviousPage = PreviousPage;
-
-},{}]},{},[2]);

@@ -1,3 +1,3 @@
 import { setUpArticles } from './articles';
 
-setUpArticles('/wp-json/api/blogs');
+setUpArticles('/wp-json/api/poetry');

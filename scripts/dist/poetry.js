@@ -131,13 +131,7 @@ function getButtonEventCb(page, fetchArticlesFn) {
     };
 }
 
-},{"./classes/nextpage":3,"./classes/previouspage":4}],2:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var articles_1 = require("./articles");
-articles_1.setUpArticles('/wp-json/api/blogs');
-
-},{"./articles":1}],3:[function(require,module,exports){
+},{"./classes/nextpage":2,"./classes/previouspage":3}],2:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NextPage = void 0;
@@ -152,7 +146,7 @@ var NextPage = /** @class */ (function () {
 }());
 exports.NextPage = NextPage;
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PreviousPage = void 0;
@@ -167,4 +161,10 @@ var PreviousPage = /** @class */ (function () {
 }());
 exports.PreviousPage = PreviousPage;
 
-},{}]},{},[2]);
+},{}],4:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var articles_1 = require("./articles");
+articles_1.setUpArticles('/wp-json/api/poetry');
+
+},{"./articles":1}]},{},[4]);

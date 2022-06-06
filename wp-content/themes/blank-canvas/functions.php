@@ -11,13 +11,16 @@
 
  // adding a rest api for retrieving all blogs.
 require_once __DIR__ . '/api/blogs.php';
+require_once __DIR__ . '/api/poetry.php';
+// adding the html string generation functions for the leftsidebar.
+require_once __DIR__ . '/htmlfunctions/leftsidebar.php';
 
  //Define which pages should get a sidebar and a "most recent" bar.
 define('PAGES_WITH_SIDEBAR', ['life being inspirations']);
 define('PAGES_WITH_MOST_RECENT_BAR', ['be home']);
 // Define the blogs parent page title.
 define('BLOG_PAGE', 'Being Blogs');
-define('POETRY_PAGE', 'poetry');
+define('POETRY_PAGE', 'Poetry');
 
 define('PAGINATION_SIZE', 5);
 
@@ -219,7 +222,7 @@ function blank_canvas_body_classes( $classes ) {
 }
 
 // Check if a page is a child of one of the parents.
-function is_child_of($child, $parents) {
+function is_child_of(WP_Post $child, array $parents): bool {
 	foreach($parents as $parent)  {
 		if ($child -> post_parent === $parent -> ID) return true;
 	}
@@ -227,7 +230,7 @@ function is_child_of($child, $parents) {
 }
 
 //find_if, use a predicate to retrieve an element from an array or null if not found.
-function find_if($array, $predicate) {
+function find_if(array $array, callable $predicate): WP_Post {
 	foreach($array as $element) {
 		if ($predicate($element)) return $element;
 	}
@@ -237,8 +240,8 @@ function find_if($array, $predicate) {
 /*
 Using a title, find the corresponding page having that title or `null` if not found.
 */
-function get_page_from_title($title) {
-	return find_if(get_pages(), function($page) use($title) {
+function get_page_from_title(string $title): WP_Post {
+	return find_if(get_pages(), function(WP_Post $page) use($title) {
 		return strtolower($page -> post_title) === strtolower($title);
 	});
 }
@@ -247,7 +250,7 @@ function get_page_from_title($title) {
 Retrieve all child page of `parent`.
 Return an array of child page objects sorted by date, descending order.
 */
-function find_child_pages_of_parent($parent) {
+function find_child_pages_of_parent(WP_Post $parent): array {
 	return get_pages(
 		array(
 			'parent' => $parent -> ID,
@@ -256,14 +259,20 @@ function find_child_pages_of_parent($parent) {
 		)
 	);
 }
-
 /*
-Find the most recent child by date.
+Find the most recent child from a parent.
 */
-function find_most_recent_article($parent) {
+function find_most_recent_article(WP_Post $parent): WP_Post {
 	$child_pages = find_child_pages_of_parent($parent);
 	if (sizeof($child_pages) > 0) return $child_pages[0];
 	return null;
+}
+
+// map an array with `pages` to an array with the page ids.
+function get_id_from_pages(array $pages): array {
+	return array_map(function($page) {
+		return $page -> ID;
+	}, $pages);
 }
 
 add_filter( 'body_class', 'blank_canvas_body_classes' );

@@ -13,6 +13,7 @@
 .sidebar ul {
   list-style: none;
   padding: 0 1rem;
+  min-width: 95%;
 }
 
 .sidebar-back-link a {
@@ -26,6 +27,7 @@
   min-width: 99%;
   max-width: 99%;
   align-items: center;
+  text-align: center;
 }
 
 .heart-icon {
@@ -37,6 +39,7 @@
 }
 
 .sidebar-title {
+  text-align: center;
   align-self: center;
   font-size: 1.5rem;
   color: var(--title-color);
