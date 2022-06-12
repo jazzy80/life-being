@@ -140,3 +140,15 @@ Modified and used as a block pattern image.
   padding: 0;
   margin: 0;
 }
+
+@media screen and (max-width: 750px) {
+  #main {
+    display: flex;
+    flex-direction: column;
+    font-size: 10pt;
+  }
+
+  .entry-content {
+    min-height: 90vh;
+  }
+}

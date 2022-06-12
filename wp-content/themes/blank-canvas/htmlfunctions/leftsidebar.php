@@ -9,7 +9,7 @@ function get_pages_needing_left_sidebar(): array {
 /*
 Retrieve the menus for the left sidebar if required.
 */
-function get_left_side_bar_menu_items(array $menus) {
+function get_left_side_bar_menu_items(array $menus): array {
 	// Get the menu_items. Filter on the menu item being a child of the page that needs them.
   return (sizeof($menus) > 0
 		? array_filter(wp_get_nav_menu_items($menus[0]), function(WP_Post $item): bool {

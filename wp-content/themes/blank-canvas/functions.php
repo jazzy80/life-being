@@ -267,8 +267,7 @@ Find the most recent child from a parent.
 */
 function find_most_recent_article(WP_Post $parent): ?WP_Post {
 	$child_pages = find_child_pages_of_parent($parent);
-	if (sizeof($child_pages) > 0) return $child_pages[0];
-	return null;
+	return (sizeof($child_pages) > 0) ? $child_pages[0] : null;
 }
 
 // map an array with `pages` to an array with the page ids.

@@ -53,17 +53,28 @@ echo get_left_side_bar($current_post);
 <?php
 // Check if the current page should have a rigth sidebar.
 if (!is_on_home($current_post)) {
-	// Retrieve the most recent blog and poem.
-	$most_recent_blog = find_most_recent_article(get_page_from_title(BLOG_PAGE));
-	$most_recent_poem = find_most_recent_article(get_page_from_title(POETRY_PAGE));
-	$most_recent_inspire = find_most_recent_article(get_page_from_title(INSPIRE_PAGE));
+	// Retrieve the most recent blog, poem and inspire.
+	// TODO generalize and remove obvious code dublication.
+	$blog_page = get_page_from_title(BLOG_PAGE);
+	$poetry_page = get_page_from_title(POETRY_PAGE);
+	$inspire_page = get_page_from_title(INSPIRE_PAGE);
+	$most_recent_blog = $blog_page ? find_most_recent_article($blog_page) : null;
+	$most_recent_poem = $poetry_page ? find_most_recent_article($poetry_page) : null;
+	$most_recent_inspire = $inspire_page ? find_most_recent_article($inspire_page) : null;
+	// Create HTML div with most recent articles
 	echo create_container_with_most_recent_articles(
+		// className for the div
 		'most-recent-container',
+		// list of generated HTML articles.
 		[
 			get_most_recent_article(
+			// page
 			$most_recent_blog,
+			// title
 			'Meest recente Blog',
+			// class
 			'most-recent-blog',
+			// class for header <p> tag.
 			'recent_blog_heading'
 			),
 			get_most_recent_article(
