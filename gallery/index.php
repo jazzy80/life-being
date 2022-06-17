@@ -25,5 +25,5 @@
       return "\"" . 'gallery/' . $page . '/' .$file . "\"";
     }, $images );
   }
-  echo '{"imageFiles": [' . implode($imagesWithFullPath, ',') . ']}';
+  echo '{"imageFiles": [' . implode(',', $imagesWithFullPath) . ']}';
  ?>
