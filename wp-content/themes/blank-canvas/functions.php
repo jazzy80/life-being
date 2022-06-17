@@ -19,7 +19,7 @@ require_once __DIR__ . '/htmlfunctions/mostrecentarticle.php';
  //Define home page.
  define('HOME_PAGE', 'be home');
  //Define which pages should get a sidebar and a "most recent" bar.
-define('PAGES_WITH_SIDEBAR', ['vitality']);
+define('PAGES_WITH_LEFT_SIDEBAR', ['vitality']);
 // Define the blogs parent page title.
 define('BLOG_PAGE', 'Being Blogs');
 define('POETRY_PAGE', 'Poetry');
@@ -284,3 +284,4 @@ function is_on_home(WP_Post $current_post): bool {
 add_filter( 'body_class', 'blank_canvas_body_classes' );
 // Adding excerpt support in the wp-admin.
 add_post_type_support( 'page', 'excerpt' );
+add_filter( 'big_image_size_threshold', '__return_false' );

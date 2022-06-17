@@ -2,7 +2,7 @@
 // Retrieve the pages that need a left sidebar.
 function get_pages_needing_left_sidebar(): array {
 	return array_filter(get_pages(), function(WP_Post $page): bool {
-		return in_array(strtolower($page -> post_title), PAGES_WITH_SIDEBAR);
+		return in_array(strtolower($page -> post_title), PAGES_WITH_LEFT_SIDEBAR);
 	});
 }
 
@@ -37,7 +37,7 @@ if (
 }
 
 function get_standard_left_side_bar(WP_Post $current_post): string {
-	$style = is_on_home($current_post) ? 'opacity: 0;' : '';
+	$style = is_on_home($current_post) ? 'display: none;' : '';
 	return create_container_with_most_recent_articles(
 		'most-recent-container',
 		[
@@ -78,15 +78,8 @@ function get_vitality_menu(WP_Post $current_post, array $left_sidebar_needing_pa
 	// If on a child page of a sidebar page.
   // create a backlink back to its parent.
 	(in_array($current_post -> post_parent, $left_sidebar_needing_page_ids)
-		? '<span class="sidebar-back-link">
-		 	 <i class="fas fa-angle-double-left"></i>
-			 <li>
-			 	<a href="' . filter_var(get_permalink($current_post -> post_parent), FILTER_SANITIZE_URL) . '">
-					Terug
-				</a>
-			</li>
-			</span>'
-		: '') .
+		? create_backlink_to_parent($current_post) : '') .
+	// Concantenate with the rest of the menu items below.
 	// Create all the menu items, and concatenate to html string.
   // Use links of child pages to populate the sidebar.
 	array_reduce($menu_items, function(string $html, WP_Post $menu_item): string {
@@ -100,5 +93,16 @@ function get_vitality_menu(WP_Post $current_post, array $left_sidebar_needing_pa
 	}, '') .
 	'</ul>
 	</div>';
+}
+
+function create_backlink_to_parent(WP_Post $current_post): string {
+	return '<span class="sidebar-back-link">
+	 	 <i class="fas fa-angle-double-left"></i>
+		 <li>
+		 	<a href="' . filter_var(get_permalink($current_post -> post_parent), FILTER_SANITIZE_URL) . '">
+				Terug
+			</a>
+		</li>
+		</span>';
 }
 ?>

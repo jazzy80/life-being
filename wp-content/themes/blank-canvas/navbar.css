@@ -14,10 +14,8 @@
 /* links in the navbars */
 .nav-links {
   display: flex;
-  width: 100%;
-  padding: 0 0.5rem;
-  justify-content: space-evenly;
-  align-items: center;
+  min-width: fit-content;
+  padding: 0 1.5rem;
   list-style: none;
 }
 
@@ -42,6 +40,14 @@
 .lower-navbar {
   height: 2.5rem;
   border-radius: 10px;
+  min-width: 100%;
+}
+
+.lower-navbar-links {
+  min-width: 100%;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 0 2rem;
 }
 
 .hamburger-container {

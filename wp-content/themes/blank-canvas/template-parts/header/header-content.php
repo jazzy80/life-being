@@ -13,7 +13,7 @@ $menus = wp_get_nav_menus();
   // If a featured image exists, use it as the header background.
   // Use an inline script to use php variables directly.
   // TODO find a more elegant solution.
-  $thumbnail_url = get_the_post_thumbnail_url();
+  $thumbnail_url = get_the_post_thumbnail_url(null, 'large');
   if($thumbnail_url) {
     echo <<< EOL
     <script>

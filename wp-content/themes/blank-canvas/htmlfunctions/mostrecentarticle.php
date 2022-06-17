@@ -16,7 +16,7 @@ function get_most_recent_article(
   </div>' : '';
 }
 /*
-Create a div html conainer using array of articles as HTML
+Create a div html container using array of articles as HTML
 */
 function create_container_with_most_recent_articles(
   string $container_class,

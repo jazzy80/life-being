@@ -6,6 +6,8 @@
   grid-template-rows: 1fr 1fr 1fr;
   background-color: var(--secondary-background-color);
   border-radius: 10px;
+  flex: 1 1 25%;
+  max-width: 25%;
 }
 
 .most-recent-container > div {
