@@ -2,12 +2,11 @@
   font-size: var(--sidebar-font-size);
   margin: 0;
   color: var(--lower-navbar-link-color);
-  display: grid;
-  grid-template-rows: 1fr 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   background-color: var(--secondary-background-color);
   border-radius: 10px;
   flex: 1 1 25%;
-  max-width: 25%;
 }
 
 .most-recent-container > div {
@@ -16,6 +15,8 @@
   align-items: center;
   justify-content: space-around;
   padding: 1rem;
+  min-height: 12rem;
+  max-height: 20rem;
 }
 
 .most-recent-container a {
