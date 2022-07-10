@@ -30,6 +30,7 @@ body {
 
 a {
   border-bottom-color: var(--link-underline-color);
+  color: var(--lower-navbar-link-color);
 }
 
 a:hover {
