@@ -42,21 +42,26 @@ EOL;
     </div>
     <i class="fas fa-chevron-right next-button"></i>
   </div>
-  <div class="navbar lower-navbar">
-    <input id="menu-toggle" type="checkbox"/>
-    <ul class="nav-links lower-navbar-links">
-        <?php
-        if (!is_on_home($current_post)) {
-          foreach ($menu_items as $item){
-            if (strtolower($item -> title) !== HOME_PAGE) {
-              echo "<li><a href=" . $item -> url . ">" . $item -> title . "</a></li>";
-            }
-          }
-        }
-        ?>
-    </ul>
-    <label for="menu-toggle" class="hamburger-container">
-      <span class="hamburger-menu"></span>
-    </label>
-  </div>
+  <?php
+  if (!is_on_home($current_post)) {
+    echo <<< EOL
+    <div class="navbar lower-navbar">
+      <input id="menu-toggle" type="checkbox"/>
+      <ul class="nav-links lower-navbar-links">
+EOL;
+    foreach ($menu_items as $item){
+      if (strtolower($item -> title) !== HOME_PAGE) {
+        echo "<li><a href=" . $item -> url . ">" . $item -> title . "</a></li>";
+      }
+    }
+    echo <<< EOL
+      </ul>
+      <label for="menu-toggle" class="hamburger-container">
+        <span class="hamburger-menu"></span>
+      </label>
+    </div>
+  }
+EOL;
+}
+?>
 </header>
