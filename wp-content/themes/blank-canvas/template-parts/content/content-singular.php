@@ -11,18 +11,22 @@
 $show_post_and_page_titles = get_theme_mod( 'show_post_and_page_titles', false );
 // Get the current post/page
 $current_post = get_post();
-// Render the left side bar.
-echo get_left_side_bar($current_post);
+if (page_needs_vitality_menu($current_post))
+	echo render_vitality_menu($current_post);
 ?>
 <div class="entry-content">
 	<?php
 	//  Init script to generate the blog list and the pagination.
-	if ($current_post -> post_title === BLOG_PAGE) {
+	if (strtolower($current_post -> post_title) === BLOG_PAGE) {
 		echo '<script src="/scripts/dist/blogs.js"></script>';
 	}
 	//  Same for the poetry page.
-	elseif ($current_post -> post_title === POETRY_PAGE) {
+	if (strtolower($current_post -> post_title) === POETRY_PAGE) {
 		echo '<script src="/scripts/dist/poetry.js"></script>';
+	}
+	if (strtolower($current_post -> post_title) === GUESTBOOK) {
+		$entries = get_guestbook_entries();
+		echo render_guest_book($entries);
 	}
 	// Otherwise show the page/post using default WP/theme functionality.
 	else {
@@ -52,9 +56,9 @@ echo get_left_side_bar($current_post);
 </div><!-- .entry-content -->
 <?php
 // Check if the current page should have a rigth sidebar.
-if (!is_on_home($current_post)) {
+if (page_needs_right_sidebar($current_post)) {
 	// Retrieve the most recent blog, poem and inspire.
-	// TODO generalize and remove obvious code dublication.
+	// TODO generalize and remove obvious code duplication.
 	$blog_page = get_page_from_title(BLOG_PAGE);
 	$poetry_page = get_page_from_title(POETRY_PAGE);
 	$inspire_page = get_page_from_title(INSPIRE_PAGE);

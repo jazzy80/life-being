@@ -1,42 +1,23 @@
 <?php
-// Retrieve the pages that need a left sidebar.
-function get_pages_needing_left_sidebar(): array {
-	return array_filter(get_pages(), function(WP_Post $page): bool {
-		return in_array(strtolower($page -> post_title), PAGES_WITH_LEFT_SIDEBAR);
-	});
-}
-
 /*
 Retrieve the menus for the left sidebar if required.
 */
-function get_left_side_bar_menu_items(array $menus): array {
+function get_vitality_menu_items(array $menus): array {
 	// Get the menu_items. Filter on the menu item being a child of the page that needs them.
   return (sizeof($menus) > 0
 		? array_filter(wp_get_nav_menu_items($menus[0]), function(WP_Post $item): bool {
-	    return is_child_of($item, get_pages_needing_left_sidebar());
+	    return is_child_of($item, get_pages_needing_vitality());
 	  }) : []);
 }
 
-/*
-Get the left_side_bar as HTML string.
-*/
-function get_left_side_bar(WP_Post $current_post): string {
-	$left_sidebar_needing_pages = get_pages_needing_left_sidebar();
-	$left_sidebar_needing_page_ids = get_id_from_pages($left_sidebar_needing_pages);
-
-if (
-		// If the current post is a page that needs a rendered left sidebar with a vitality menu.
-		in_array($current_post -> ID, $left_sidebar_needing_page_ids) ||
-		// or if its a child of the current page, the sidebar also needs to be rendered.
-		is_child_of($current_post, $left_sidebar_needing_pages)
-	) {
-		return get_vitality_menu($current_post, $left_sidebar_needing_page_ids);
-	}
-	// Else return an empty left side bar without a menu.
-	return get_standard_left_side_bar($current_post);
+function get_pages_needing_vitality(): array {
+	return array_map(
+		'get_page_from_title',
+    PAGES_NEEDING_VITALITY
+	);
 }
 
-function get_standard_left_side_bar(WP_Post $current_post): string {
+function get_left_side_bar(WP_Post $current_post): string {
 	$style = is_on_home($current_post) ? 'display: none;' : '';
 	return create_container_with_most_recent_articles(
 		'most-recent-container',
@@ -64,11 +45,11 @@ function get_standard_left_side_bar(WP_Post $current_post): string {
 /*
 Get the vitality left side bar menu HTML string.
 */
-function get_vitality_menu(WP_Post $current_post, array $left_sidebar_needing_page_ids): string {
+function render_vitality_menu(WP_Post $current_post): string {
 	// Use menu items defined for this post.
 	$menus = wp_get_nav_menus();
 	// Retrieve all left side bar menu_items from all defined menus.
-	$menu_items = get_left_side_bar_menu_items($menus);
+	$menu_items = get_vitality_menu_items($menus);
 
 	// Retrurn the left side bar as a HTML string.
 	return
@@ -77,8 +58,8 @@ function get_vitality_menu(WP_Post $current_post, array $left_sidebar_needing_pa
 		<ul>' .
 	// If on a child page of a sidebar page.
   // create a backlink back to its parent.
-	(in_array($current_post -> post_parent, $left_sidebar_needing_page_ids)
-		? create_backlink_to_parent($current_post) : '') .
+	(is_child_of($current_post, get_pages_needing_vitality())
+	? create_backlink_to_parent($current_post) : '') .
 	// Concantenate with the rest of the menu items below.
 	// Create all the menu items, and concatenate to html string.
   // Use links of child pages to populate the sidebar.

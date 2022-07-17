@@ -1,0 +1,31 @@
+.form {
+  display: none;
+  flex-direction: column;
+}
+
+.body-title {
+  text-align: center;
+  margin: 0;
+}
+
+.add-comment {
+  margin: 1rem;
+}
+
+.comments {
+  list-style: none;
+  margin: 1rem;
+}
+
+.comment {
+  display: flex;
+  margin: 1rem;
+}
+
+.comment > div {
+  width: 50%;
+}
+
+.comment p {
+  text-align: left;
+}

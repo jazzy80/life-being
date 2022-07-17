@@ -9,23 +9,21 @@
  * @since 1.0
  */
 
+ //applicationConfig
+require_once __DIR__ . '/applicationconfig.php';
  // adding a rest api for retrieving all blogs.
 require_once __DIR__ . '/api/blogs.php';
 require_once __DIR__ . '/api/poetry.php';
+
+//get the data objects.
+require_once __DIR__ . '/data/guestbookentry.php';
+
+// get the models.
+require_once __DIR__ . '/models/guestbookmodel.php';
 // adding the html string generation functions for the leftsidebar.
-require_once __DIR__ . '/htmlfunctions/leftsidebar.php';
+require_once __DIR__ . '/htmlfunctions/vitality.php';
 require_once __DIR__ . '/htmlfunctions/mostrecentarticle.php';
-
- //Define home page.
- define('HOME_PAGE', 'be home');
- //Define which pages should get a sidebar and a "most recent" bar.
-define('PAGES_WITH_LEFT_SIDEBAR', ['vitality']);
-// Define the blogs parent page title.
-define('BLOG_PAGE', 'Being Blogs');
-define('POETRY_PAGE', 'Poetry');
-define('INSPIRE_PAGE', 'Inspire');
-
-define('PAGINATION_SIZE', 5);
+require_once __DIR__ . '/htmlfunctions/guestbook.php';
 
 if ( ! function_exists( 'blank_canvas_setup' ) ) :
 	/**
@@ -279,6 +277,26 @@ function get_id_from_pages(array $pages): array {
 
 function is_on_home(WP_Post $current_post): bool {
 	return strtolower($current_post -> post_title) === strtolower(HOME_PAGE);
+}
+
+function page_needs_left_sidebar(WP_Post $current_post): bool {
+  return in_array(strtolower($current_post -> post_title), PAGES_NEEDING_LEFT_SIDEBAR);
+}
+
+function page_needs_right_sidebar(WP_Post $current_post): bool {
+  return in_array(strtolower($current_post -> post_title), PAGES_NEEDING_RIGHT_SIDEBAR);
+}
+
+function page_needs_vitality_menu(WP_Post $current_post): bool {
+  return in_array(
+    strtolower($current_post -> post_title), PAGES_NEEDING_VITALITY
+    ) || is_child_of($current_post, array_map('get_page_from_title', PAGES_NEEDING_VITALITY));
+}
+
+function get_guestbook_entries(): array {
+  global $wpdb;
+  $con = new GuestBookModel($wpdb);
+  return $con -> get_all_entries();
 }
 
 add_filter( 'body_class', 'blank_canvas_body_classes' );
