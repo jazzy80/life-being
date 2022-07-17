@@ -60,7 +60,6 @@ EOL;
         <span class="hamburger-menu"></span>
       </label>
     </div>
-  }
 EOL;
 }
 ?>
