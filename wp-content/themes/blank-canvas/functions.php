@@ -233,7 +233,7 @@ function is_child_of(WP_Post $child, array $parents): bool {
 }
 
 //find_if, use a predicate to retrieve an element from an array or null if not found.
-function find_if(array $array, callable $predicate): WP_Post {
+function find_if(array $array, callable $predicate): ?WP_Post {
 	foreach($array as $element) {
 		if ($predicate($element)) return $element;
 	}
@@ -243,7 +243,7 @@ function find_if(array $array, callable $predicate): WP_Post {
 /*
 Using a title, find the corresponding page having that title or `null` if not found.
 */
-function get_page_from_title(string $title): WP_Post {
+function get_page_from_title(string $title): ?WP_Post {
 	return find_if(get_pages(), function(WP_Post $page) use($title) {
 		return strtolower($page -> post_title) === strtolower($title);
 	});
