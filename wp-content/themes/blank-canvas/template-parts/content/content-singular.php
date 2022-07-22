@@ -54,43 +54,52 @@ echo get_left_side_bar($current_post);
 // Check if the current page should have a rigth sidebar.
 if (!is_on_home($current_post)) {
 	// Retrieve the most recent blog, poem and inspire.
+<<<<<<< Updated upstream
 	// TODO generalize and remove obvious code dublication.
+=======
+>>>>>>> Stashed changes
 	$blog_page = get_page_from_title(BLOG_PAGE);
 	$poetry_page = get_page_from_title(POETRY_PAGE);
 	$inspire_page = get_page_from_title(INSPIRE_PAGE);
-	$most_recent_blog = $blog_page ? find_most_recent_article($blog_page) : null;
-	$most_recent_poem = $poetry_page ? find_most_recent_article($poetry_page) : null;
-	$most_recent_inspire = $inspire_page ? find_most_recent_article($inspire_page) : null;
-	// Create HTML div with most recent articles
-	echo create_container_with_most_recent_articles(
-		// className for the div
-		'most-recent-container',
-		// list of generated HTML articles.
+
+	$blog_view = $blog_page -> map(
+		function($a) {
+			find_most_recent_article($a) -> map(function($b) {
+				new MostRecentArticleView(
+					$b,
+					"Meest recente blog"
+				);
+			});
+		}
+	);
+	$poem_view = $poetry_page -> map(
+		function($a) {
+			find_most_recent_article($a) -> map(function($b) {
+				new MostRecentArticleView(
+					$b,
+					"Meest recent gedicht"
+				);
+			});
+		}
+	);
+	$insipire_view = $inspire_page -> map(
+		function($a) {
+			find_most_recent_article($a) -> map(function($b) {
+				new MostRecentArticleView(
+					$b,
+					"Inspire"
+				);
+			});
+		}
+	);
+	$container = new MostRecentArticleContainer(
 		[
-			get_most_recent_article(
-			// page
-			$most_recent_blog,
-			// title
-			'Meest recente Blog',
-			// class
-			'most-recent-blog',
-			// class for header <p> tag.
-			'recent_blog_heading'
-			),
-			get_most_recent_article(
-				$most_recent_inspire,
-				'Inspire',
-				'inspire-block',
-				'recent-inspire'
-			),
-			get_most_recent_article(
-				$most_recent_poem,
-				'Meest recente gedicht',
-				'recent-poem',
-				'most-recent-poem'
-			)
+			$blog_view,
+			$poem_view,
+			$inspire_view
 		]
 	);
+	echo $container -> display();
 }
 ?>
 <!-- Add the main script for the site -->

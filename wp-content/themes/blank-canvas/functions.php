@@ -13,19 +13,12 @@
 require_once __DIR__ . '/api/blogs.php';
 require_once __DIR__ . '/api/poetry.php';
 // adding the html string generation functions for the leftsidebar.
-require_once __DIR__ . '/htmlfunctions/leftsidebar.php';
-require_once __DIR__ . '/htmlfunctions/mostrecentarticle.php';
+require_once __DIR__ . '/views/vitality.php';
+require_once __DIR__ . '/views/mostrecentarticleview.php';
+require_once __DIR__ . '/views/guestbook.php';
+require_once __DIR__ . '/views/mostrecentarticlecontainer.php';
 
- //Define home page.
- define('HOME_PAGE', 'be home');
- //Define which pages should get a sidebar and a "most recent" bar.
-define('PAGES_WITH_LEFT_SIDEBAR', ['vitality']);
-// Define the blogs parent page title.
-define('BLOG_PAGE', 'Being Blogs');
-define('POETRY_PAGE', 'Poetry');
-define('INSPIRE_PAGE', 'Inspire');
-
-define('PAGINATION_SIZE', 5);
+require_once __DIR__ . '/utils/maybe.php';
 
 if ( ! function_exists( 'blank_canvas_setup' ) ) :
 	/**
@@ -233,17 +226,17 @@ function is_child_of(WP_Post $child, array $parents): bool {
 }
 
 //find_if, use a predicate to retrieve an element from an array or null if not found.
-function find_if(array $array, callable $predicate): WP_Post {
+function find_if(array $array, callable $predicate): Maybe {
 	foreach($array as $element) {
-		if ($predicate($element)) return $element;
+		if ($predicate($element)) return new Just($element);
 	}
-	return null;
+	return new None;
 }
 
 /*
 Using a title, find the corresponding page having that title or `null` if not found.
 */
-function get_page_from_title(string $title): WP_Post {
+function get_page_from_title(string $title): Maybe {
 	return find_if(get_pages(), function(WP_Post $page) use($title) {
 		return strtolower($page -> post_title) === strtolower($title);
 	});
@@ -265,9 +258,9 @@ function find_child_pages_of_parent(WP_Post $parent): array {
 /*
 Find the most recent child from a parent.
 */
-function find_most_recent_article(WP_Post $parent): ?WP_Post {
+function find_most_recent_article(WP_Post $parent): Maybe {
 	$child_pages = find_child_pages_of_parent($parent);
-	return (sizeof($child_pages) > 0) ? $child_pages[0] : null;
+	return (sizeof($child_pages) > 0) ? new Just($child_pages[0]) : new None;
 }
 
 // map an array with `pages` to an array with the page ids.
