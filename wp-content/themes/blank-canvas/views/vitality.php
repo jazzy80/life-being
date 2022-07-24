@@ -11,35 +11,18 @@ function get_vitality_menu_items(array $menus): array {
 }
 
 function get_pages_needing_vitality(): array {
-	return array_map(
-		'get_page_from_title',
-    PAGES_NEEDING_VITALITY
-	);
+	return MaybeCompanion::flattenArray(
+    array_map(
+  		'get_page_from_title',
+      PAGES_NEEDING_VITALITY
+  	)
+  );
 }
 
-function get_left_side_bar(WP_Post $current_post): string {
-	$style = is_on_home($current_post) ? 'display: none;' : '';
-	return create_container_with_most_recent_articles(
-		'most-recent-container',
-		[
-			get_most_recent_article(
-				$most_recent_recipe,
-				'Most recent recipe',
-				'most-recent-recipe'
-			),
-			get_most_recent_article(
-				$most_recent_exercise,
-				'Most recent Exercise',
-				'most-recent-exercise'
-			),
-			get_most_recent_article(
-				$most_recent_general,
-				'Most Recent article',
-				'most-recent-article'
-			)
-		],
-		$style
-	);
+function is_page_needing_vitality(WP_Post $current_post): bool {
+  $pages = get_pages_needing_vitality();
+  return in_array($current_post, $pages)
+    || is_child_of($current_post, $pages);
 }
 
 /*

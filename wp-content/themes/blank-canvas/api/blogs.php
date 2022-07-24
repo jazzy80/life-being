@@ -6,9 +6,9 @@ add_action( 'rest_api_init', function () {
   ) );
 } );
 
-function get_blogs ($data) {
-  $blog_page = get_page_from_title(BLOG_PAGE);
-  require_once 'articles.php';
-  return get_articles($data, $blog_page);
+require_once 'articles.php';
+
+function get_blogs (object $data): array {
+  return get_articles_for_page(BLOG_PAGE, $data);
 }
 ?>

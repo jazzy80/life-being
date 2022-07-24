@@ -11,17 +11,19 @@
 $show_post_and_page_titles = get_theme_mod( 'show_post_and_page_titles', false );
 // Get the current post/page
 $current_post = get_post();
-// Render the left side bar.
-echo get_left_side_bar($current_post);
+if (is_page_needing_vitality($current_post)) {
+	// Render the vitality
+	echo render_vitality_menu($current_post);
+}
 ?>
 <div class="entry-content">
 	<?php
 	//  Init script to generate the blog list and the pagination.
-	if ($current_post -> post_title === BLOG_PAGE) {
+	if (strtolower($current_post -> post_title) === BLOG_PAGE) {
 		echo '<script src="/scripts/dist/blogs.js"></script>';
 	}
 	//  Same for the poetry page.
-	elseif ($current_post -> post_title === POETRY_PAGE) {
+	elseif (strtolower($current_post -> post_title) === POETRY_PAGE) {
 		echo '<script src="/scripts/dist/poetry.js"></script>';
 	}
 	// Otherwise show the page/post using default WP/theme functionality.
@@ -54,50 +56,49 @@ echo get_left_side_bar($current_post);
 // Check if the current page should have a rigth sidebar.
 if (!is_on_home($current_post)) {
 	// Retrieve the most recent blog, poem and inspire.
-<<<<<<< Updated upstream
-	// TODO generalize and remove obvious code dublication.
-=======
->>>>>>> Stashed changes
 	$blog_page = get_page_from_title(BLOG_PAGE);
 	$poetry_page = get_page_from_title(POETRY_PAGE);
 	$inspire_page = get_page_from_title(INSPIRE_PAGE);
 
-	$blog_view = $blog_page -> map(
+	$blog_view = $blog_page -> bind(
 		function($a) {
-			find_most_recent_article($a) -> map(function($b) {
-				new MostRecentArticleView(
+			return find_most_recent_child_page($a) -> map(function($b) {
+				return new MostRecentArticleView(
 					$b,
 					"Meest recente blog"
 				);
 			});
 		}
 	);
-	$poem_view = $poetry_page -> map(
+	$poem_view = $poetry_page -> bind(
 		function($a) {
-			find_most_recent_article($a) -> map(function($b) {
-				new MostRecentArticleView(
+			return find_most_recent_child_page($a) -> map(function($b) {
+				return new MostRecentArticleView(
 					$b,
 					"Meest recent gedicht"
 				);
 			});
 		}
 	);
-	$insipire_view = $inspire_page -> map(
+	$inspire_view = $inspire_page -> bind(
 		function($a) {
-			find_most_recent_article($a) -> map(function($b) {
-				new MostRecentArticleView(
+			return find_most_recent_child_page($a) -> map(function($b) {
+				return new MostRecentArticleView(
 					$b,
 					"Inspire"
 				);
 			});
 		}
 	);
-	$container = new MostRecentArticleContainer(
-		[
-			$blog_view,
-			$poem_view,
-			$inspire_view
-		]
+	$container = new CompositeView(
+		MaybeCompanion::flattenArray(
+			[
+				$blog_view,
+				$poem_view,
+				$inspire_view
+			]
+		),
+		"most-recent-container"
 	);
 	echo $container -> display();
 }

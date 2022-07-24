@@ -6,9 +6,9 @@ add_action( 'rest_api_init', function () {
   ) );
 } );
 
-function get_poetry ($data) {
-  $poetry_page = get_page_from_title(POETRY_PAGE);
-  require_once 'articles.php';
-  return get_articles($data, $poetry_page);
+require_once 'articles.php';
+
+function get_poetry (object $data): array {
+  return get_articles_for_page(POETRY_PAGE, $data);
 }
 ?>
