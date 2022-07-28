@@ -12,7 +12,7 @@ class CompositeView implements IView {
   }
 
   public function display(): string {
-    // Display is implementating by calling the display of all child views.
+    // Display is implemented by calling the display of all child views.
     return array_reduce(
       $this -> views,
       fn(string $page, IView $view) =>

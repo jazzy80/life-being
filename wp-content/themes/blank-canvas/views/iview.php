@@ -5,4 +5,4 @@ interface IView {
   **/
   public function display(): string;
 }
- ?>
+?>

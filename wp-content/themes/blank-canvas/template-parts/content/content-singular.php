@@ -11,9 +11,10 @@
 $show_post_and_page_titles = get_theme_mod( 'show_post_and_page_titles', false );
 // Get the current post/page
 $current_post = get_post();
-if (is_page_needing_vitality($current_post)) {
+if (PageModel :: is_page_needing_vitality($current_post)) {
 	// Render the vitality
-	echo render_vitality_menu($current_post);
+	$vitality = new VitalityView($current_post, wp_get_nav_menus());
+	echo $vitality -> display();
 }
 ?>
 <div class="entry-content">
@@ -54,15 +55,15 @@ if (is_page_needing_vitality($current_post)) {
 </div><!-- .entry-content -->
 <?php
 // Check if the current page should have a rigth sidebar.
-if (!is_on_home($current_post)) {
+if (!PageModel :: is_on_home($current_post)) {
 	// Retrieve the most recent blog, poem and inspire.
-	$blog_page = get_page_from_title(BLOG_PAGE);
-	$poetry_page = get_page_from_title(POETRY_PAGE);
-	$inspire_page = get_page_from_title(INSPIRE_PAGE);
+	$blog_page = PageModel :: get_page_from_title(BLOG_PAGE);
+	$poetry_page = PageModel :: get_page_from_title(POETRY_PAGE);
+	$inspire_page = PageModel :: get_page_from_title(INSPIRE_PAGE);
 
 	$blog_view = $blog_page -> bind(
 		function($a) {
-			return find_most_recent_child_page($a) -> map(function($b) {
+			return PageModel :: find_most_recent_child_page($a) -> map(function($b) {
 				return new MostRecentArticleView(
 					$b,
 					"Meest recente blog"
@@ -72,7 +73,7 @@ if (!is_on_home($current_post)) {
 	);
 	$poem_view = $poetry_page -> bind(
 		function($a) {
-			return find_most_recent_child_page($a) -> map(function($b) {
+			return PageModel :: find_most_recent_child_page($a) -> map(function($b) {
 				return new MostRecentArticleView(
 					$b,
 					"Meest recent gedicht"
@@ -82,7 +83,7 @@ if (!is_on_home($current_post)) {
 	);
 	$inspire_view = $inspire_page -> bind(
 		function($a) {
-			return find_most_recent_child_page($a) -> map(function($b) {
+			return PageModel :: find_most_recent_child_page($a) -> map(function($b) {
 				return new MostRecentArticleView(
 					$b,
 					"Inspire"

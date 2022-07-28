@@ -1,18 +1,4 @@
 <?php
-
-// Retrieve all published menu items.
-$menus = wp_get_nav_menus();
-  $menu_items = sizeof($menus) > 0
-    ? array_filter(wp_get_nav_menu_items($menus[0]), function($item) {
-    return $item -> post_parent === 0;
-  }) : [];
-  $current_post = get_post();
-?>
-
-<?php
-  // If a featured image exists, use it as the header background.
-  // Use an inline script to use php variables directly.
-  // TODO find a more elegant solution.
   $thumbnail_url = get_the_post_thumbnail_url(null, 'large');
   if($thumbnail_url) {
     echo <<< EOL
@@ -43,7 +29,13 @@ EOL;
     <i class="fas fa-chevron-right next-button"></i>
   </div>
   <?php
-  if (!is_on_home($current_post)) {
+  // Retrieve the current post.
+  $current_post = get_post();
+  // Retrieve the navbar menu items.
+  $menu_items = PageModel  :: get_nav_menu_items(wp_get_nav_menus());
+
+  // if we are not on `Home` make the navbar and hamburger visible.
+  if (!PageModel :: is_on_home($current_post)) {
     echo <<< EOL
     <div class="navbar lower-navbar">
       <input id="menu-toggle" type="checkbox"/>
