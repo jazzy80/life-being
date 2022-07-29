@@ -9,18 +9,34 @@
  * @since 1.0
  */
 
- // adding a rest api for retrieving all blogs.
+ // adding a rest api for retrieving all articles.
 require_once __DIR__ . '/api/blogs.php';
 require_once __DIR__ . '/api/poetry.php';
-// adding the html string generation functions for the leftsidebar.
-require_once __DIR__ . '/views/vitality.php';
+
+//adding the models.
+require_once __DIR__ . '/models/pagemodel.php';
+// adding the views.
+require_once __DIR__ . '/views/vitalityview.php';
 require_once __DIR__ . '/views/mostrecentarticleview.php';
 require_once __DIR__ . '/views/guestbook.php';
-require_once __DIR__ . '/views/mostrecentarticlecontainer.php';
+require_once __DIR__ . '/views/compositeview.php';
 
+// adding the utils.
 require_once __DIR__ . '/utils/maybe.php';
 
+//Define home page.
+define('HOME_PAGE', 'be home');
+//Define which pages should get the `Vitality` menu.
+define('PAGES_NEEDING_VITALITY', ['vitality']);
+// Define the blogs parent page title.
+define('BLOG_PAGE', 'being blogs');
+define('POETRY_PAGE', 'poetry');
+define('INSPIRE_PAGE', 'inspire');
+
+define('PAGINATION_SIZE', 5);
+
 if ( ! function_exists( 'blank_canvas_setup' ) ) :
+
 	/**
 	 * Sets up theme defaults and registers support for various WordPress features.
 	 *
@@ -217,64 +233,11 @@ function blank_canvas_body_classes( $classes ) {
 	return $classes;
 }
 
-// Check if a page is a child of one of the parents.
-function is_child_of(WP_Post $child, array $parents): bool {
-	foreach($parents as $parent)  {
-		if ($child -> post_parent === $parent -> ID) return true;
-	}
-	return false;
-}
-
-//find_if, use a predicate to retrieve an element from an array or null if not found.
-function find_if(array $array, callable $predicate): Maybe {
-	foreach($array as $element) {
-		if ($predicate($element)) return new Just($element);
-	}
-	return new None;
-}
-
-/*
-Using a title, find the corresponding page having that title or `null` if not found.
-*/
-function get_page_from_title(string $title): Maybe {
-	return find_if(get_pages(), function(WP_Post $page) use($title) {
-		return strtolower($page -> post_title) === strtolower($title);
-	});
-}
-
-/*
-Retrieve all child page of `parent`.
-Return an array of child page objects sorted by date, descending order.
-*/
-function find_child_pages_of_parent(WP_Post $parent): array {
-	return get_pages(
-		array(
-			'parent' => $parent -> ID,
-			'sort_order' => 'DESC',
-			'sort_column' => 'post_date'
-		)
-	);
-}
-/*
-Find the most recent child from a parent.
-*/
-function find_most_recent_article(WP_Post $parent): Maybe {
-	$child_pages = find_child_pages_of_parent($parent);
-	return (sizeof($child_pages) > 0) ? new Just($child_pages[0]) : new None;
-}
-
-// map an array with `pages` to an array with the page ids.
-function get_id_from_pages(array $pages): array {
-	return array_map(function($page) {
-		return $page -> ID;
-	}, $pages);
-}
-
-function is_on_home(WP_Post $current_post): bool {
-	return strtolower($current_post -> post_title) === strtolower(HOME_PAGE);
-}
-
+// Add a class to the body html tag.
 add_filter( 'body_class', 'blank_canvas_body_classes' );
+
 // Adding excerpt support in the wp-admin.
 add_post_type_support( 'page', 'excerpt' );
+
+// Remove big image size threshold.
 add_filter( 'big_image_size_threshold', '__return_false' );
