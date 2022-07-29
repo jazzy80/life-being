@@ -20,20 +20,15 @@ require_once __DIR__ . '/views/vitalityview.php';
 require_once __DIR__ . '/views/mostrecentarticleview.php';
 require_once __DIR__ . '/views/guestbook.php';
 require_once __DIR__ . '/views/compositeview.php';
+require_once __DIR__ . '/views/lowernavbarview.php';
+require_once __DIR__ . '/views/uppernavbarview.php';
+require_once __DIR__ . '/views/headerview.php';
 
 // adding the utils.
 require_once __DIR__ . '/utils/maybe.php';
 
-//Define home page.
-define('HOME_PAGE', 'be home');
-//Define which pages should get the `Vitality` menu.
-define('PAGES_NEEDING_VITALITY', ['vitality']);
-// Define the blogs parent page title.
-define('BLOG_PAGE', 'being blogs');
-define('POETRY_PAGE', 'poetry');
-define('INSPIRE_PAGE', 'inspire');
-
-define('PAGINATION_SIZE', 5);
+//adding the configuration.
+require_once __DIR__ . '/applicationconfig.php';
 
 if ( ! function_exists( 'blank_canvas_setup' ) ) :
 

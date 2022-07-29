@@ -23,7 +23,7 @@ class PageModel {
   public static function get_nav_menu_items(array $menus): array {
     return array_filter(
       wp_get_nav_menu_items($menus[0]),
-      fn(WP_Post $menu_item): bool => $menu_item -> parent_post == 0
+      fn(WP_Post $menu_item): bool => $menu_item -> post_parent == 0
     );
   }
 
@@ -35,7 +35,7 @@ class PageModel {
     $predicate = fn(WP_Post $page): bool =>
       PageModel :: is_child_of($page, pageModel :: get_pages_from_titles(PAGES_NEEDING_VITALITY));
     return array_filter(
-      PageModel :: get_nav_menu_items($menus),
+      wp_get_nav_menu_items($menus[0]),
       $predicate
     );
   }
