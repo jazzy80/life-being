@@ -9,6 +9,6 @@ add_action( 'rest_api_init', function () {
 require_once 'articles.php';
 
 function get_blogs (object $data): array {
-  return get_articles_for_page(BLOG_PAGE, $data);
+  return get_articles_for_page(new PageModel, BLOG_PAGE, $data);
 }
 ?>

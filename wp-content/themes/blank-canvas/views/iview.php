@@ -1,7 +1,10 @@
 <?php
+/**
+* IView is a representation of the UI elements.
+**/
 interface IView {
   /**
-  * Returns a string representation of a IView which can be displayed.
+  * Returns a string representation of the IView for display.
   **/
   public function display(): string;
 }

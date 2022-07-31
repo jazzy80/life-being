@@ -6,9 +6,10 @@ require_once "iview.php";
 * Class representing a View that consists of other views.
 **/
 class CompositeView implements IView {
-  public function __construct(array $views, string $class_attr) {
+  private array $views;
+
+  public function __construct(array $views) {
     $this -> views = $views;
-    $this -> class_attr = $class_attr;
   }
 
   public function display(): string {
@@ -17,7 +18,7 @@ class CompositeView implements IView {
       $this -> views,
       fn(string $page, IView $view) =>
         $page . $view -> display(),
-      '<div class="' . $this -> class_attr . '">') . '</div>';
+      '');
   }
 }
- ?>
+?>

@@ -1,20 +1,24 @@
 <?php
 // Function to retrieve articles belonging to a specific page.
-function get_articles_for_page(string $page_title, object $data): array {
-  return get_page_from_title($page_title) -> map(
+function get_articles_for_page(
+  PageModel $page_model,
+  string $page_title,
+  object $data
+): array {
+  return $page_model -> get_page_from_title($page_title) -> map(
     fn(WP_Post $page): array =>
-      get_articles($data, $page)
+      get_articles($page_model, $data, $page)
     // if no pages are found, return an empty array.
     ) -> get_or_else([]);
 }
 
 // general function to retrieve articles.
-function get_articles(object $data, WP_Post $article_page) {
+function get_articles(PageModel $page_model, object $data, WP_Post $article_page) {
 // Get the page number from retrieve '$data' object.
 $page_number = intval(filter_var($data['page'], FILTER_SANITIZE_STRING));
 
 // Articles are defined as child pages of the `$articel page`.
-$articles = find_child_pages_of_parent($article_page);
+$articles = $page_model -> find_child_pages_of_parent($article_page);
 
 // Get the articles for the specified `$page_number`.
 $paginated_articles = array_slice($articles, $page_number * PAGINATION_SIZE, PAGINATION_SIZE);

@@ -16,6 +16,7 @@ require_once __DIR__ . '/api/poetry.php';
 //adding the models.
 require_once __DIR__ . '/models/pagemodel.php';
 // adding the views.
+require_once __DIR__ . '/views/iview.php';
 require_once __DIR__ . '/views/vitalityview.php';
 require_once __DIR__ . '/views/mostrecentarticleview.php';
 require_once __DIR__ . '/views/guestbook.php';
@@ -23,9 +24,21 @@ require_once __DIR__ . '/views/compositeview.php';
 require_once __DIR__ . '/views/lowernavbarview.php';
 require_once __DIR__ . '/views/uppernavbarview.php';
 require_once __DIR__ . '/views/headerview.php';
+require_once __DIR__ . '/views/textbodyview.php';
+require_once __DIR__ . '/views/decorators/rightpanedecorator.php';
 
 // adding the utils.
 require_once __DIR__ . '/utils/maybe.php';
+
+//adding the view factory.
+require_once __DIR__ . '/views/factories/abstractviewfactory.php';
+require_once __DIR__ . '/views/factories/homepageviewfactory.php';
+require_once __DIR__ . '/views/factories/defaultviewfactory.php';
+
+//adding the controllers/
+require_once __DIR__ . '/controllers/basecontroller.php';
+require_once __DIR__ . '/controllers/headercontroller.php';
+require_once __DIR__ . '/controllers/simplecontroller.php';
 
 //adding the configuration.
 require_once __DIR__ . '/applicationconfig.php';
