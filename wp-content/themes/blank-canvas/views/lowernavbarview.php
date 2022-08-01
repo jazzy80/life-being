@@ -7,7 +7,7 @@ class LowerNavBarView implements IView {
   }
 
   public function display(): string {
-    $upper_part = <<< EOL
+    $navbar = <<< EOL
     <div class="navbar lower-navbar">
       <input id="menu-toggle" type="checkbox"/>
       <ul class="nav-links lower-navbar-links">
@@ -23,14 +23,14 @@ class LowerNavBarView implements IView {
         </li>",
         ''
       );
-    $lower_part = <<< EOL
+    $hamburger_menu = <<< EOL
       </ul>
       <label for="menu-toggle" class="hamburger-container">
         <span class="hamburger-menu"></span>
       </label>
     </div>
     EOL;
-    return $upper_part . $navbar_links . $lower_part;
+    return $navbar. $navbar_links . $hamburger_menu;
   }
 }
 ?>

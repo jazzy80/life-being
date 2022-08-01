@@ -1,16 +1,20 @@
 <?php
 require_once 'iview.php';
 
+// Class representing the Header portion of the UI.
 class HeaderView implements IView {
   public function __construct(
-    IView $upper_navbar,
-    IView $lower_navbar
+    // Navbars are optional.
+    Maybe /* <IView> */ $upper_navbar,
+    Maybe /* <IView> */ $lower_navbar
   ) {
     $this -> upper_navbar = $upper_navbar;
     $this -> lower_navbar = $lower_navbar;
   }
 
   public function display(): string {
+    // Script for setting the background image using the provided `featured image`
+    // in `wp-admin`.
     $thumbnail_url = get_the_post_thumbnail_url(null, 'large');
       $script_tag = $thumbnail_url ? <<< EOL
       <script>
@@ -22,8 +26,8 @@ class HeaderView implements IView {
     $header =
     '<header class="header">
       <div class="navbar upper-navbar">
-        <object class="logo" data="/resources/logo lifebeing.title.svg"> </object>'
-        . $this -> upper_navbar -> display() .
+        <object class="logo" data="/resources/sidekiq.svg"> </object>'
+        . $this -> upper_navbar -> map(fn(IView $v) => $v -> display()) -> get_or_else('') .
       '</div>
       <div class="title-with-btns">
         <i class="fas fa-chevron-left prev-button"></i>
@@ -33,7 +37,7 @@ class HeaderView implements IView {
         </div>
         <i class="fas fa-chevron-right next-button"></i>
       </div>'
-      . $this -> lower_navbar -> display() .
+      . $this -> lower_navbar -> map(fn(IView $v) => $v -> display()) -> get_or_else('') .
     '</header>';
     return $script_tag . $header;
   }

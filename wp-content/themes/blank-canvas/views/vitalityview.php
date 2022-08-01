@@ -2,30 +2,35 @@
 require_once 'iview.php';
 
 class VitalityView implements IView {
-  public function __construct(WP_Post $current_post, array $menus) {
+  private PageModel $page_model;
+  private WP_Post $current_post;
+  private array $menu_items;
+
+  public function __construct(PageModel $page_model, WP_Post $current_post, array $menu_items) {
+    $this -> page_model = $page_model;
     $this -> current_post = $current_post;
-    $this -> menus = $menus;
+    $this -> menu_items = $menu_items;
   }
   /*
   Get the vitality left side bar menu HTML string.
   */
   public function display(): string {
-  	// Retrieve the menu items beloning to `vitality`.
-  	$menu_items = PageModel :: get_vitality_menu_items($this -> menus);
-
-  	// render the vitality menu.
+  	// Render the vitality menu.
   	return
   	'<div class="sidebar">
   	 <h5 class="sidebar-title"> Vitality </h5>
   		<ul>' .
   	// If on a child page of a sidebar page.
-    // create a backlink back to its parent.
-  	(PageModel :: is_child_of($this -> current_post, PageModel :: get_pages_from_titles(PAGES_NEEDING_VITALITY))
+    // Create a backlink back to its parent.
+  	($this -> page_model -> is_child_of(
+      $this -> current_post,
+      $this -> page_model -> get_pages_from_titles(PAGES_NEEDING_VITALITY)
+      )
   	? $this -> create_backlink_to_parent() : '') .
   	// Concantenate with the rest of the menu items below.
   	// Create all the menu items, and concatenate to html string.
     // Use links of child pages to populate the sidebar.
-  	array_reduce($menu_items, function(string $html, WP_Post $menu_item): string {
+  	array_reduce($this -> menu_items, function(string $html, WP_Post $menu_item): string {
   		return $html .
   		'<li>
   			<object class="heart-icon" data="/resources/hearticon.svg"></object>
