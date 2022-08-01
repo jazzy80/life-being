@@ -20,13 +20,13 @@ class HeaderView implements IView {
       <script>
         var body = document.querySelector('body');
         body.style.backgroundImage = "url($thumbnail_url)";
-      </script>'
+      </script>
       EOL : '';
 
     $header =
     '<header class="header">
       <div class="navbar upper-navbar">
-        <object class="logo" data="/resources/sidekiq.svg"> </object>'
+        <object class="logo" data="/resources/logo lifebeing.title.svg"> </object>'
         . $this -> upper_navbar -> map(fn(IView $v) => $v -> display()) -> get_or_else('') .
       '</div>
       <div class="title-with-btns">

@@ -13,7 +13,6 @@ class DefaultViewFactory extends AbstractViewFactory {
   public function create_body(): IView {
     // Assemble the leftpane for the page.
     $left_pane  = $this -> get_left_pane();
-    // Assemble the post text body.
     $text_body  = $this -> get_text_body();
     // Assemble the right pane.
     $right_pane = $this -> get_right_pane();
@@ -26,24 +25,23 @@ class DefaultViewFactory extends AbstractViewFactory {
     // Create a new compositeView encompassing the complete page body.
     return new CompositeView(
       [
-        ...MaybeCompanion :: flattenArray(
-          [
-            $left_pane,
-          ]
-        ),
+        $left_pane,
         $text_body,
         $right_pane_decorator,
       ]
     );
   }
 
-  private function get_left_pane(): Maybe {
+  private function get_left_pane(): IView {
     return $this -> page_model -> is_page_needing_vitality($this -> page)
-      ? new Just(new VitalityView(
+      ? new VitalityView(
         $this-> page_model,
         $this -> page,
-        $this -> menu_items)
-      ) : new None;
+        $this -> menu_items
+      ) : new RightPaneDecorator(
+        new CompositeView([]),
+        'most-recent-container'
+      );
   }
 
   private function get_right_pane(): IView {
