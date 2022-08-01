@@ -7,8 +7,26 @@
  * @package Blank Canvas
  * @since 1.0
  */
+ function get_controller($page, $page_model, $builder) {
+   switch (strtolower($page -> post_title)) {
+   case HOME_PAGE: return new HomeController($builder);
+   case VITALITY:
+   case $page_model -> is_page_needing_vitality($page):
+    return new VitalityController($builder);
+    default: return new DefaultController($builder);
+  }
+ }
+
+ $page = get_post();
  $page_model = new PageModel;
- $controller = new SimpleController($page_model);
+ $view_factory = new ViewFactory(
+   $page_model,
+   $page,
+   wp_get_nav_menus()
+ );
+ $builder = new PageBuilder($view_factory);
+
+ $controller = get_controller($page, $page_model, $builder);
  $controller -> get();
 ?>
 <!-- Add the main script for the site -->

@@ -10,18 +10,6 @@ define('GUESTBOOK',     'guest book');
 define('VITALITY',      'vitality');
 define('BEINGME',       'being me, being you');
 
- //Define which pages should get a sidebar and a "most recent" bar.
-define('PAGES_NEEDING_LEFT_SIDEBAR', []);
-define(
-  'PAGES_NEEDING_RIGHT_SIDEBAR',
-  [
-    BLOG_PAGE,
-    POETRY_PAGE,
-    VITALITY,
-    BEINGME
-  ]
-);
-
 //Define the pages that need the vitality menu.
 define(
   'PAGES_NEEDING_VITALITY', [VITALITY]
@@ -37,5 +25,5 @@ define('JS_FILE_PREFIX', '/scripts/dist/');
 define('LOAD_JAVASCRIPT', [
   BLOG_PAGE => [JS_FILE_PREFIX . 'blogs.js'],
   POETRY_PAGE => [JS_FILE_PREFIX . 'poetry.js']
-])
+]);
 ?>

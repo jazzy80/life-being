@@ -18,7 +18,7 @@ class TextBodyView implements IView {
     return $js_files ? array_reduce(
       $js_files,
       fn(string $html, string $js_file): string =>
-        $html . '<script src="' . $js_file . '"</script>',
+        $html . '<script src="' . $js_file . '"></script>',
       ''
     ) : '';
   }

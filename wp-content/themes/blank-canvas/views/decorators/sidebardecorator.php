@@ -1,7 +1,6 @@
 <?php
-require_once 'viewdecorator.php';
 
-class RightPaneDecorator extends ViewDecorator implements IView {
+class SideBarDecorator extends ViewDecorator implements IView {
   private string $class_attr;
 
   public function __construct(IView $view, string $class_attr) {

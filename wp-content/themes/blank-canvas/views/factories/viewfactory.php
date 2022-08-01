@@ -1,7 +1,22 @@
 <?php
 
+
 // Class responsible for creating the needed views.
-class DefaultViewFactory extends AbstractViewFactory {
+class ViewFactory implements AbstractViewFactory {
+  const SIDEBAR_CLASS = 'most-recent-container';
+
+  protected WP_Post $page;
+  protected array $menus;
+  protected array $menu_items;
+  protected PageModel $page_model;
+
+  public function __construct(PageModel $page_model, WP_Post $page, array $menus) {
+  $this -> page_model = $page_model;
+  $this -> page = $page;
+  $this -> menus = $menus;
+  // Retrieve all top level menu items for the navbar.
+  $this -> menu_items = $this -> page_model -> get_nav_menu_items($menus);
+}
   public function create_header(): IView {
     // Create a lower and upper navbar.
     $lower_navbar = new LowerNavBarView($this -> menu_items);
@@ -10,41 +25,24 @@ class DefaultViewFactory extends AbstractViewFactory {
     return new HeaderView(new Just($upper_navbar), new Just($lower_navbar));
   }
 
-  public function create_body(): IView {
-    // Assemble the leftpane for the page.
-    $left_pane  = $this -> get_left_pane();
-    $text_body  = $this -> get_text_body();
-    // Assemble the right pane.
-    $right_pane = $this -> get_right_pane();
-    // Decorate the right pane.
-    $right_pane_decorator = new RightPaneDecorator(
-      $right_pane,
-      'most-recent-container'
-    );
+  public function create_text_body(): IView {
+    return new TextBodyView($this -> page);
+  }
 
-    // Create a new compositeView encompassing the complete page body.
-    return new CompositeView(
-      [
-        $left_pane,
-        $text_body,
-        $right_pane_decorator,
-      ]
+  public function create_vitality_menu(): IView {
+    return new VitalityView(
+      $this -> page_model,
+      $this -> page,
+      $this -> page_model -> get_vitality_menu_items($this -> menus)
     );
   }
 
-  private function get_left_pane(): IView {
-    return $this -> page_model -> is_page_needing_vitality($this -> page)
-      ? new VitalityView(
-        $this-> page_model,
-        $this -> page,
-        $this -> menu_items
-      ) : new RightPaneDecorator(
-        new CompositeView([]),
-        'most-recent-container'
-      );
+  public function create_left_pane(): IView {
+    // TODO: Generate a leftPane.
+    return new SideBarDecorator(new CompositeView([]), ViewFactory :: SIDEBAR_CLASS);
   }
 
-  private function get_right_pane(): IView {
+  public function create_right_pane(): IView {
   	// Retrieve the most recent blog, poem and inspire pages as a
     // Maybe, since some pages might not be found.
   	$blog_page =    $this -> page_model -> get_page_from_title(BLOG_PAGE);
@@ -80,14 +78,17 @@ class DefaultViewFactory extends AbstractViewFactory {
        )
      );
      // Use the compositeView to combine the view into a right pane.
-     return new CompositeView(
+     return new SideBarDecorator(
+       new CompositeView(
 	       MaybeCompanion::flattenArray(
-    	     [
-            $recent_blog_view,
-            $recent_poetry_view,
-            $recent_inspire_view
-    		   ]
-         )
+      	     [
+              $recent_blog_view,
+              $recent_poetry_view,
+              $recent_inspire_view
+      		   ]
+           )
+         ),
+         ViewFactory :: SIDEBAR_CLASS
        );
      }
    }

@@ -25,20 +25,25 @@ require_once __DIR__ . '/views/lowernavbarview.php';
 require_once __DIR__ . '/views/uppernavbarview.php';
 require_once __DIR__ . '/views/headerview.php';
 require_once __DIR__ . '/views/textbodyview.php';
-require_once __DIR__ . '/views/decorators/rightpanedecorator.php';
+
+require_once __DIR__ . '/views/decorators/viewdecorator.php';
+require_once __DIR__ . '/views/decorators/sidebardecorator.php';
 
 // adding the utils.
 require_once __DIR__ . '/utils/maybe.php';
 
 //adding the view factory.
 require_once __DIR__ . '/views/factories/abstractviewfactory.php';
-require_once __DIR__ . '/views/factories/homepageviewfactory.php';
-require_once __DIR__ . '/views/factories/defaultviewfactory.php';
+require_once __DIR__ . '/views/factories/viewfactory.php';
+
+require_once __DIR__ . '/views/builders/abstractbuilder.php';
+require_once __DIR__ . '/views/builders/pagebuilder.php';
 
 //adding the controllers/
 require_once __DIR__ . '/controllers/basecontroller.php';
-require_once __DIR__ . '/controllers/headercontroller.php';
-require_once __DIR__ . '/controllers/simplecontroller.php';
+require_once __DIR__ . '/controllers/homecontroller.php';
+require_once __DIR__ . '/controllers/defaultcontroller.php';
+require_once __DIR__ . '/controllers/vitalitycontroller.php';
 
 //adding the configuration.
 require_once __DIR__ . '/applicationconfig.php';
