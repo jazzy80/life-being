@@ -9,25 +9,47 @@
  * @since 1.0
  */
 
- // adding a rest api for retrieving all blogs.
+ // adding a rest api for retrieving all articles.
 require_once __DIR__ . '/api/blogs.php';
 require_once __DIR__ . '/api/poetry.php';
-// adding the html string generation functions for the leftsidebar.
-require_once __DIR__ . '/htmlfunctions/leftsidebar.php';
-require_once __DIR__ . '/htmlfunctions/mostrecentarticle.php';
 
- //Define home page.
- define('HOME_PAGE', 'be home');
- //Define which pages should get a sidebar and a "most recent" bar.
-define('PAGES_WITH_LEFT_SIDEBAR', ['vitality']);
-// Define the blogs parent page title.
-define('BLOG_PAGE', 'Being Blogs');
-define('POETRY_PAGE', 'Poetry');
-define('INSPIRE_PAGE', 'Inspire');
+//adding the models.
+require_once __DIR__ . '/models/pagemodel.php';
+// adding the views.
+require_once __DIR__ . '/views/iview.php';
+require_once __DIR__ . '/views/vitalityview.php';
+require_once __DIR__ . '/views/mostrecentarticleview.php';
+require_once __DIR__ . '/views/guestbook.php';
+require_once __DIR__ . '/views/compositeview.php';
+require_once __DIR__ . '/views/lowernavbarview.php';
+require_once __DIR__ . '/views/uppernavbarview.php';
+require_once __DIR__ . '/views/headerview.php';
+require_once __DIR__ . '/views/textbodyview.php';
 
-define('PAGINATION_SIZE', 5);
+require_once __DIR__ . '/views/decorators/viewdecorator.php';
+require_once __DIR__ . '/views/decorators/sidebardecorator.php';
+
+// adding the utils.
+require_once __DIR__ . '/utils/maybe.php';
+
+//adding the view factory.
+require_once __DIR__ . '/views/factories/abstractviewfactory.php';
+require_once __DIR__ . '/views/factories/viewfactory.php';
+
+require_once __DIR__ . '/views/builders/abstractbuilder.php';
+require_once __DIR__ . '/views/builders/pagebuilder.php';
+
+//adding the controllers/
+require_once __DIR__ . '/controllers/basecontroller.php';
+require_once __DIR__ . '/controllers/homecontroller.php';
+require_once __DIR__ . '/controllers/defaultcontroller.php';
+require_once __DIR__ . '/controllers/vitalitycontroller.php';
+
+//adding the configuration.
+require_once __DIR__ . '/applicationconfig.php';
 
 if ( ! function_exists( 'blank_canvas_setup' ) ) :
+
 	/**
 	 * Sets up theme defaults and registers support for various WordPress features.
 	 *
@@ -224,64 +246,10 @@ function blank_canvas_body_classes( $classes ) {
 	return $classes;
 }
 
-// Check if a page is a child of one of the parents.
-function is_child_of(WP_Post $child, array $parents): bool {
-	foreach($parents as $parent)  {
-		if ($child -> post_parent === $parent -> ID) return true;
-	}
-	return false;
-}
-
-//find_if, use a predicate to retrieve an element from an array or null if not found.
-function find_if(array $array, callable $predicate): ?WP_Post {
-	foreach($array as $element) {
-		if ($predicate($element)) return $element;
-	}
-	return null;
-}
-
-/*
-Using a title, find the corresponding page having that title or `null` if not found.
-*/
-function get_page_from_title(string $title): ?WP_Post {
-	return find_if(get_pages(), function(WP_Post $page) use($title) {
-		return strtolower($page -> post_title) === strtolower($title);
-	});
-}
-
-/*
-Retrieve all child page of `parent`.
-Return an array of child page objects sorted by date, descending order.
-*/
-function find_child_pages_of_parent(WP_Post $parent): array {
-	return get_pages(
-		array(
-			'parent' => $parent -> ID,
-			'sort_order' => 'DESC',
-			'sort_column' => 'post_date'
-		)
-	);
-}
-/*
-Find the most recent child from a parent.
-*/
-function find_most_recent_article(WP_Post $parent): ?WP_Post {
-	$child_pages = find_child_pages_of_parent($parent);
-	return (sizeof($child_pages) > 0) ? $child_pages[0] : null;
-}
-
-// map an array with `pages` to an array with the page ids.
-function get_id_from_pages(array $pages): array {
-	return array_map(function($page) {
-		return $page -> ID;
-	}, $pages);
-}
-
-function is_on_home(WP_Post $current_post): bool {
-	return strtolower($current_post -> post_title) === strtolower(HOME_PAGE);
-}
-
 add_filter( 'body_class', 'blank_canvas_body_classes' );
+
 // Adding excerpt support in the wp-admin.
 add_post_type_support( 'page', 'excerpt' );
+
+// Remove big image size threshold.
 add_filter( 'big_image_size_threshold', '__return_false' );
