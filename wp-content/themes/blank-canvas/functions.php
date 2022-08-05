@@ -246,7 +246,6 @@ function blank_canvas_body_classes( $classes ) {
 	return $classes;
 }
 
-// Add a class to the body html tag.
 add_filter( 'body_class', 'blank_canvas_body_classes' );
 
 // Adding excerpt support in the wp-admin.
