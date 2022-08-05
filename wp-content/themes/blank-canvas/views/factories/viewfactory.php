@@ -1,7 +1,7 @@
 <?php
 
 
-// Class responsible for creating the needed views.
+// Class responsible for creating the UI views.
 class ViewFactory implements AbstractViewFactory {
   const SIDEBAR_CLASS = 'most-recent-container';
 

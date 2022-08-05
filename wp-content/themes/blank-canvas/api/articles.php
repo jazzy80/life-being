@@ -12,7 +12,7 @@ function get_articles_for_page(
     ) -> get_or_else([]);
 }
 
-// general function to retrieve articles.
+// General function to retrieve articles.
 function get_articles(PageModel $page_model, object $data, WP_Post $article_page) {
 // Get the page number from retrieve '$data' object.
 $page_number = intval(filter_var($data['page'], FILTER_SANITIZE_STRING));
