@@ -13,7 +13,9 @@
    case VITALITY:
    case $page_model -> is_page_needing_vitality($page):
     return new VitalityController($builder);
-    default: return new DefaultController($builder);
+   case GUESTBOOK:
+    return new GuestBookController($builder);
+   default: return new DefaultController($builder);
   }
  }
 

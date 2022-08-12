@@ -1,35 +1,43 @@
 <?php
-function render_guest_book(array $guest_book_entries): string {
-  return '
-  <h2 class="body-title">Leave a comment below</h2>
-  <a class="add-comment" href="#">Add a comment</a>
-  <form class="form">
-    <h2> New Comment: </h2>
-    Name: <input></input>
-    Comment <textarea></textarea>
-  </form> '
-  . generate_html_from_guestbook_entries($guest_book_entries);
-}
 
-function generate_html_from_guestbook_entries(array $guest_book_entries): string {
-  return array_reduce(
-    $guest_book_entries,
-    function(string $html, GuestBookEntry $entry): string {
-      return $html . '<li class="comment">
-        <div>
-          <p>' . $entry -> name . '</p>
-          <p>' .  $entry -> date  . '</p>
-          <p>' .  $entry -> time  . '</p>
-          </div>
+class GuestBook implements IView {
+  public function __construct($guest_book_entries) {
+    $this -> guest_book_entries = $guest_book_entries;
+  }
+  function display(): string {
+    return '
+    <div class="guestbook">
+      <h2 class="body-title">Leave a comment below</h2>
+      <a class="add-comment">Add a comment</a>
+      <form class="guestbook-form">
+        <h2> New Comment: </h2>
+        Name: <input></input>
+        Comment <textarea></textarea>
+      </form> '
+      . $this -> generate_guestbook_entries() .
+    '</div>';
+  }
+
+  private function generate_guestbook_entries(): string {
+    return array_reduce(
+      $this -> guest_book_entries,
+      function(string $html, GuestBookEntry $entry): string {
+        return $html . '<li class="comment">
           <div>
-            <p>' . $entry -> text_body . '</p>
-          </div>
-      </li>
-      <hr>';
-    },
-    // initial HTML.
-    '<ul class="comments"><hr>'
-    // Close list.
-  ) . '</ul>';
+            <p>' . $entry -> name . '</p>
+            <p>' .  $entry -> date  . '</p>
+            <p>' .  $entry -> time  . '</p>
+            </div>
+            <div>
+              <p>' . $entry -> text_body . '</p>
+            </div>
+        </li>
+        <hr>';
+      },
+      // initial HTML.
+      '<ul class="comments"><hr>'
+      // Close list.
+    ) . '</ul>';
+  }
 }
 ?>

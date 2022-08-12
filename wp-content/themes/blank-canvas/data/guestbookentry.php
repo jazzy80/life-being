@@ -20,7 +20,7 @@ class GuestBookEntry {
   }
 
   private function get_time(string $timestamp): string {
-    return date_format(date_create($timestamp), 'hh:mm');
+    return date_format(date_create($timestamp), 'h:m');
   }
 }
 ?>
