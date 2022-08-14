@@ -10,12 +10,19 @@ class GuestBook implements IView {
       <h2 class="body-title">Leave a comment below</h2>
       <a class="add-comment">Add a comment</a>
       <form class="guestbook-form">
-        <h2> New Comment: </h2>
-        Name: <input></input>
-        Comment <textarea></textarea>
+        <h2 class="form-title"> New Comment </h2>
+        Name <input class="input-name"></input>
+        <p class="error-name"></p>
+        Comment (max 200 characters) <textarea class="comment-text" rows="8"></textarea>
+        <p class="error-comment"></p>
+        <div class="form-btns">
+          <button class="submit-comment">Add Comment</button>
+          <button class="cancel-comment">Cancel Comment</button>
+        </div>
       </form> '
       . $this -> generate_guestbook_entries() .
-    '</div>';
+    '</div>
+    <script src="' . JS_FILE_PREFIX . 'guestbook.js"></script>';
   }
 
   private function generate_guestbook_entries(): string {
