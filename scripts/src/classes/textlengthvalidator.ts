@@ -1,4 +1,4 @@
-import { FieldValidator } from './fieldvalidator';
+import { FieldValidator } from '../interfaces/fieldvalidator';
 
 export class TextLengthValidator implements FieldValidator<string> {
   public constructor(private maxLength: number) {}
