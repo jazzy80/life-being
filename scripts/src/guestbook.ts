@@ -1,17 +1,25 @@
 import { TextLengthValidator } from './classes/textlengthvalidator';
+import { AlphaNumValidator} from './classes/alphanumvalidator';
+import { CompositeValidator } from './classes/compositevalidator';
+
+const ADDCOMMENT = '.add-comment';
+const CANCELCOMMENT = '.cancel-comment';
+const SUBMITCOMMENT = '.submit-comment';
+const OVERLAY = '.overlay';
+const GUESTBOOKFORM = '.guestbook-form';
 
 function init(): void {
-  const addCommentBtn = document.querySelector('.add-comment');
+  const addCommentBtn = document.querySelector(ADDCOMMENT);
   addCommentBtn?.addEventListener('click', e => {
     e.preventDefault();
     showCommentModal();
   });
-  const cancelCommentBtn = document.querySelector('.cancel-comment');
+  const cancelCommentBtn = document.querySelector(CANCELCOMMENT);
   cancelCommentBtn?.addEventListener('click', e => {
     e.preventDefault();
     removeCommentModal();
   });
-  const submitCommentBtn = document.querySelector('.submit-comment');
+  const submitCommentBtn = document.querySelector(SUBMITCOMMENT);
   submitCommentBtn?.addEventListener('click', e => {
     e.preventDefault();
     validateComment();
@@ -29,7 +37,7 @@ function removeCommentModal(): void {
 }
 
 function addOverlay(): void {
-  const overlay: HTMLDivElement = document.querySelector('.overlay')
+  const overlay: HTMLDivElement = document.querySelector(OVERLAY)
     || document.createElement('div');
   overlay.classList.add('overlay');
   const body = document.body;
@@ -38,7 +46,7 @@ function addOverlay(): void {
 }
 
 function removeOverlay(): void {
-  const overlay = document.querySelector('.overlay') as HTMLDivElement | null;
+  const overlay = document.querySelector(OVERLAY) as HTMLDivElement | null;
   if (overlay) {
     overlay.remove();
     document.body.style.overflowY = 'auto';
@@ -46,12 +54,12 @@ function removeOverlay(): void {
 }
 
 function showCommentForm(): void {
-  const commentForm = document.querySelector('.guestbook-form') as HTMLFormElement;
+  const commentForm = document.querySelector(GUESTBOOKFORM) as HTMLFormElement;
   commentForm.style.display = 'flex';
 }
 
 function removeCommentForm(): void {
-  const commentForm = document.querySelector('.guestbook-form') as HTMLFormElement;
+  const commentForm = document.querySelector(GUESTBOOKFORM) as HTMLFormElement;
   commentForm.style.display = 'none';
 }
 
@@ -60,9 +68,13 @@ function validateComment(): void {
   const commentField = document.querySelector('.comment-text') as HTMLTextAreaElement;
   const name = nameField.value;
   const comment = nameField.value;
+
   const textLengthValidator = new TextLengthValidator(200);
-  const nameIsValid = textLengthValidator.validate(name);
-  const commentIsValid = textLengthValidator.validate(comment);
+  const alphanumValidator = new AlphaNumValidator;
+  const guestbookValidator = new CompositeValidator(textLengthValidator, alphanumValidator);
+
+  const nameIsValid = guestbookValidator.validate(name);
+  const commentIsValid = guestbookValidator.validate(comment);
   if (nameIsValid && commentIsValid) return submitComment();
   if (!nameIsValid) displayNameError();
   if (!commentIsValid) displayCommentError();

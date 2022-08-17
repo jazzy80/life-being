@@ -22,7 +22,7 @@ class GuestBook implements IView {
       </form> '
       . $this -> generate_guestbook_entries() .
     '</div>
-    <script src="' . JS_FILE_PREFIX . 'guestbook.js"></script>';
+    <script src="' . LOAD_JAVASCRIPT[GUESTBOOK] '"></script>';
   }
 
   private function generate_guestbook_entries(): string {
