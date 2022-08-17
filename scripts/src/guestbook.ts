@@ -4,11 +4,16 @@ import { AlphaNumValidator} from './classes/alphanumvalidator';
 import { CompositeValidator } from './classes/compositevalidator';
 import { FormField } from './types/formfield';
 
-const ADDCOMMENT = '.add-comment';
-const CANCELCOMMENT = '.cancel-comment';
-const SUBMITCOMMENT = '.submit-comment';
-const OVERLAY = '.overlay';
-const GUESTBOOKFORM = '.guestbook-form';
+const ADDCOMMENT_SELECTOR = '.add-comment';
+const CANCELCOMMENT_SELECTOR = '.cancel-comment';
+const SUBMITCOMMENT_SELECTOR = '.submit-comment';
+const GUESTBOOKFORM_SELECTOR = '.guestbook-form';
+const OVERLAY_SELECTOR = '.overlay';
+
+const ERROR = 'error';
+const ERROR_COLOR = 'red';
+const NEUTRAL_COLOR = 'black';
+
 
 const GUESTBOOK_POST_URL = '/wp-json/api/guestbook/';
 
@@ -20,27 +25,26 @@ function init(): void {
   const commentField = document.querySelector('.comment-text') as HTMLTextAreaElement;
   const formFields = [nameField, commentField];
 
-  const addCommentBtn = document.querySelector(ADDCOMMENT);
-  addCommentBtn?.addEventListener('click', e => {
+  const addCommentBtn = document.querySelector(ADDCOMMENT_SELECTOR) as HTMLAnchorElement;
+  addCommentBtn.addEventListener('click', e => {
     e.preventDefault();
     showCommentModal(form, formFields);
   });
-  const cancelCommentBtn = document.querySelector(CANCELCOMMENT);
-  cancelCommentBtn?.addEventListener('click', e => {
+  const cancelCommentBtn = document.querySelector(CANCELCOMMENT_SELECTOR) as HTMLButtonElement;
+  cancelCommentBtn.addEventListener('click', e => {
     e.preventDefault();
     removeCommentModal(form, formFields);
   });
-  const submitCommentBtn = document.querySelector(SUBMITCOMMENT);
-  submitCommentBtn?.addEventListener('click', e => {
+  const submitCommentBtn = document.querySelector(SUBMITCOMMENT_SELECTOR) as HTMLButtonElement;
+  submitCommentBtn.addEventListener('click', e => {
     removeErrors();
     e.preventDefault();
-    validateFormFields(formFields);
-    removeCommentModal(form, formFields);
+    validateFormFields(form, formFields);
   });
 }
 
 function getCommentForm(): HTMLFormElement {
-  return document.querySelector(GUESTBOOKFORM) as HTMLFormElement;
+  return document.querySelector(GUESTBOOKFORM_SELECTOR) as HTMLFormElement;
 }
 
 function showCommentModal(form: HTMLFormElement, fields: FormField[]): void {
@@ -56,7 +60,7 @@ function removeCommentModal(form: HTMLFormElement, fields: FormField[]): void {
 }
 
 function addOverlay(): void {
-  const overlay: HTMLDivElement = document.querySelector(OVERLAY)
+  const overlay: HTMLDivElement = document.querySelector(OVERLAY_SELECTOR)
     || document.createElement('div');
   overlay.classList.add('overlay');
   const body = document.body;
@@ -65,9 +69,12 @@ function addOverlay(): void {
 }
 
 function removeOverlay(): void {
-  const overlay = document.querySelector(OVERLAY) as HTMLDivElement | null;
+  const overlay = document.querySelector(OVERLAY_SELECTOR) as HTMLDivElement | null;
+  // Check if overlay is already active.
   if (overlay) {
+    // Remove it
     overlay.remove();
+    // Reenable the scroll bar.
     document.body.style.overflowY = 'auto';
   }
 }
@@ -80,10 +87,10 @@ function hideForm(form: HTMLFormElement): void {
   form.style.display = 'none';
 }
 
-function validateFormFields(fields: FormField[]): void {
+function validateFormFields(form: HTMLFormElement, fields: FormField[]): void {
   const guestBookValidator = createGuestBookValidator();
   const invalidFields = fields.filter(field => !guestBookValidator.validate(field));
-  if (invalidFields.length === 0) return submitComment(fields);
+  if (invalidFields.length === 0) return submitComment(form, fields);
 
   generateErrors(guestBookValidator, invalidFields);
 }
@@ -101,23 +108,25 @@ function createGuestBookValidator(): FieldValidator {
   );
 }
 
-function submitComment(fields: FormField[]): void {
+function submitComment(form: HTMLFormElement, fields: FormField[]): void {
   const body = fields.reduce((acc: object, field: FormField) => (
     {[field.name]: field.value, ...acc}
   ), {});
-  fetch(GUESTBOOK_POST_URL, {method: 'POST', body: JSON.stringify(body)});
-  location.reload();
+  fetch(GUESTBOOK_POST_URL, {method: 'POST', body: JSON.stringify(body)}).then(_ => {
+    removeCommentModal(form, fields);
+    location.reload();
+  });
 }
 
 function displayError(field: FormField, errorMsg: string): void {
-  field.style.borderColor = 'red';
+  field.style.borderColor = ERROR_COLOR;
   const errorField = createErrorText(errorMsg);
   field.after(errorField);
 }
 
 function createErrorText(errorMsg: string): HTMLParagraphElement {
   const pElement = document.createElement('p');
-  pElement.classList.add('error');
+  pElement.classList.add(ERROR);
   pElement.innerText = errorMsg;
   return pElement;
 }
@@ -125,13 +134,13 @@ function createErrorText(errorMsg: string): HTMLParagraphElement {
 function resetForm(fields: FormField[]): void {
   fields.forEach((field) => {
     field.value = '';
-    field.style.borderColor = 'black';
+    field.style.borderColor = NEUTRAL_COLOR;
   });
   removeErrors();
 }
 
 function removeErrors(): void {
-  const errorFields = document.getElementsByClassName('error');
+  const errorFields = document.getElementsByClassName(ERROR);
   Array.prototype.slice.call(errorFields).forEach((field) => field.remove());
 }
 
