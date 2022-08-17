@@ -24,7 +24,7 @@ define('JS_FILE_PREFIX', '/scripts/dist/');
 //Load javascript files for a specific page.
 define('LOAD_JAVASCRIPT', [
   BLOG_PAGE => [JS_FILE_PREFIX . 'blogs.js'],
-  POETRY_PAGE => [JS_FILE_PREFIX . 'poetry.js']
+  POETRY_PAGE => [JS_FILE_PREFIX . 'poetry.js'],
   GUESTBOOK => [JS_FILE_PREFIX . 'guestbook.js']
 ]);
 ?>

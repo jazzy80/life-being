@@ -1,7 +1,11 @@
 import { FieldValidator } from '../interfaces/fieldvalidator';
+import { FormField } from '../types/formfield';
 
-export class AlphaNumValidator implements FieldValidator<string> {
-  public validate(value: string): boolean {
-    return /[a-z][A-Z][0-9][!?]/.test(value);
+export class AlphaNumValidator extends FieldValidator {
+  protected errorMsg =
+    'Error: Input should contain alpha-numeric characters or "!?.,()"\n';
+
+  public validate(field: FormField): boolean {
+    return /^[a-zA-Z0-9!?,.() ]*$/.test(field.value);
   }
 }

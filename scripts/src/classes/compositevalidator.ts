@@ -1,13 +1,22 @@
 import { FieldValidator } from '../interfaces/fieldvalidator';
+import { FormField } from '../types/formfield';
 
-export class CompositeValidator<A> implements FieldValidator<A> {
-  private validators: Array<FieldValidator<A>>;
+export class CompositeValidator extends FieldValidator {
+  private validators: Array<FieldValidator>;
+  protected errorMsg = '';
 
-  public constructor(...validators: Array<FieldValidator<A>>) {
+  public constructor(...validators: Array<FieldValidator>) {
+    super();
     this.validators = validators;
   }
 
-  public validate(value: A): boolean {
-    return this.validators.every(v => v.validate(value));
+  public validate(field: FormField): boolean {
+    return this.validators.every(v => v.validate(field));
+  }
+
+  public getError(field: FormField): string {
+    return this.validators.reduce((error: string, validator: FieldValidator) => (
+      `${error}${validator.getError(field)}`
+    ), '');
   }
 }

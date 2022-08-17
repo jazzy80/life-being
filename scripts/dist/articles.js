@@ -47,7 +47,7 @@ function attachElementToAnchor(element, anchor) {
     }
 }
 function fetchArticles(url, pageNumber, callBackFn) {
-    fetch(url + "/" + pageNumber).then(function (response) { return response.json(); }).then(function (data) {
+    fetch("".concat(url, "/").concat(pageNumber)).then(function (response) { return response.json(); }).then(function (data) {
         callBackFn(data.blogs, data.count);
     });
 }
@@ -69,7 +69,7 @@ function createPaginatorButtonsWithContainer(prevPage, nextPage) {
     var el = document.createElement('div');
     el.classList.add('paginator-btns');
     el.innerHTML =
-        "<button\n    " + (!hasPrevPage ? 'disabled' : '') + "\n    class=\"paginator-prev-btn " + (!hasPrevPage ? 'paginator-btn-disabled' : '') + "\"\n    >\n      Prev\n  </button>\n   <button\n    " + (!hasNextPage ? 'disabled' : '') + "\n    class=\"paginator-next-btn " + (!hasNextPage ? 'paginator-btn-disabled' : '') + "\"\n  >\n      Next\n  </button>";
+        "<button\n    ".concat(!hasPrevPage ? 'disabled' : '', "\n    class=\"paginator-prev-btn ").concat(!hasPrevPage ? 'paginator-btn-disabled' : '', "\"\n    >\n      Prev\n  </button>\n   <button\n    ").concat(!hasNextPage ? 'disabled' : '', "\n    class=\"paginator-next-btn ").concat(!hasNextPage ? 'paginator-btn-disabled' : '', "\"\n  >\n      Next\n  </button>");
     return el;
 }
 function getPaginatorButtonsContainer() {
@@ -85,10 +85,10 @@ function createArticleListItem(articleUrl, articleTitle, articleDate, articleExc
     var el = document.createElement('li');
     el.classList.add('article');
     var image = imageSource
-        ? "<img class=\"article-image\" width=\"180\" heigth=\"135\" src=\"" + imageSource + "\">"
+        ? "<img class=\"article-image\" width=\"180\" heigth=\"135\" src=\"".concat(imageSource, "\">")
         : '';
     el.innerHTML =
-        image + "\n      <div class=\"article-text\">\n        <a class=\"article-title\" href=\"" + articleUrl + "\">" + articleTitle + "</a>\n        <p class=\"article-date\">" + articleDate + "</p>\n        <p class=\"article-excerpt\">" + articleExcerpt + "</p>";
+        "".concat(image, "\n      <div class=\"article-text\">\n        <a class=\"article-title\" href=\"").concat(articleUrl, "\">").concat(articleTitle, "</a>\n        <p class=\"article-date\">").concat(articleDate, "</p>\n        <p class=\"article-excerpt\">").concat(articleExcerpt, "</p>");
     return el;
 }
 function setUpPaginatorButtons(prevPage, nextPage, fetchArticlesFn) {

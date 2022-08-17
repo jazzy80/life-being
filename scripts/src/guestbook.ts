@@ -1,6 +1,8 @@
+import { FieldValidator } from './interfaces/fieldvalidator';
 import { TextLengthValidator } from './classes/textlengthvalidator';
 import { AlphaNumValidator} from './classes/alphanumvalidator';
 import { CompositeValidator } from './classes/compositevalidator';
+import { FormField } from './types/formfield';
 
 const ADDCOMMENT = '.add-comment';
 const CANCELCOMMENT = '.cancel-comment';
@@ -8,32 +10,49 @@ const SUBMITCOMMENT = '.submit-comment';
 const OVERLAY = '.overlay';
 const GUESTBOOKFORM = '.guestbook-form';
 
+const GUESTBOOK_POST_URL = '/wp-json/api/guestbook/';
+
+const TEXTMAXLENGTH = 200;
+
 function init(): void {
+  const form = getCommentForm();
+  const nameField = document.querySelector('.input-name') as HTMLInputElement;
+  const commentField = document.querySelector('.comment-text') as HTMLTextAreaElement;
+  const formFields = [nameField, commentField];
+
   const addCommentBtn = document.querySelector(ADDCOMMENT);
   addCommentBtn?.addEventListener('click', e => {
     e.preventDefault();
-    showCommentModal();
+    showCommentModal(form, formFields);
   });
   const cancelCommentBtn = document.querySelector(CANCELCOMMENT);
   cancelCommentBtn?.addEventListener('click', e => {
     e.preventDefault();
-    removeCommentModal();
+    removeCommentModal(form, formFields);
   });
   const submitCommentBtn = document.querySelector(SUBMITCOMMENT);
   submitCommentBtn?.addEventListener('click', e => {
+    removeErrors();
     e.preventDefault();
-    validateComment();
+    validateFormFields(formFields);
+    removeCommentModal(form, formFields);
   });
 }
 
-function showCommentModal(): void {
-  addOverlay();
-  showCommentForm();
+function getCommentForm(): HTMLFormElement {
+  return document.querySelector(GUESTBOOKFORM) as HTMLFormElement;
 }
 
-function removeCommentModal(): void {
-  removeCommentForm();
+function showCommentModal(form: HTMLFormElement, fields: FormField[]): void {
+  addOverlay();
+  showForm(form);
+  resetForm(fields);
+}
+
+function removeCommentModal(form: HTMLFormElement, fields: FormField[]): void {
+  hideForm(form);
   removeOverlay();
+  resetForm(fields);
 }
 
 function addOverlay(): void {
@@ -53,43 +72,67 @@ function removeOverlay(): void {
   }
 }
 
-function showCommentForm(): void {
-  const commentForm = document.querySelector(GUESTBOOKFORM) as HTMLFormElement;
-  commentForm.style.display = 'flex';
+function showForm(form: HTMLFormElement): void {
+  form.style.display = 'flex';
 }
 
-function removeCommentForm(): void {
-  const commentForm = document.querySelector(GUESTBOOKFORM) as HTMLFormElement;
-  commentForm.style.display = 'none';
+function hideForm(form: HTMLFormElement): void {
+  form.style.display = 'none';
 }
 
-function validateComment(): void {
-  const nameField = document.querySelector('.input-name') as HTMLInputElement;
-  const commentField = document.querySelector('.comment-text') as HTMLTextAreaElement;
-  const name = nameField.value;
-  const comment = nameField.value;
+function validateFormFields(fields: FormField[]): void {
+  const guestBookValidator = createGuestBookValidator();
+  const invalidFields = fields.filter(field => !guestBookValidator.validate(field));
+  if (invalidFields.length === 0) return submitComment(fields);
 
-  const textLengthValidator = new TextLengthValidator(200);
-  const alphanumValidator = new AlphaNumValidator;
-  const guestbookValidator = new CompositeValidator(textLengthValidator, alphanumValidator);
-
-  const nameIsValid = guestbookValidator.validate(name);
-  const commentIsValid = guestbookValidator.validate(comment);
-  if (nameIsValid && commentIsValid) return submitComment();
-  if (!nameIsValid) displayNameError();
-  if (!commentIsValid) displayCommentError();
+  generateErrors(guestBookValidator, invalidFields);
 }
 
-function submitComment(): void {
-
+function generateErrors(validator: FieldValidator, fields: FormField[]): void {
+  fields.forEach(field => {
+    displayError(field, validator.getError(field))
+  });
 }
 
-function displayNameError(): void {
-
+function createGuestBookValidator(): FieldValidator {
+  return new CompositeValidator(
+    new TextLengthValidator(TEXTMAXLENGTH),
+    new AlphaNumValidator
+  );
 }
 
-function displayCommentError(): void {
+function submitComment(fields: FormField[]): void {
+  const body = fields.reduce((acc: object, field: FormField) => (
+    {[field.name]: field.value, ...acc}
+  ), {});
+  fetch(GUESTBOOK_POST_URL, {method: 'POST', body: JSON.stringify(body)});
+  location.reload();
+}
 
+function displayError(field: FormField, errorMsg: string): void {
+  field.style.borderColor = 'red';
+  const errorField = createErrorText(errorMsg);
+  field.after(errorField);
+}
+
+function createErrorText(errorMsg: string): HTMLParagraphElement {
+  const pElement = document.createElement('p');
+  pElement.classList.add('error');
+  pElement.innerText = errorMsg;
+  return pElement;
+}
+
+function resetForm(fields: FormField[]): void {
+  fields.forEach((field) => {
+    field.value = '';
+    field.style.borderColor = 'black';
+  });
+  removeErrors();
+}
+
+function removeErrors(): void {
+  const errorFields = document.getElementsByClassName('error');
+  Array.prototype.slice.call(errorFields).forEach((field) => field.remove());
 }
 
 init();

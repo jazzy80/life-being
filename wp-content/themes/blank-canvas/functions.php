@@ -12,6 +12,7 @@
  // adding a rest api for retrieving all articles.
 require_once __DIR__ . '/api/blogs.php';
 require_once __DIR__ . '/api/poetry.php';
+require_once __DIR__ . '/api/guestbook.php';
 
 require_once __DIR__ . '/data/guestbookentry.php';
 

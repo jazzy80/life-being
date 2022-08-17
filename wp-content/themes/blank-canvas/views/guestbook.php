@@ -11,10 +11,8 @@ class GuestBook implements IView {
       <a class="add-comment">Add a comment</a>
       <form class="guestbook-form">
         <h2 class="form-title"> New Comment </h2>
-        Name <input class="input-name"></input>
-        <p class="error-name"></p>
-        Comment (max 200 characters) <textarea class="comment-text" rows="8"></textarea>
-        <p class="error-comment"></p>
+        Name <input class="input-name" name="name"></input>
+        Comment (max 200 characters) <textarea class="comment-text" name="comment" rows="8"></textarea>
         <div class="form-btns">
           <button class="submit-comment">Add Comment</button>
           <button class="cancel-comment">Cancel Comment</button>
@@ -22,7 +20,7 @@ class GuestBook implements IView {
       </form> '
       . $this -> generate_guestbook_entries() .
     '</div>
-    <script src="' . LOAD_JAVASCRIPT[GUESTBOOK] '"></script>';
+    <script src="' . LOAD_JAVASCRIPT[GUESTBOOK][0] . '"></script>';
   }
 
   private function generate_guestbook_entries(): string {
