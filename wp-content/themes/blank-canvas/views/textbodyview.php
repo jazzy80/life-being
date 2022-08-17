@@ -9,8 +9,20 @@ class TextBodyView implements IView {
   }
 
   public function display(): string {
-    return '<div class="entry-content">' . get_the_content() . '</div>'
-      . $this -> load_js_files();
+    return '<div class="entry-content">' . do_shortcode(get_the_content(
+      sprintf(
+				wp_kses(
+					/* translators: %s: Name of current post. Only visible to screen readers */
+					__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', 'blank-canvas' ),
+					array(
+						'span' => array(
+							'class' => array(),
+						),
+					)
+				),
+				get_the_title()
+			)
+		)) . '</div>' . $this -> load_js_files();
   }
 
   private function load_js_files(): string {

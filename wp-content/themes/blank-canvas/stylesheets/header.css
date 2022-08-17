@@ -13,6 +13,7 @@
   --secondary-background-color: #3b533b;
   --navbar-font-size: clamp(1rem, 2vw, 1.2rem);
   --sidebar-font-size: calc(var(--navbar-font-size) - 0.2rem);
+  --button-main-color: #7e4caa;
 }
 
 * {
@@ -26,6 +27,11 @@ body {
   padding: 0;
   background-repeat: no-repeat;
   background-position: 50% 75%;
+}
+
+button {
+  border-radius: 15px;
+  background-color: var(--button-main-color);
 }
 
 a {
