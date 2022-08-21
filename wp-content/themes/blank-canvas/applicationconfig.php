@@ -15,6 +15,8 @@ define(
   'PAGES_NEEDING_VITALITY', [VITALITY]
 );
 
+define('PAGES_NEEDING_LITE_HEADER', [HOME_PAGE]);
+
 // Define the pagination size for blogs etc.
 define('PAGINATION_SIZE', 5);
 

@@ -12,6 +12,10 @@ class PageBuilder implements AbstractBuilder {
       return $this -> add_component($this -> view_factory -> create_header());
   }
 
+  public function build_lite_header(): AbstractBuilder {
+    return $this -> add_component(new HeaderView(new Just(new UpperNavBarView), new None));
+  }
+
   public function build_left_pane(): AbstractBuilder {
       return $this -> add_component($this -> view_factory -> create_left_pane());
   }
