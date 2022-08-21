@@ -26,7 +26,7 @@ class HeaderView implements IView {
     $header =
     '<header class="header">
       <div class="navbar upper-navbar">
-        <object class="logo" data="/resources/logo lifebeing.title.svg"> </object>'
+        <img class="logo" src="/resources/logo lifebeing.title.svg">'
         . $this -> upper_navbar -> map(fn(IView $v) => $v -> display()) -> get_or_else('') .
       '</div>
       <div class="title-with-btns">
