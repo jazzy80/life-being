@@ -29,6 +29,7 @@ require_once __DIR__ . '/views/lowernavbarview.php';
 require_once __DIR__ . '/views/uppernavbarview.php';
 require_once __DIR__ . '/views/headerview.php';
 require_once __DIR__ . '/views/textbodyview.php';
+require_once __DIR__ . '/views/jsfilesview.php';
 
 require_once __DIR__ . '/views/decorators/viewdecorator.php';
 require_once __DIR__ . '/views/decorators/sidebardecorator.php';
@@ -49,6 +50,9 @@ require_once __DIR__ . '/controllers/homecontroller.php';
 require_once __DIR__ . '/controllers/defaultcontroller.php';
 require_once __DIR__ . '/controllers/vitalitycontroller.php';
 require_once __DIR__ . '/controllers/guestbookcontroller.php';
+require_once __DIR__ . '/controllers/factories/controllerfactory.php';
+
+require_once __DIR__ . '/serviceproviders/modelproviderimpl.php';
 
 //adding the configuration.
 require_once __DIR__ . '/applicationconfig.php';

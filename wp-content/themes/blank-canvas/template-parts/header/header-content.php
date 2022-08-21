@@ -1,9 +1,7 @@
 <?php
 // init viewfactory.
 $view_factory = new viewfactory(
-  new pagemodel,
-  get_post(),
-  wp_get_nav_menus()
+  new ModelProviderImpl
 );
 // init builder.
 $builder = new pagebuilder($view_factory);

@@ -6,6 +6,7 @@ class DefaultController extends BaseController {
                  -> build_left_pane()
                  -> build_text_body()
                  -> build_right_pane()
+                 -> build_jsfiles($this -> page)
                  -> get();
   }
 }
