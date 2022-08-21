@@ -12,9 +12,13 @@
  // adding a rest api for retrieving all articles.
 require_once __DIR__ . '/api/blogs.php';
 require_once __DIR__ . '/api/poetry.php';
+require_once __DIR__ . '/api/guestbook.php';
+
+require_once __DIR__ . '/data/guestbookentry.php';
 
 //adding the models.
 require_once __DIR__ . '/models/pagemodel.php';
+require_once __DIR__ . '/models/guestbookmodel.php';
 // adding the views.
 require_once __DIR__ . '/views/iview.php';
 require_once __DIR__ . '/views/vitalityview.php';
@@ -44,6 +48,7 @@ require_once __DIR__ . '/controllers/basecontroller.php';
 require_once __DIR__ . '/controllers/homecontroller.php';
 require_once __DIR__ . '/controllers/defaultcontroller.php';
 require_once __DIR__ . '/controllers/vitalitycontroller.php';
+require_once __DIR__ . '/controllers/guestbookcontroller.php';
 
 //adding the configuration.
 require_once __DIR__ . '/applicationconfig.php';

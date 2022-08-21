@@ -40,6 +40,15 @@ class PageBuilder implements AbstractBuilder {
     );
   }
 
+  public function build_guestbook(): AbstractBuilder {
+    global $wpdb;
+    $guest_book_entries = (new GuestBookModel($wpdb)) -> get_all_entries();
+    return new PageBuilder(
+      $this -> view_factory,
+      [...$this -> components, (new GuestBook($guest_book_entries))]
+    );
+  }
+
   public function get(): IView {
     return new CompositeView($this -> components);
   }

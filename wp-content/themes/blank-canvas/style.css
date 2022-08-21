@@ -54,13 +54,14 @@ https://github.com/googlefonts/noto-emoji/blob/master/svg/emoji_u1f354.svg
 Modified and used as a block pattern image.
 */
 
-@import "navbar.css";
+@import "stylesheets/navbar.css";
 @import "variables.css";
-@import "header.css";
-@import "sidebarstyles.css";
-@import "most-recent-sidebar.css";
-@import "articles.css";
-@import "contact-form.css";
+@import "stylesheets/header.css";
+@import "stylesheets/sidebarstyles.css";
+@import "stylesheets/most-recent-sidebar.css";
+@import "stylesheets/articles.css";
+@import "stylesheets/contact-form.css";
+@import "stylesheets/guestbook.css";
 
 /* Remove extra margin from articles on single post pages. */
 

@@ -13,6 +13,7 @@
   --secondary-background-color: #3b533b;
   --navbar-font-size: clamp(1rem, 2vw, 1.2rem);
   --sidebar-font-size: calc(var(--navbar-font-size) - 0.2rem);
+  --button-main-color: #7e4caa;
 }
 
 * {
@@ -28,6 +29,11 @@ body {
   background-position: 50% 75%;
 }
 
+button {
+  border-radius: 15px;
+  background-color: var(--button-main-color);
+}
+
 a {
   border-bottom-color: var(--link-underline-color);
   color: var(--lower-navbar-link-color);
@@ -36,6 +42,15 @@ a {
 a:hover {
   color: var(--title-color) !important;
   transition: color 300ms ease-in-out;
+}
+
+.overlay {
+  background-color: black;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  opacity: 0.8;
 }
 
 /* Block for the title and subtitle */

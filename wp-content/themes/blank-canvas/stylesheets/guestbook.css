@@ -1,0 +1,78 @@
+.guestbook {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  background-color: var(--secondary-background-color);
+  margin-bottom: 0;
+  border-radius: 20px;
+}
+
+.guestbook-form {
+  display: none;
+  flex-direction: column;
+  color: white;
+  opacity: 1;
+  padding: 2rem;
+  position: fixed;
+  top: 20%;
+  z-index: 5;
+  width: 75%;
+  border-radius: 10px;
+  background-color: var(--secondary-background-color);
+}
+
+.error {
+  color: red;
+}
+
+.form-btns {
+  display: flex;
+  justify-content: space-around;
+}
+
+.comment-text {
+  margin-bottom: 1rem;
+}
+
+.form-title {
+  text-align: center;
+}
+
+.input-name {
+  margin-bottom: 1rem;
+  width: 35%;
+  border-radius: 10px;
+}
+
+.body-title {
+  text-align: center;
+  margin: 1rem;
+}
+
+.add-comment {
+  margin: 1rem;
+  cursor: pointer;
+}
+
+.comments {
+  list-style: none;
+  margin: 2.5rem 1rem;
+  width: 100%;
+  padding: 0 1.5rem;
+}
+
+.comment {
+  display: flex;
+  margin: 1rem;
+}
+
+.comment > div {
+  width: 50%;
+}
+
+.comment p {
+  text-align: left;
+}

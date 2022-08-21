@@ -3,19 +3,19 @@
 function get_articles_for_page(
   PageModel $page_model,
   string $page_title,
-  object $data
+  WP_REST_Request $req
 ): array {
   return $page_model -> get_page_from_title($page_title) -> map(
     fn(WP_Post $page): array =>
-      get_articles($page_model, $data, $page)
+      get_articles($page_model, $req, $page)
     // if no pages are found, return an empty array.
     ) -> get_or_else([]);
 }
 
 // General function to retrieve articles.
-function get_articles(PageModel $page_model, object $data, WP_Post $article_page) {
+function get_articles(PageModel $page_model, WP_REST_Request $req, WP_Post $article_page) {
 // Get the page number from retrieve '$data' object.
-$page_number = intval(filter_var($data['page'], FILTER_SANITIZE_STRING));
+$page_number = intval(filter_var($req['page'], FILTER_SANITIZE_STRING));
 
 // Articles are defined as child pages of the `$articel page`.
 $articles = $page_model -> find_child_pages_of_parent($article_page);
