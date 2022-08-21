@@ -6,9 +6,11 @@
 abstract class BaseController {
   protected AbstractBuilder $builder;
 
-  public function __construct(AbstractBuilder $builder) {
+  public function __construct(AbstractBuilder $builder, ModelProvider $provider) {
     // Builder is used to generate the specific views.
     $this -> builder = $builder;
+    $this -> provider = $provider;
+    $this -> page = $provider -> get_page_model() -> get_current_page();
   }
 
   // Get Function to create the UI.

@@ -10,12 +10,12 @@ class ViewFactory implements AbstractViewFactory {
   protected array $menu_items;
   protected PageModel $page_model;
 
-  public function __construct(PageModel $page_model, WP_Post $page, array $menus) {
-  $this -> page_model = $page_model;
-  $this -> page = $page;
-  $this -> menus = $menus;
+  public function __construct(ModelProvider $model_provider) {
+  $this -> page_model = $model_provider -> get_page_model();
+  $this -> page = $this -> page_model -> get_current_page();
+  $this -> menus = $this -> page_model -> get_page_menu();
   // Retrieve all top level menu items for the navbar.
-  $this -> menu_items = $this -> page_model -> get_nav_menu_items($menus);
+  $this -> menu_items = $this -> page_model -> get_nav_menu_items($this -> menus);
 }
   public function create_header(): IView {
     // Create a lower and upper navbar.

@@ -6,6 +6,7 @@ class VitalityController extends BaseController {
                  -> build_vitality()
                  -> build_text_body()
                  -> build_right_pane()
+                 -> build_jsfiles($this -> page)
                  -> get();
   }
 }

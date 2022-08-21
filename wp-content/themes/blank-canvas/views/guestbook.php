@@ -19,8 +19,7 @@ class GuestBook implements IView {
         </div>
       </form> '
       . $this -> generate_guestbook_entries() .
-    '</div>
-    <script src="' . LOAD_JAVASCRIPT[GUESTBOOK][0] . '"></script>';
+    '</div>';
   }
 
   private function generate_guestbook_entries(): string {
@@ -41,7 +40,6 @@ class GuestBook implements IView {
       },
       // initial HTML.
       '<ul class="comments"><hr>'
-      // Close list.
     ) . '</ul>';
   }
 }

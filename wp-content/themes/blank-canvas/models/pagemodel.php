@@ -11,6 +11,14 @@ class PageModel {
     );
   }
 
+  public function get_current_page(): WP_Post {
+    return get_post();
+  }
+
+  public function get_page_menu(): array {
+    return wp_get_nav_menus();
+  }
+
   // Function to find out whether the `$current_post` needs the vitality menu.
   public function is_page_needing_vitality(WP_Post $current_post): bool {
     $pages = $this -> get_pages_from_titles(PAGES_NEEDING_VITALITY);

@@ -1,13 +1,15 @@
 <?php
 // init viewfactory.
 $view_factory = new viewfactory(
-  new pagemodel,
-  get_post(),
-  wp_get_nav_menus()
+  new ModelProviderImpl
 );
+$page = (new ModelProviderImpl) -> get_page_model() -> get_current_page();
 // init builder.
 $builder = new pagebuilder($view_factory);
-// no controller is used, since rendering the header, should be straightforward.
+
+if (in_array(strtolower($page -> post_title), PAGES_NEEDING_LITE_HEADER)) {
+  echo $builder -> build_lite_header() -> get() -> display();
+}
 // the theme used is forcing the use of a seperate file for rendering the header of the document.
-echo $builder -> build_header() -> get() -> display();
+else echo $builder -> build_header() -> get() -> display();
 ?>
