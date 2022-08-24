@@ -21,10 +21,10 @@ export function setUpSlideShow(): void {
       // url must be a non-empty string.
       .filter((url) => url !== undefined || url !== '')
       .join('/')
-      .replace(/^\/$/, 'home');
+      .replace(/^\/$/, '/home/');
 
     // If there is nothing after the hostName default to home.
-    const files = fetch(`/gallery/?page=${page || "home"}`);
+    const files = fetch(`/wp-json/api/gallery-images/?page=${page || "home"}`);
 
     files.then(resp => resp.json()).then( ({ imageFiles: rawImages}) => {
       // No images, nothing to do, TODO show a default image.
@@ -64,10 +64,10 @@ export function setUpSlideShow(): void {
 
 // Wrapping the imageNames into a Image obj forces the browser to precache the images.
 function preCacheImage(imageUrl: string): HTMLImageElement {
-    const prefetchImage = new Image;
-    prefetchImage.src = `/${imageUrl}`;
-    return prefetchImage;
-  }
+  const prefetchImage = new Image;
+  prefetchImage.src = imageUrl;
+  return prefetchImage;
+}
 
 // Initialize the gallery/slideshow with the first image
 function initSlideShow(

@@ -10,6 +10,9 @@ define('GUESTBOOK',     'guest book');
 define('VITALITY',      'vitality');
 define('BEINGME',       'being me, being you');
 
+define('BASE_URL', $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME']);
+define('ROOT_DIR', $_SERVER['DOCUMENT_ROOT']);
+
 //Define the pages that need the vitality menu.
 define(
   'PAGES_NEEDING_VITALITY', [VITALITY]

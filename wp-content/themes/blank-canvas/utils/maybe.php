@@ -10,6 +10,8 @@
     // Retrieves the value contained in the Maybe or `fallback` if `None`.
     // get_or_else(a: A): A.
     public function get_or_else($fallback);
+    // If None return the 'other' maybe else this maybe.
+    public function or_else(Maybe $other): Maybe;
     // Retrieves the value container in the Maybe or throws if `None`.
     // get(): A.
     public function get();
@@ -32,6 +34,11 @@
     public function get_or_else($fallback) {
       return $this -> a;
     }
+
+    public function or_else(Maybe $other): Maybe {
+      return $this;
+    }
+
     public function get() { return $this -> a;}
   }
 
@@ -43,6 +50,9 @@
     public function map(callable $fb): Maybe {return $this;}
     public function get_or_else($fallback) {
       return $fallback;
+    }
+    public function or_else(Maybe $other): Maybe {
+      return $other;
     }
     public function get() { throw new ValueNotPresentError;}
   }
@@ -68,6 +78,11 @@ class MaybeCompanion {
           fn(Maybe $maybe) => $maybe instanceof Just
         )
       );
+    }
+
+    public static function to_maybe($a): Maybe {
+      if (!$a) return new None;
+      return new Just($a);
     }
   }
 ?>

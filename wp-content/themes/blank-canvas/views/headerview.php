@@ -13,18 +13,7 @@ class HeaderView implements IView {
   }
 
   public function display(): string {
-    // Script for setting the background image using the provided `featured image`
-    // in `wp-admin`.
-    $thumbnail_url = get_the_post_thumbnail_url(null, 'large');
-      $script_tag = $thumbnail_url ? <<< EOL
-      <script>
-        var body = document.querySelector('body');
-        body.style.backgroundImage = "url($thumbnail_url)";
-      </script>
-      EOL : '';
-
-    $header =
-    '<header class="header">
+    return '<header class="header">
       <div class="navbar upper-navbar">
         <img class="logo" src="/resources/logo lifebeing.title.svg">'
         . $this -> upper_navbar -> map(fn(IView $v) => $v -> display()) -> get_or_else('') .
@@ -39,7 +28,6 @@ class HeaderView implements IView {
       </div>'
       . $this -> lower_navbar -> map(fn(IView $v) => $v -> display()) -> get_or_else('') .
     '</header>';
-    return $script_tag . $header;
   }
 }
 ?>

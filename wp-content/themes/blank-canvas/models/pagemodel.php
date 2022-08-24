@@ -19,6 +19,21 @@ class PageModel {
     return wp_get_nav_menus();
   }
 
+  public function get_featured_image(WP_Post $page): Maybe {
+    return MaybeCompanion :: to_maybe(
+      get_the_post_thumbnail_url($page, 'large')
+    );
+  }
+
+  public function get_post_from_url(string $target_url): Maybe {
+    $urls = array_reduce(
+      get_pages(),
+      fn(array $acc, WP_Post $page) => array_merge([get_permalink($page) => $page], $acc),
+      []
+    );
+    return MaybeCompanion :: to_maybe($urls[$target_url]);
+  }
+
   // Function to find out whether the `$current_post` needs the vitality menu.
   public function is_page_needing_vitality(WP_Post $current_post): bool {
     $pages = $this -> get_pages_from_titles(PAGES_NEEDING_VITALITY);

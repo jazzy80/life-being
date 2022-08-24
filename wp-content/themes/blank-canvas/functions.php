@@ -9,10 +9,14 @@
  * @since 1.0
  */
 
+//adding the configuration.
+require_once __DIR__ . '/applicationconfig.php';
+
  // adding a rest api for retrieving all articles.
 require_once __DIR__ . '/api/blogs.php';
 require_once __DIR__ . '/api/poetry.php';
 require_once __DIR__ . '/api/guestbook.php';
+require_once __DIR__ . '/api/gallery.php';
 
 require_once __DIR__ . '/data/guestbookentry.php';
 
@@ -53,9 +57,6 @@ require_once __DIR__ . '/controllers/guestbookcontroller.php';
 require_once __DIR__ . '/controllers/factories/controllerfactory.php';
 
 require_once __DIR__ . '/serviceproviders/modelproviderimpl.php';
-
-//adding the configuration.
-require_once __DIR__ . '/applicationconfig.php';
 
 if ( ! function_exists( 'blank_canvas_setup' ) ) :
 
