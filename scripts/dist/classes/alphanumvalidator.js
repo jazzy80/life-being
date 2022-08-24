@@ -21,7 +21,7 @@ var AlphaNumValidator = /** @class */ (function (_super) {
     __extends(AlphaNumValidator, _super);
     function AlphaNumValidator() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.errorMsg = 'Error: Input should contain alpha-numeric characters or "!?.,()"\n';
+        _this.errorMsg = 'Enkel alfa-numerieke tekens en "!?.,()" zijn toegestaan.\n';
         return _this;
     }
     AlphaNumValidator.prototype.validate = function (field) {

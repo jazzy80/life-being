@@ -23,7 +23,7 @@ var TextLengthValidator = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.maxLength = maxLength;
         _this.errorMsg =
-            "Error: Input should contain between 0 and ".concat(_this.maxLength, " characters\n");
+            "Ingevoerde tekst moet tussen de 0 en ".concat(_this.maxLength, " tekens bevatten.\n");
         return _this;
     }
     TextLengthValidator.prototype.validate = function (field) {

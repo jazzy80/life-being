@@ -7,7 +7,7 @@ export class TextLengthValidator extends FieldValidator {
   public constructor(private maxLength: number) {
     super();
     this.errorMsg =
-      `Error: Input should contain between 0 and ${this.maxLength} characters\n`;
+      `Ingevoerde tekst moet tussen de 0 en ${this.maxLength} tekens bevatten.\n`;
   }
 
   public validate(field: FormField): boolean {

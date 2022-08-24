@@ -1,21 +1,23 @@
 <?php
 
 class GuestBook implements IView {
+  private array $guest_book_entries;
+
   public function __construct($guest_book_entries) {
     $this -> guest_book_entries = $guest_book_entries;
   }
   function display(): string {
     return '
     <div class="guestbook">
-      <h2 class="body-title">Leave a comment below</h2>
-      <a class="add-comment">Add a comment</a>
+      <h2 class="body-title">Voel je vrij om je ervaringen met elkaar te delen in dit gastenboek.</h2>
+      <a class="add-comment">Plaats bericht</a>
       <form class="guestbook-form">
-        <h2 class="form-title"> New Comment </h2>
-        Name <input class="input-name" name="name"></input>
-        Comment (max 200 characters) <textarea class="comment-text" name="comment" rows="8"></textarea>
+        <h2 class="form-title">Nieuw bericht</h2>
+        Naam <input class="input-name" name="name"></input>
+        Bericht (max 200 characters) <textarea class="comment-text" name="comment" rows="8"></textarea>
         <div class="form-btns">
-          <button class="submit-comment">Add Comment</button>
-          <button class="cancel-comment">Cancel Comment</button>
+          <button class="submit-comment">Plaats bericht</button>
+          <button class="cancel-comment">Annuleer</button>
         </div>
       </form> '
       . $this -> generate_guestbook_entries() .

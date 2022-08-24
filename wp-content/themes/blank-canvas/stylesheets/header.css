@@ -32,6 +32,11 @@ body {
 button {
   border-radius: 15px;
   background-color: var(--button-main-color);
+  transition: background-color 600ms ease-in-out;
+}
+
+button:hover {
+  background-color: var(--title-color) !important;
 }
 
 a {

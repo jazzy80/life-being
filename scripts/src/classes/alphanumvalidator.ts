@@ -3,7 +3,7 @@ import { FormField } from '../types/formfield';
 
 export class AlphaNumValidator extends FieldValidator {
   protected errorMsg =
-    'Error: Input should contain alpha-numeric characters or "!?.,()"\n';
+    'Enkel alfa-numerieke tekens en "!?.,()" zijn toegestaan.\n';
 
   public validate(field: FormField): boolean {
     return /^[a-zA-Z0-9!?,.() ]*$/.test(field.value);
