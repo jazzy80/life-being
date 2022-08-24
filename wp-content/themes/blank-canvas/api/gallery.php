@@ -2,7 +2,6 @@
   /* API to fetch images from the gallery folder, which can be sent
   to the client for retrieval.
   */
-
   define ('GALLERY_URL', '/gallery/');
   define ('GALLERY_DIR', ROOT_DIR . GALLERY_URL);
   define ('IMAGE_FILE_EXTENSIONS', ['jpg', 'jpeg', 'png']);
@@ -22,7 +21,7 @@ function get_gallery_images(WP_REST_Request $req): array {
 }
 
 function get_images_files(string $page): array {
-  $dir_path = GALLERY_DIR . $page;
+  $dir_path = GALLERY_DIR . $page . '/';
   $dir_contents = glob($dir_path . '*');
 
   // If there is no directory for images, return the featured image for the page
@@ -30,13 +29,13 @@ function get_images_files(string $page): array {
   if (!$dir_contents) return get_featured_image($page)
     -> or_else(get_default_image()) -> get_or_else(empty_result());
 
-  $images = array_map(
-    'convert_dirname_to_url',
+  $image_urls = array_map(
+    'strip_dirname_prefix',
     extract_images_from_dir_contents($dir_contents)
   );
   return array(
    // array_values is used to get rid of the numeric keys.
-   IMAGE_FILES_KEY => array_values($images)
+   IMAGE_FILES_KEY => array_values($image_urls)
  );
 }
 
@@ -58,10 +57,10 @@ function empty_result(): array {
 function get_default_image(): Maybe {
   return MaybeCompanion :: to_maybe(glob(DEFAULT_IMAGE_DIR . '*'))
     -> map(
-      fn($contents) => [
+      fn($dir_contents) => [
         IMAGE_FILES_KEY => array_map(
-          'convert_dirname_to_url',
-          $contents
+          'strip_dirname_prefix',
+          $dir_contents
           )
         ]
       );
@@ -71,13 +70,13 @@ function get_featured_image(string $page): Maybe {
   $page_model = (new ModelProviderImpl) -> get_page_model();
   $post = $page_model -> get_post_from_url(BASE_URL . $page);
   return $post -> bind(fn(WP_Post $p) =>
-    $page_model -> get_featured_image($p) -> map(fn($image) =>
-      [IMAGE_FILES_KEY => [$image]]
+    $page_model -> get_featured_image($p) -> map(fn($image_url) =>
+      [IMAGE_FILES_KEY => [$image_url]]
       )
     );
   }
 
- function convert_dirname_to_url(string $dirname): string {
+ function strip_dirname_prefix(string $dirname): string {
    return str_replace(ROOT_DIR, '', $dirname);
  }
 ?>
