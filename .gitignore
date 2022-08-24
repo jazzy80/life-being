@@ -1,5 +1,6 @@
 .htaccess
 wp-config.php
+wp-content/plugins/
 
 # ignore everything in the root except the "wp-content" directory.
 !wp-content/
