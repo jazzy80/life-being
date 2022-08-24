@@ -2,7 +2,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var slideshow_1 = require("./slideshow");
-slideshow_1.setUpSlideShow();
+(0, slideshow_1.setUpSlideShow)();
 
 },{"./slideshow":2}],2:[function(require,module,exports){
 "use strict";
@@ -34,7 +34,7 @@ function setUpSlideShow() {
         .join('/')
         .replace(/^\/$/, 'home');
     // If there is nothing after the hostName default to home.
-    var files = fetch("/gallery/?page=" + (page || "home"));
+    var files = fetch("/wp-json/api/gallery-images/?page=".concat(page || "home"));
     files.then(function (resp) { return resp.json(); }).then(function (_a) {
         var rawImages = _a.imageFiles;
         // No images, nothing to do, TODO show a default image.
@@ -73,14 +73,14 @@ exports.setUpSlideShow = setUpSlideShow;
 // Wrapping the imageNames into a Image obj forces the browser to precache the images.
 function preCacheImage(imageUrl) {
     var prefetchImage = new Image;
-    prefetchImage.src = "/" + imageUrl;
+    prefetchImage.src = imageUrl;
     return prefetchImage;
 }
 // Initialize the gallery/slideshow with the first image
 function initSlideShow(body, buttons, images) {
     // Initialize the gallery using the first image in the `images` array.
     if (images.length > 0) {
-        body.style.backgroundImage = "url(" + images[0].src;
+        body.style.backgroundImage = "url(".concat(images[0].src);
     }
     // Buttons should be visible and initialized when there are 2 or more buttons.
     if (images.length > 1) {
@@ -108,7 +108,7 @@ function initSlideShow(body, buttons, images) {
 }
 // General image setter function.
 function setImage(header, image) {
-    header.style.backgroundImage = "url(" + image.src + ")";
+    header.style.backgroundImage = "url(".concat(image.src, ")");
 }
 function manipulateButtons(buttons, mode, currentActiveTimers) {
     // Start opacity as 0 if the buttons need to be shown else start at 1.
@@ -136,4 +136,4 @@ function manipulateButtons(buttons, mode, currentActiveTimers) {
     currentActiveTimers.push(timeoutTimer);
 }
 
-},{}]},{},[1,2]);
+},{}]},{},[2,1]);

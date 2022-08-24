@@ -27,7 +27,7 @@ function setUpSlideShow() {
         .join('/')
         .replace(/^\/$/, 'home');
     // If there is nothing after the hostName default to home.
-    var files = fetch("/gallery/?page=".concat(page || "home"));
+    var files = fetch("/wp-json/api/gallery-images/?page=".concat(page || "home"));
     files.then(function (resp) { return resp.json(); }).then(function (_a) {
         var rawImages = _a.imageFiles;
         // No images, nothing to do, TODO show a default image.
@@ -66,7 +66,7 @@ exports.setUpSlideShow = setUpSlideShow;
 // Wrapping the imageNames into a Image obj forces the browser to precache the images.
 function preCacheImage(imageUrl) {
     var prefetchImage = new Image;
-    prefetchImage.src = "/".concat(imageUrl);
+    prefetchImage.src = imageUrl;
     return prefetchImage;
 }
 // Initialize the gallery/slideshow with the first image
