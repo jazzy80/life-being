@@ -1,5 +1,5 @@
 <?php
-
+namespace views;
 class GuestBook implements IView {
   private array $guest_book_entries;
 

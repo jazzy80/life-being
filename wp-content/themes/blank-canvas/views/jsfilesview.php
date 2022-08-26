@@ -1,9 +1,8 @@
 <?php
-require_once 'iview.php';
-
 // Class representing "<script></script>" tags.
+namespace views;
 class JsFilesView implements IView {
-  public function __construct(WP_Post $page) {
+  public function __construct(\WP_Post $page) {
     $this -> page = $page;
   }
 

@@ -1,4 +1,5 @@
 <?php
+namespace models;
 class GuestBookModel {
   function __construct(wpdb $db_client) {
     $this -> db_client = $db_client;

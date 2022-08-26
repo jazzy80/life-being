@@ -1,12 +1,11 @@
 <?php
-require_once 'iview.php';
-
 // Class representing the Header portion of the UI.
+namespace views;
 class HeaderView implements IView {
   public function __construct(
     // Navbars are optional.
-    Maybe /* <IView> */ $upper_navbar,
-    Maybe /* <IView> */ $lower_navbar
+    \utils\Maybe /* <IView> */ $upper_navbar,
+    \utils\Maybe /* <IView> */ $lower_navbar
   ) {
     $this -> upper_navbar = $upper_navbar;
     $this -> lower_navbar = $lower_navbar;

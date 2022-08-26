@@ -1,5 +1,6 @@
 <?php
 // Controller for rendering the Guest Book page.
+namespace controllers;
 class GuestBookController extends BaseController {
   public function create_view(): IView {
     $guest_book_entries = $this -> provider

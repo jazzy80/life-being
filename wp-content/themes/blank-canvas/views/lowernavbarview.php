@@ -1,6 +1,5 @@
 <?php
-require_once 'iview.php';
-
+namespace views;
 class LowerNavBarView implements IView {
   public function __construct(array $menu_items) {
     $this -> menu_items = $menu_items;

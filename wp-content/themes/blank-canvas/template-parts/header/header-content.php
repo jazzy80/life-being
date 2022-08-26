@@ -1,11 +1,12 @@
 <?php
 // init viewfactory.
-$view_factory = new viewfactory(
-  new ModelProviderImpl
+$model_provider = new serviceproviders\ModelProviderImpl;
+$view_factory = new views\factories\ViewFactory (
+  $model_provider
 );
-$page = (new ModelProviderImpl) -> get_page_model() -> get_current_page();
+$page = $model_provider -> get_page_model() -> get_current_page();
 // init builder.
-$builder = new pagebuilder($view_factory);
+$builder = new views\builders\PageBuilder($view_factory);
 
 if (in_array(strtolower($page -> post_title), PAGES_NEEDING_LITE_HEADER)) {
   echo $builder -> build_lite_header() -> get() -> display();

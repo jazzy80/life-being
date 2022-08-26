@@ -2,47 +2,51 @@
 
 
 // Class responsible for creating the UI views.
+namespace views\factories;
 class ViewFactory implements AbstractViewFactory {
   const SIDEBAR_CLASS = 'most-recent-container';
 
-  protected WP_Post $page;
+  protected \WP_Post $page;
   protected array $menus;
   protected array $menu_items;
-  protected PageModel $page_model;
+  protected \models\PageModel $page_model;
 
-  public function __construct(ModelProvider $model_provider) {
+  public function __construct(\serviceproviders\ModelProvider $model_provider) {
   $this -> page_model = $model_provider -> get_page_model();
   $this -> page = $this -> page_model -> get_current_page();
   $this -> menus = $this -> page_model -> get_page_menu();
   // Retrieve all top level menu items for the navbar.
   $this -> menu_items = $this -> page_model -> get_nav_menu_items($this -> menus);
 }
-  public function create_header(): IView {
+  public function create_header(): \views\IView {
     // Create a lower and upper navbar.
-    $lower_navbar = new LowerNavBarView($this -> menu_items);
-    $upper_navbar = new UpperNavBarView;
+    $lower_navbar = new \views\LowerNavBarView($this -> menu_items);
+    $upper_navbar = new \views\UpperNavBarView;
     // Create the header for the page and render it, using the created navbars.
-    return new HeaderView(new Just($upper_navbar), new Just($lower_navbar));
+    return new \views\HeaderView(new \utils\Just($upper_navbar), new \utils\Just($lower_navbar));
   }
 
-  public function create_text_body(): IView {
-    return new TextBodyView($this -> page);
+  public function create_text_body(): \views\IView {
+    return new \views\TextBodyView($this -> page);
   }
 
-  public function create_vitality_menu(): IView {
-    return new VitalityView(
+  public function create_vitality_menu(): \views\IView {
+    return new \views\VitalityView(
       $this -> page_model,
       $this -> page,
       $this -> page_model -> get_vitality_menu_items($this -> menus)
     );
   }
 
-  public function create_left_pane(): IView {
+  public function create_left_pane(): \views\IView {
     // TODO: Generate a leftPane.
-    return new SideBarDecorator(new CompositeView([]), ViewFactory :: SIDEBAR_CLASS);
+    return new \views\decorators\SideBarDecorator(
+      new \views\CompositeView([]),
+      ViewFactory :: SIDEBAR_CLASS
+    );
   }
 
-  public function create_right_pane(): IView {
+  public function create_right_pane(): \views\IView {
   	// Retrieve the most recent blog, poem and inspire pages as a
     // Maybe, since some pages might not be found.
   	$blog_page =    $this -> page_model -> get_page_from_title(BLOG_PAGE);
@@ -53,7 +57,7 @@ class ViewFactory implements AbstractViewFactory {
     $recent_blog_view = $blog_page -> bind(fn($blog) =>
 	   $this -> page_model -> find_most_recent_child_page($blog) -> map(
        fn($recent_blog) =>
-  			new MostRecentArticleView(
+  			new \views\MostRecentArticleView(
           $recent_blog,
           "Meest recent blog"
         )
@@ -62,7 +66,7 @@ class ViewFactory implements AbstractViewFactory {
     $recent_poetry_view = $poetry_page -> bind(fn($poetry) =>
 		  $this -> page_model -> find_most_recent_child_page($poetry) -> map(
         fn($recent_poetry) =>
-        new MostRecentArticleView(
+        new \views\MostRecentArticleView(
           $recent_poetry,
           "Meest recente gedicht"
         )
@@ -71,15 +75,15 @@ class ViewFactory implements AbstractViewFactory {
   	$recent_inspire_view = $inspire_page -> bind(fn($inspire) =>
     	  $this -> page_model -> find_most_recent_child_page($inspire) -> map(
           fn($recent_inspire) =>
-          new MostRecentArticleView(
+          new \views\MostRecentArticleView(
             $recent_inspirce,
             "Meest recent inspire"
          )
        )
      );
      // Use the compositeView to combine the view into a right pane.
-     return new SideBarDecorator(
-       new CompositeView(
+     return new \views\decorators\SideBarDecorator(
+       new \views\CompositeView(
 	       MaybeCompanion::flattenArray(
       	     [
               $recent_blog_view,

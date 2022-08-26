@@ -1,9 +1,13 @@
 <?php
+namespace views\builders;
 class PageBuilder implements AbstractBuilder {
-  private AbstractViewFactory $view_factory;
+  private \views\factories\AbstractViewFactory $view_factory;
   private array $components;
 
-  public function __construct(AbstractViewFactory $view_factory, array $components = []) {
+  public function __construct(
+    \views\factories\AbstractViewFactory $view_factory,
+    array $components = []
+  ) {
     $this -> view_factory = $view_factory;
     $this -> components = $components;
   }
@@ -13,7 +17,13 @@ class PageBuilder implements AbstractBuilder {
   }
 
   public function build_lite_header(): AbstractBuilder {
-    return $this -> add_component(new HeaderView(new Just(new UpperNavBarView), new None));
+    return $this -> add_component(
+      new \views\HeaderView(
+        new \utils\Just(
+          new \views\UpperNavBarView
+        ), new \utils\None
+      )
+    );
   }
 
   public function build_left_pane(): AbstractBuilder {
@@ -36,15 +46,15 @@ class PageBuilder implements AbstractBuilder {
       return $this -> add_component(new GuestBook($guest_book_entries));
   }
 
-  public function build_jsfiles(WP_Post $page): AbstractBuilder {
-      return $this -> add_component(new JsFilesView($page));
+  public function build_jsfiles(\WP_Post $page): AbstractBuilder {
+      return $this -> add_component(new \views\JsFilesView($page));
   }
 
-  public function get(): IView {
-    return new CompositeView($this -> components);
+  public function get(): \views\IView {
+    return new \views\CompositeView($this -> components);
   }
 
-  private function add_component(IView $component): AbstractBuilder {
+  private function add_component(\views\IView $component): AbstractBuilder {
     return new PageBuilder(
       $this -> view_factory,
       [...$this -> components, $component]

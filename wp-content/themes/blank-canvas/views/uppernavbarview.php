@@ -1,6 +1,5 @@
 <?php
-require_once 'iview.php';
-
+namespace views;
 class UpperNavBarView implements IView {
   public function display(): string {
     return <<< EOL

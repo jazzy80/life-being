@@ -1,9 +1,8 @@
 <?php
-
-require_once "iview.php";
 /*
 a View representing a most recent article page.
 */
+namespace views;
 class MostRecentArticleView implements IView {
   public function __construct(
     WP_Post $most_recent_article,

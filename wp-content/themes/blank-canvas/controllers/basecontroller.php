@@ -3,10 +3,14 @@
 * Abstract class for controllers, these object are responsible for the flow between
 * data and the UI.
 */
+namespace controllers;
 abstract class BaseController {
-  protected AbstractBuilder $builder;
+  protected \views\builders\AbstractBuilder $builder;
 
-  public function __construct(AbstractBuilder $builder, ModelProvider $provider) {
+  public function __construct(
+    \views\builders\AbstractBuilder $builder,
+    \serviceproviders\ModelProvider $provider
+  ) {
     // Builder is used to generate the specific views.
     $this -> builder = $builder;
     $this -> provider = $provider;
@@ -20,6 +24,6 @@ abstract class BaseController {
   }
 
   // Function to create the specific View to render.
-  abstract protected function create_view(): IView;
+  abstract protected function create_view(): \views\IView;
 }
 ?>

@@ -1,13 +1,12 @@
 <?php
-require_once 'modelprovider.php';
-
+namespace serviceproviders;
 class ModelProviderImpl implements ModelProvider {
-  function get_page_model(): PageModel {
-    return new PageModel;
+  function get_page_model(): \models\PageModel {
+    return new \models\PageModel;
   }
-  function get_guestbook_model(): GuestBookModel {
+  function get_guestbook_model(): \models\GuestBookModel {
     global $wpdb;
-    return new GuestBookModel($wpdb);
+    return new \models\GuestBookModel($wpdb);
   }
 }
 ?>

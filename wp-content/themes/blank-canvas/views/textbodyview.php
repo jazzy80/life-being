@@ -1,10 +1,9 @@
 <?php
-require_once 'iview.php';
-
+namespace views;
 class TextBodyView implements IView {
-  private WP_Post $page;
+  private \WP_Post $page;
 
-  public function __construct(WP_Post $page) {
+  public function __construct(\WP_Post $page) {
     $this -> page = $page;
   }
 

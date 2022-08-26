@@ -7,12 +7,12 @@
  * @package Blank Canvas
  * @since 1.0
  */
- $controller_factory = new ControllerFactory;
- $model_provider = new ModelProviderImpl;
- $view_factory = new ViewFactory(
+ $controller_factory = new controllers\factories\ControllerFactory;
+ $model_provider = new serviceproviders\ModelProviderImpl;
+ $view_factory = new \views\factories\ViewFactory(
    $model_provider
  );
- $builder = new PageBuilder($view_factory);
+ $builder = new views\builders\PageBuilder($view_factory);
 
  $controller = $controller_factory -> get_controller($model_provider, $builder);
  $controller -> get();

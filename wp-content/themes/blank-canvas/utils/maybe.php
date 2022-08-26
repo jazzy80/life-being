@@ -2,6 +2,7 @@
   /**
   *Maybe is a type that either contains a value `Just` or nothing `None`
   **/
+  namespace utils;
   interface Maybe {
     // bind(A => Maybe<B>): Maybe<B>.
     public function bind(callable $fb): Maybe;
@@ -17,48 +18,8 @@
     public function get();
   }
 
-  /**
-  *`Just` represent a `Maybe` that has a value.
-  **/
-  class Just implements Maybe {
-    public function __construct($a) {
-      $this -> a = $a;
-    }
-    public function bind(callable $fb): Maybe {
-      return $fb($this -> a);
-    }
-
-    public function map(callable $fb): Maybe {
-      return new Just($fb($this -> a));
-    }
-    public function get_or_else($fallback) {
-      return $this -> a;
-    }
-
-    public function or_else(Maybe $other): Maybe {
-      return $this;
-    }
-
-    public function get() { return $this -> a;}
-  }
-
-  /**
-  * `None` represents a Maybe that does not contain a value.
-  **/
-  class None implements Maybe {
-    public function bind(callable $fb): Maybe {return $this;}
-    public function map(callable $fb): Maybe {return $this;}
-    public function get_or_else($fallback) {
-      return $fallback;
-    }
-    public function or_else(Maybe $other): Maybe {
-      return $other;
-    }
-    public function get() { throw new ValueNotPresentError;}
-  }
-
 // Simple exception class for a value that is not present e.g. calling get on a `None` instance.
-class ValueNotPresentError extends Exception {}
+class ValueNotPresentError extends \Exception {}
 
 // Convenience class for `Maybe`.
 class MaybeCompanion {

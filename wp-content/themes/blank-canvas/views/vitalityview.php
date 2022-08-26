@@ -1,6 +1,5 @@
 <?php
-require_once 'iview.php';
-
+namespace views;
 class VitalityView implements IView {
   private PageModel $page_model;
   private WP_Post $current_post;

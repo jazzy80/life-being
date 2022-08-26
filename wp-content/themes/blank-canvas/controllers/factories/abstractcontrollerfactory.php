@@ -1,8 +1,9 @@
 <?php
+namespace controllers\factories;
 interface AbstractControllerFactory {
   function get_controller(
-    ModelProvider $provider,
-    AbstractBuilder $builder
-  ): BaseController;
+    \serviceproviders\ModelProvider $provider,
+    \views\builders\AbstractBuilder $builder
+  ): \controllers\BaseController;
 }
 ?>
