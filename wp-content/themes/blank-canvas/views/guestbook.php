@@ -9,7 +9,8 @@ class GuestBook implements IView {
   function display(): string {
     return '
     <div class="guestbook">
-      <h2 class="body-title">Voel je vrij om je ervaringen met elkaar te delen in dit gastenboek.</h2>
+      <h2 class="guestbook-title">GastenBoek</h2>
+      <p class="body-title">Voel je vrij om je ervaringen met elkaar te delen in dit gastenboek.</p>
       <a class="add-comment">Plaats bericht</a>
       <form class="guestbook-form">
         <h2 class="form-title">Nieuw bericht</h2>
@@ -29,14 +30,13 @@ class GuestBook implements IView {
       $this -> guest_book_entries,
       function(string $html, \data\GuestBookEntry $entry): string {
         return $html . '<li class="comment">
-          <div>
-            <p>' . $entry -> name . '</p>
-            <p>' .  $entry -> date  . '</p>
-            <p>' .  $entry -> time  . '</p>
-            </div>
-            <div>
-              <p>' . $entry -> text_body . '</p>
-            </div>
+          <div class="row guestbook-header">
+            <p class="guest-name">' . $entry -> name . '</p>
+            <p class="comment-date">' .  $entry -> date  . '</p>
+          </div>
+          <div class="row text-body">
+            <p class="comment-text">' . $entry -> text_body . '</p>
+          </div>
         </li>
         <hr>';
       },

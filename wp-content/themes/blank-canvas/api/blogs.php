@@ -9,6 +9,6 @@ add_action( 'rest_api_init', function () {
 require_once 'articles.php';
 
 function get_blogs (WP_REST_Request $req): array {
-  return get_articles_for_page(new PageModel, BLOG_PAGE, $req);
+  return get_articles_for_page(new \models\PageModel, BLOG_PAGE, $req);
 }
 ?>

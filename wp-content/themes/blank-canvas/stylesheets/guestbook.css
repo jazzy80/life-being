@@ -8,6 +8,7 @@
   background-color: var(--secondary-background-color);
   margin-bottom: 0;
   border-radius: 20px;
+  padding: 1.5rem;
 }
 
 .guestbook-form {
@@ -30,11 +31,34 @@
 
 .form-btns {
   display: flex;
+  margin: 1rem;
   justify-content: space-around;
 }
 
+.row {
+  display: flex;
+}
+
+.guestbook-header {
+  margin-left: 40% !important;
+}
+
+.row > p {
+  margin: 0.2rem;
+}
+
+.guest-name {
+  font-weight: bolder;
+  margin-bottom: 2rem !important;
+}
+
+.comment-date {
+  font-weight: lighter;
+}
+
 .comment-text {
-  margin-bottom: 1rem;
+  margin: 0 1rem auto auto;
+  text-align: center;
 }
 
 .form-title {
@@ -66,7 +90,10 @@
 
 .comment {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 1rem;
+  padding: 0 1rem;
 }
 
 .comment > div {

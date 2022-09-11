@@ -62,6 +62,7 @@ Modified and used as a block pattern image.
 @import "stylesheets/articles.css";
 @import "stylesheets/contact-form.css";
 @import "stylesheets/guestbook.css";
+@import "stylesheets/footer.css";
 
 /* Remove extra margin from articles on single post pages. */
 

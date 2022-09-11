@@ -1,0 +1,17 @@
+.footer {
+  display: flex;
+  justify-content: center;
+}
+
+.row {
+  display: flex;
+  margin: 0 1rem;
+}
+
+.row > i {
+  margin: auto 0.2rem;
+}
+
+.row > p {
+  margin: 0.3rem;
+}

@@ -1,11 +1,14 @@
 <?php
 namespace views;
 class VitalityView implements IView {
-  private PageModel $page_model;
-  private WP_Post $current_post;
+  private \models\PageModel $page_model;
+  private \WP_Post $current_post;
   private array $menu_items;
 
-  public function __construct(PageModel $page_model, WP_Post $current_post, array $menu_items) {
+  public function __construct(
+    \models\PageModel $page_model,
+    \WP_Post $current_post, array $menu_items
+  ) {
     $this -> page_model = $page_model;
     $this -> current_post = $current_post;
     $this -> menu_items = $menu_items;
@@ -29,7 +32,7 @@ class VitalityView implements IView {
   	// Concantenate with the rest of the menu items below.
   	// Create all the menu items, and concatenate to html string.
     // Use links of child pages to populate the sidebar.
-  	array_reduce($this -> menu_items, function(string $html, WP_Post $menu_item): string {
+  	array_reduce($this -> menu_items, function(string $html, \WP_Post $menu_item): string {
   		return $html .
   		'<li>
   			<object class="heart-icon" data="/resources/hearticon.svg"></object>
