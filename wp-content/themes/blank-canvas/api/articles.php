@@ -1,7 +1,7 @@
 <?php
 // Function to retrieve articles belonging to a specific page.
 function get_articles_for_page(
-  PageModel $page_model,
+  models\PageModel $page_model,
   string $page_title,
   WP_REST_Request $req
 ): array {
@@ -13,7 +13,7 @@ function get_articles_for_page(
 }
 
 // General function to retrieve articles.
-function get_articles(PageModel $page_model, WP_REST_Request $req, WP_Post $article_page) {
+function get_articles(models\PageModel $page_model, WP_REST_Request $req, WP_Post $article_page) {
 // Get the page number from retrieve '$data' object.
 $page_number = intval(filter_var($req['page'], FILTER_SANITIZE_STRING));
 

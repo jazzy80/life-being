@@ -27,7 +27,7 @@ class GuestBook implements IView {
   private function generate_guestbook_entries(): string {
     return array_reduce(
       $this -> guest_book_entries,
-      function(string $html, GuestBookEntry $entry): string {
+      function(string $html, \data\GuestBookEntry $entry): string {
         return $html . '<li class="comment">
           <div>
             <p>' . $entry -> name . '</p>

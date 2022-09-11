@@ -9,6 +9,6 @@ add_action( 'rest_api_init', function () {
 require_once 'articles.php';
 
 function get_poetry (WP_REST_Request $req): array {
-  return get_articles_for_page(new PageModel, POETRY_PAGE, $req);
+  return get_articles_for_page(new models\PageModel, POETRY_PAGE, $req);
 }
 ?>

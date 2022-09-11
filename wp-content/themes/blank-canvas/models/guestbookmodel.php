@@ -1,7 +1,7 @@
 <?php
 namespace models;
 class GuestBookModel {
-  function __construct(wpdb $db_client) {
+  function __construct(\wpdb $db_client) {
     $this -> db_client = $db_client;
   }
 
@@ -11,8 +11,8 @@ class GuestBookModel {
       OBJECT
     );
     return array_map(
-      function (object $entry): GuestBookEntry {
-        return new GuestBookEntry(
+      function (object $entry): \data\GuestBookEntry {
+        return new \data\GuestBookEntry(
           $entry -> name,
           $entry -> created_on,
           $entry -> text_body

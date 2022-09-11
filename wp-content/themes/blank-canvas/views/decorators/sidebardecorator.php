@@ -1,9 +1,10 @@
 <?php
 
-class SideBarDecorator extends ViewDecorator implements IView {
+namespace views\decorators;
+class SideBarDecorator extends ViewDecorator implements \views\IView {
   private string $class_attr;
 
-  public function __construct(IView $view, string $class_attr) {
+  public function __construct(\views\IView $view, string $class_attr) {
     parent :: __construct($view);
     $this -> class_attr = $class_attr;
   }

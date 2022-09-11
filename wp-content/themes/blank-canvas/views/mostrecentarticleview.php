@@ -5,7 +5,7 @@ a View representing a most recent article page.
 namespace views;
 class MostRecentArticleView implements IView {
   public function __construct(
-    WP_Post $most_recent_article,
+    \WP_Post $most_recent_article,
     string $header_title
   )
   {

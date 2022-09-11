@@ -84,7 +84,7 @@ class ViewFactory implements AbstractViewFactory {
      // Use the compositeView to combine the view into a right pane.
      return new \views\decorators\SideBarDecorator(
        new \views\CompositeView(
-	       MaybeCompanion::flattenArray(
+	       \utils\MaybeCompanion::flattenArray(
       	     [
               $recent_blog_view,
               $recent_poetry_view,

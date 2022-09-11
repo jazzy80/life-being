@@ -13,7 +13,7 @@ class LowerNavBarView implements IView {
     EOL;
     $navbar_links = array_reduce(
       $this -> menu_items,
-      fn(string $html_page, WP_Post $menu_item) =>
+      fn(string $html_page, \WP_Post $menu_item) =>
         $html_page .
         "<li>
           <a href=" . $menu_item -> url . ">" .

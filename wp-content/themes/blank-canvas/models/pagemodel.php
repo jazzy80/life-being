@@ -4,7 +4,7 @@ class PageModel {
   // Map an array of titles to an array of `WP_Post` objects.
   // Removes the ones that cannot be found.
   public function get_pages_from_titles(array $titles): array {
-  	return MaybeCompanion::flattenArray(
+  	return \utils\MaybeCompanion::flattenArray(
       array_map(
         fn(string $title) => $this -> get_page_from_title($title),
         $titles
@@ -20,19 +20,19 @@ class PageModel {
     return wp_get_nav_menus();
   }
 
-  public function get_featured_image(\WP_Post $page): Maybe {
-    return MaybeCompanion :: to_maybe(
+  public function get_featured_image(\WP_Post $page): \utils\Maybe {
+    return \utils\MaybeCompanion :: to_maybe(
       get_the_post_thumbnail_url($page, 'large')
     );
   }
 
-  public function get_post_from_url(string $target_url): Maybe {
+  public function get_post_from_url(string $target_url): \utils\Maybe {
     $urls = array_reduce(
       get_pages(),
       fn(array $acc, \WP_Post $page) => array_merge([get_permalink($page) => $page], $acc),
       []
     );
-    return MaybeCompanion :: to_maybe($urls[$target_url]);
+    return \utils\MaybeCompanion :: to_maybe($urls[$target_url]);
   }
 
   // Function to find out whether the `$current_post` needs the vitality menu.
@@ -76,17 +76,17 @@ class PageModel {
   }
 
   //find_if, use a predicate to retrieve an element from an array or `None` if not found.
-  public function find_if(array $array, callable $predicate): Maybe {
+  public function find_if(array $array, callable $predicate): \utils\Maybe {
   	foreach($array as $element) {
-  		if ($predicate($element)) return new Just($element);
+  		if ($predicate($element)) return new \utils\Just($element);
   	}
-  	return new None;
+  	return new \utils\None;
   }
 
   /*
   Using a title, find the corresponding page having that title or `None` if not found.
   */
-  public function get_page_from_title(string $title): Maybe {
+  public function get_page_from_title(string $title): \utils\Maybe {
   	return $this -> find_if(get_pages(), fn($page) =>
   		strtolower($page -> post_title) === strtolower($title)
   	);
@@ -108,9 +108,9 @@ class PageModel {
   /*
   Find the most recent (by posting date) child page from a parent. Returns `None` if noting found.
   */
-  public function find_most_recent_child_page(\WP_Post $parent): Maybe {
+  public function find_most_recent_child_page(\WP_Post $parent): \utils\Maybe {
   	$child_pages = $this -> find_child_pages_of_parent($parent);
-  	return (sizeof($child_pages) > 0) ? new Just($child_pages[0]) : new None;
+  	return (sizeof($child_pages) > 0) ? new \utils\Just($child_pages[0]) : new \utils\None;
   }
 
   // maps an array of `pages` to an array with the page ids.

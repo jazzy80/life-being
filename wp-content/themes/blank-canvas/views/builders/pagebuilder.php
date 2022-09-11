@@ -43,7 +43,7 @@ class PageBuilder implements AbstractBuilder {
   }
 
   public function build_guestbook(array $guest_book_entries): AbstractBuilder {
-      return $this -> add_component(new GuestBook($guest_book_entries));
+      return $this -> add_component(new \views\GuestBook($guest_book_entries));
   }
 
   public function build_jsfiles(\WP_Post $page): AbstractBuilder {

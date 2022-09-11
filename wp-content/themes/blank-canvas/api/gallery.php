@@ -54,8 +54,8 @@ function empty_result(): array {
   return [IMAGE_FILES_KEY => []];
 }
 
-function get_default_image(): Maybe {
-  return MaybeCompanion :: to_maybe(glob(DEFAULT_IMAGE_DIR . '*'))
+function get_default_image(): \utils\Maybe {
+  return \utils\MaybeCompanion :: to_maybe(glob(DEFAULT_IMAGE_DIR . '*'))
     -> map(
       fn($dir_contents) => [
         IMAGE_FILES_KEY => array_map(
@@ -66,8 +66,8 @@ function get_default_image(): Maybe {
       );
 }
 
-function get_featured_image(string $page): Maybe {
-  $page_model = (new ModelProviderImpl) -> get_page_model();
+function get_featured_image(string $page): \utils\Maybe {
+  $page_model = (new \serviceproviders\ModelProviderImpl) -> get_page_model();
   $post = $page_model -> get_post_from_url(BASE_URL . $page);
   return $post -> bind(fn(WP_Post $p) =>
     $page_model -> get_featured_image($p) -> map(fn($image_url) =>

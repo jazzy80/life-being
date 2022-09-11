@@ -1,4 +1,5 @@
 <?php
+namespace data;
 class GuestBookEntry {
   function __construct(string $name, string $timestamp, string $text_body) {
     $this -> name = filter_var($name, FILTER_SANITIZE_STRING);
