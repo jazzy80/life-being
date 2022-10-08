@@ -12,7 +12,7 @@ define('BEINGME',       'being me, being you');
 
 define(
   'BASE_URL',
-  $_SERVER['HTTPS'] === 'on' ? 'https' : 'http' . "://" . $_SERVER['SERVER_NAME']
+  ($_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . "://" . $_SERVER['SERVER_NAME']
 );
 define('ROOT_DIR', $_SERVER['DOCUMENT_ROOT']);
 
