@@ -15,6 +15,8 @@ class ControllerFactory implements AbstractControllerFactory {
      return new \controllers\VitalityController($builder, $provider);
     case GUESTBOOK:
      return new \controllers\GuestBookController($builder, $provider);
+     case ATELIER:
+     return new \controllers\AtelierController($builder, $provider);
     default: return new \controllers\DefaultController($builder, $provider);
    }
   }

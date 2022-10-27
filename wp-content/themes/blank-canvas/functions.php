@@ -17,6 +17,7 @@ require_once __DIR__ . '/api/blogs.php';
 require_once __DIR__ . '/api/gallery.php';
 require_once __DIR__ . '/api/guestbook.php';
 require_once __DIR__ . '/api/poetry.php';
+require_once __DIR__ . '/api/atelier.php';
 
 if ( ! function_exists( 'blank_canvas_setup' ) ) :
 

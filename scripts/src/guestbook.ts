@@ -3,12 +3,12 @@ import { TextLengthValidator } from './classes/textlengthvalidator';
 import { AlphaNumValidator} from './classes/alphanumvalidator';
 import { CompositeValidator } from './classes/compositevalidator';
 import { FormField } from './types/formfield';
+import {addOverlay, removeOverlay} from './utils/overlay';
 
 const ADDCOMMENT_SELECTOR = '.add-comment';
 const CANCELCOMMENT_SELECTOR = '.cancel-comment';
 const SUBMITCOMMENT_SELECTOR = '.submit-comment';
 const GUESTBOOKFORM_SELECTOR = '.guestbook-form';
-const OVERLAY_SELECTOR = '.overlay';
 
 const ERROR = 'error';
 const ERROR_COLOR = 'red';
@@ -57,26 +57,6 @@ function removeCommentModal(form: HTMLFormElement, fields: FormField[]): void {
   hideForm(form);
   removeOverlay();
   resetForm(fields);
-}
-
-function addOverlay(): void {
-  const overlay: HTMLDivElement = document.querySelector(OVERLAY_SELECTOR)
-    || document.createElement('div');
-  overlay.classList.add('overlay');
-  const body = document.body;
-  body.style.overflowY = 'hidden';
-  body.prepend(overlay);
-}
-
-function removeOverlay(): void {
-  const overlay = document.querySelector(OVERLAY_SELECTOR) as HTMLDivElement | null;
-  // Check if overlay is already active.
-  if (overlay) {
-    // Remove it
-    overlay.remove();
-    // Reenable the scroll bar.
-    document.body.style.overflowY = 'auto';
-  }
 }
 
 function showForm(form: HTMLFormElement): void {
