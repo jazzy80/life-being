@@ -7,6 +7,14 @@
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 
+function ogf_register_typography_control( $wp_customize ) {
+	if ( ! class_exists( 'OGF_Customize_Typography_Control' ) ) {
+		require_once OGF_DIR_PATH . 'includes/customizer/controls/class-ogf-customize-typography-control.php';
+		$wp_customize->register_control_type( 'OGF_Customize_Typography_Control' );
+	}
+}
+add_action( 'customize_register', 'ogf_register_typography_control', 10 );
+
 /**
  * An array containing the customizer sections, settings and controls.
  *
@@ -14,14 +22,13 @@
  */
 function ogf_customize_register( $wp_customize ) {
 	require_once OGF_DIR_PATH . 'includes/customizer/controls/class-ogf-customize-multiple-fonts-control.php';
-	require_once OGF_DIR_PATH . 'includes/customizer/controls/class-ogf-customize-typography-control.php';
+
 	require_once OGF_DIR_PATH . 'includes/customizer/controls/class-ogf-customize-repeater-control.php';
 	require_once OGF_DIR_PATH . 'includes/customizer/controls/class-ogf-customize-upsell-control.php';
 	require_once OGF_DIR_PATH . 'includes/customizer/controls/class-ogf-customize-multiple-checkbox-control.php';
 
 	$wp_customize->register_control_type( 'OGF_Customize_Multiple_Fonts_Control' );
 	$wp_customize->register_control_type( 'OGF_Customize_Multiple_Checkbox_Control' );
-	$wp_customize->register_control_type( 'OGF_Customize_Typography_Control' );
 
 	$wp_customize->add_setting(
 		'ogf_custom_selectors',
@@ -56,6 +63,7 @@ function ogf_customize_register( $wp_customize ) {
 				'label'       => esc_html__( 'Load Fonts Only', 'olympus-google-fonts' ),
 				'description' => esc_html__( 'Load fonts but don\'t automatically assign them to an element.', 'olympus-google-fonts' ),
 				'section'     => 'ogf_advanced__css',
+				'type'        => 'ogf-typography-multiselect',
 			)
 		)
 	);
@@ -66,11 +74,9 @@ function ogf_customize_register( $wp_customize ) {
 	 * @param array $elements array of elements to build controls based on.
 	 */
 	function ogf_build_customizer_controls( $elements ) {
-
 		global $wp_customize;
 
 		foreach ( $elements as $id => $values ) {
-
 			$wp_customize->add_setting(
 				$id . '_font',
 				array(
@@ -103,9 +109,37 @@ function ogf_customize_register( $wp_customize ) {
 			);
 
 			$wp_customize->add_setting(
+				$id . '_font_size_tablet',
+				array(
+					'transport' => 'refresh',
+				)
+			);
+
+			$wp_customize->add_setting(
+				$id . '_font_size_mobile',
+				array(
+					'transport' => 'refresh',
+				)
+			);
+
+			$wp_customize->add_setting(
 				$id . '_line_height',
 				array(
 					'transport' => 'postMessage',
+				)
+			);
+
+			$wp_customize->add_setting(
+				$id . '_line_height_tablet',
+				array(
+					'transport' => 'refresh',
+				)
+			);
+
+			$wp_customize->add_setting(
+				$id . '_line_height_mobile',
+				array(
+					'transport' => 'refresh',
 				)
 			);
 
@@ -130,6 +164,13 @@ function ogf_customize_register( $wp_customize ) {
 				)
 			);
 
+			$wp_customize->add_setting(
+				$id . '_text_decoration',
+				array(
+					'transport' => 'postMessage',
+				)
+			);
+
 			$wp_customize->add_control(
 				new OGF_Customize_Typography_Control(
 					$wp_customize,
@@ -139,15 +180,25 @@ function ogf_customize_register( $wp_customize ) {
 						'label'       => ( isset( $values['label'] ) ? esc_attr( $values['label'] ) : '' ),
 						'description' => ( isset( $values['description'] ) ? esc_attr( $values['description'] ) : '' ),
 						'section'     => ( isset( $values['section'] ) ? esc_attr( $values['section'] ) : '' ),
-						'settings'    => array(
-							'family'         => $id . '_font',
-							'weight'         => $id . '_font_weight',
-							'style'          => $id . '_font_style',
-							'size'           => $id . '_font_size',
-							'line_height'    => $id . '_line_height',
-							'color'          => $id . '_font_color',
-							'letter_spacing' => $id . '_letter_spacing',
-							'text_transform' => $id . '_text_transform',
+						'type'        => 'ogf-typography',
+						'settings'    =>
+							apply_filters(
+								'ogf_typography_control_settings',
+								array(
+								'family'             => $id . '_font',
+								'weight'             => $id . '_font_weight',
+								'style'              => $id . '_font_style',
+								'size'               => $id . '_font_size',
+								'size_tablet'        => $id . '_font_size_tablet',
+								'size_mobile'        => $id . '_font_size_mobile',
+								'line_height'        => $id . '_line_height',
+								'line_height_tablet' => $id . '_line_height_tablet',
+								'line_height_mobile' => $id . '_line_height_mobile',
+								'color'              => $id . '_font_color',
+								'letter_spacing'     => $id . '_letter_spacing',
+								'text_transform'     => $id . '_text_transform',
+							),
+							$id
 						),
 					)
 				)
@@ -171,10 +222,10 @@ function ogf_customize_register( $wp_customize ) {
 		'force_styles',
 		array(
 			'label'       => esc_html__( 'Force Styles?', 'olympus-google-fonts' ),
+			'description' => esc_html__( 'If your choices are not displaying correctly, check this box.', 'olympus-google-fonts' ),
 			'section'     => 'ogf_debugging',
 			'settings'    => 'ogf_force_styles',
 			'type'        => 'checkbox',
-			'description' => esc_html__( 'If your choices are not displaying correctly, check this box.', 'olympus-google-fonts' ),
 		)
 	);
 
@@ -191,10 +242,10 @@ function ogf_customize_register( $wp_customize ) {
 		'ogf_disable_post_level_controls',
 		array(
 			'label'       => esc_html__( 'Disable Editor Controls', 'olympus-google-fonts' ),
+			'description' => esc_html__( 'Remove font controls from the individual post editor screen (Gutenberg and Classic).', 'olympus-google-fonts' ),
 			'section'     => 'ogf_debugging',
 			'settings'    => 'ogf_disable_post_level_controls',
 			'type'        => 'checkbox',
-			'description' => esc_html__( 'Remove font controls from the individual post editor screen (Gutenberg and Classic).', 'olympus-google-fonts' ),
 		)
 	);
 
@@ -209,14 +260,15 @@ function ogf_customize_register( $wp_customize ) {
 	$wp_customize->add_control(
 		'ogf_font_display',
 		array(
+			'label'   => esc_html__( 'Font Display', 'olympus-google-fonts' ),
+			'description'   => '<a href="https://fontsplugin.com/google-fonts-font-display-swap/#values">' . esc_html__( 'Learn more →', 'olympus-google-fonts' ) . '</a>',
 			'type'    => 'select',
 			'section' => 'ogf_debugging',
-			'label'   => __( 'Font Display' ),
 			'choices' => array(
-				'swap'     => __( 'Swap', 'olympus-google-fonts' ),
-				'block'    => __( 'Block', 'olympus-google-fonts' ),
-				'fallback' => __( 'Fallback', 'olympus-google-fonts' ),
-				'optional' => __( 'Optional', 'olympus-google-fonts' ),
+				'swap'     => esc_html__( 'Swap', 'olympus-google-fonts' ),
+				'block'    => esc_html__( 'Block', 'olympus-google-fonts' ),
+				'fallback' => esc_html__( 'Fallback', 'olympus-google-fonts' ),
+				'optional' => esc_html__( 'Optional', 'olympus-google-fonts' ),
 			),
 		)
 	);
@@ -269,6 +321,7 @@ function ogf_customize_register( $wp_customize ) {
 						'section'     => 'ogf_font_loading',
 						'choices'     => $new_variants,
 						'input_attrs' => $input_attrs,
+						'type'        => 'ogf-multiple-checkbox',
 					)
 				)
 			);
@@ -303,6 +356,7 @@ function ogf_customize_register( $wp_customize ) {
 				array(
 					'section'  => $loc,
 					'priority' => 120,
+					'type'     => 'ogf-upsell',
 				)
 			)
 		);
@@ -310,13 +364,14 @@ function ogf_customize_register( $wp_customize ) {
 	}
 
 }
-add_action( 'customize_register', 'ogf_customize_register' );
+add_action( 'customize_register', 'ogf_customize_register', 20 );
 
 /**
  * Sanitize value from select field.
  *
  * @param string $input The selected input.
- * @param string $setting The setting.
+ * @param object $setting The setting.
+ * @return bool
  */
 function ogf_sanitize_select( $input, $setting ) {
 	// Ensure input is a slug.

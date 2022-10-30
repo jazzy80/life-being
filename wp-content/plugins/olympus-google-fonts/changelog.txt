@@ -1,6 +1,50 @@
-= 3.0.12 =
+= 3.2.1 =
 
-* Version bump
+* Add prefixes to control types to prevent conflicts.
+
+= 3.2.0 =
+
+* Add WooCommerce support.
+
+= 3.1.2 =
+
+* Automatically add all custom uploaded and typekit/adobe fonts to the Classic Editor.
+
+= 3.0.21 =
+
+* Improve compatibility with Full Site Editing (FSE).
+
+= 3.0.20 =
+
+* Update fonts list.
+
+= 3.0.19 =
+
+* Compatibility update.
+
+= 3.0.18 =
+
+* Update fonts list.
+
+= 3.0.17 =
+
+* Add filters to font control choices.
+
+= 3.0.16 =
+
+* Fix footer heading selectors.
+
+= 3.0.15 =
+
+* Fix issue with translations in /languages loading too late.
+
+= 3.0.14 =
+
+* Add support for block-based themes and full site editing.
+
+= 3.0.13 =
+
+* Fix issue where resource hints were being loaded when using local fonts.
 
 = 3.0.11 =
 

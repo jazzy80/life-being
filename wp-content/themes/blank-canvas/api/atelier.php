@@ -7,11 +7,9 @@ add_action('rest_api_init', function () {
 } );
 
 function get_atelier_images(WP_REST_Request $req): array {
-  $uploads = glob(ROOT_DIR . '/wp-content/uploads/2022/05/*');
-  return array_map(
-    fn(string $dir): string =>
-      str_replace(ROOT_DIR, '', $dir),
-    $uploads
-  );
+  global $wpdb;
+  $atelier_model = new \models\AtelierModel($wpdb);
+  $category = $req -> get_query_params()['category'];
+  return $atelier_model -> get_atelier_images_by_category($category);
 }
 ?>

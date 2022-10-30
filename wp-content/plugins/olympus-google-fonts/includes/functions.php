@@ -9,6 +9,8 @@
 
 /**
  * An array of user-defined elements that can be customized using the plugin.
+ *
+ * @return array An array of user-defined elements.
  */
 function ogf_get_custom_elements() {
 	$theme_mod = get_theme_mod( 'ogf_custom_selectors', false );
@@ -28,6 +30,8 @@ function ogf_get_custom_elements() {
 
 /**
  * An array of elements that can be customized using the plugin.
+ *
+ * @return array Elements the plugin can target.
  */
 function ogf_get_elements() {
 	$elements = array(
@@ -53,31 +57,31 @@ function ogf_get_elements() {
 			'label'       => esc_html__( 'Site Title Typography', 'olympus-google-fonts' ),
 			'description' => esc_html__( 'Select and configure the font for your site title.', 'olympus-google-fonts' ),
 			'section'     => 'ogf_advanced__branding',
-			'selectors'   => '#site-title, .site-title, #site-title a, .site-title a, #site-logo, #site-logo a, #logo, #logo a, .logo, .logo a',
+			'selectors'   => '#site-title, .site-title, #site-title a, .site-title a, #site-logo, #site-logo a, #logo, #logo a, .logo, .logo a, .wp-block-site-title, .wp-block-site-title a',
 		),
 		'ogf_site_description' => array(
 			'label'       => esc_html__( 'Site Description Typography', 'olympus-google-fonts' ),
 			'description' => esc_html__( 'Select and configure the font for your site description.', 'olympus-google-fonts' ),
 			'section'     => 'ogf_advanced__branding',
-			'selectors'   => '#site-description, .site-description',
+			'selectors'   => '#site-description, .site-description, #site-tagline, .site-tagline, .wp-block-site-tagline',
 		),
 		'ogf_site_navigation' => array(
 			'label'       => esc_html__( 'Navigation Typography', 'olympus-google-fonts' ),
 			'description' => esc_html__( 'Select and configure the font for your site navigation.', 'olympus-google-fonts' ),
 			'section'     => 'ogf_advanced__navigation',
-			'selectors'   => '.menu, .page_item a, .menu-item a',
+			'selectors'   => '.menu, .page_item a, .menu-item a, .wp-block-navigation, .wp-block-navigation-item__content',
 		),
 		'ogf_post_page_content' => array(
 			'label'       => esc_html__( 'Content Typography', 'olympus-google-fonts' ),
 			'description' => esc_html__( 'Select and configure the font for your post and page content.', 'olympus-google-fonts' ),
 			'section'     => 'ogf_advanced__content',
-			'selectors'   => '.entry-content, .entry-content p, .post-content, .page-content, .post-excerpt, .entry-summary, .entry-excerpt, .excerpt, .excerpt p, .type-post p, .type-page p',
+			'selectors'   => '.entry-content, .entry-content p, .post-content, .page-content, .post-excerpt, .entry-summary, .entry-excerpt, .excerpt, .excerpt p, .type-post p, .type-page p, .wp-block-post-content, .wp-block-post-excerpt',
 		),
 		'ogf_post_page_h1' => array(
 			'label'       => esc_html__( 'Title and H1 Typography', 'olympus-google-fonts' ),
 			'description' => esc_html__( 'Select and configure the font for your title and H1 headings.', 'olympus-google-fonts' ),
 			'section'     => 'ogf_advanced__content',
-			'selectors'   => '.entry-title, .entry-title a, .post-title, .post-title a, .page-title, .entry-content h1, #content h1, .type-post h1, .type-page h1',
+			'selectors'   => '.wp-block-post-title, .wp-block-post-title a, .entry-title, .entry-title a, .post-title, .post-title a, .page-title, .entry-content h1, #content h1, .type-post h1, .type-page h1',
 		),
 		'ogf_post_page_h2' => array(
 			'label'       => esc_html__( 'H2 Typography', 'olympus-google-fonts' ),
@@ -131,9 +135,7 @@ function ogf_get_elements() {
 			'label'       => esc_html__( 'Headings Typography', 'olympus-google-fonts' ),
 			'description' => esc_html__( 'Select and configure the font for your footer headings.', 'olympus-google-fonts' ),
 			'section'     => 'ogf_advanced__footer',
-			'selectors'   => 'footer h1, footer h2, footer h3, footer h4, footer h5, footer h6,
-												.footer h1, .footer h2, .footer h3, .footer h4, .footer h5, .footer h6
-												#footer h1, #footer h2, #footer h3, #footer h4, #footer h5, #footer h6',
+			'selectors'   => 'footer h1, footer h2, footer h3, footer h4, footer h5, footer h6, .footer h1, .footer h2, .footer h3, .footer h4, .footer h5, .footer h6, #footer h1, #footer h2, #footer h3, #footer h4, #footer h5, #footer h6',
 		),
 		'ogf_footer_content' => array(
 			'label'       => esc_html__( 'Content Typography', 'olympus-google-fonts' ),
@@ -149,9 +151,11 @@ function ogf_get_elements() {
 /**
  * Return an array of all available Google Fonts.
  *
- * @return array    All Google Fonts.
+ * @return array All Google Fonts.
  */
 function ogf_fonts_array() {
+	$fonts = array();
+
 	$fonts_json = file_get_contents( OGF_DIR_PATH . '/blocks/src/google-fonts/fonts.json' );
 
 	// Change the object to a multidimensional array.
@@ -159,7 +163,6 @@ function ogf_fonts_array() {
 
 	// Format the variants array for easier use.
 	foreach ( $fonts_array['items'] as $key => $font ) {
-
 		$variants_remove = array(
 			'100italic',
 			'200italic',
@@ -188,7 +191,6 @@ function ogf_fonts_array() {
 		$font['v'] = array_flip( $font['v'] );
 
 		$fonts_array['items'][ $key ] = $font;
-
 	}
 
 	// Change the array key to the font's ID.
@@ -202,13 +204,17 @@ function ogf_fonts_array() {
 
 /**
  * Return a array of custom fonts.
+ *
+ * @return array User uploaded fonts.
  */
 function ogf_custom_fonts() {
 	return OGF_Fonts_Taxonomy::get_fonts();
 }
 
 /**
- * Return a array of custom fonts.
+ * Return a array of typekit fonts.
+ *
+ * @return array Typekit fonts.
  */
 function ogf_typekit_fonts() {
 	return OGF_Typekit::get_fonts();
@@ -216,6 +222,8 @@ function ogf_typekit_fonts() {
 
 /**
  * Return a array of system fonts.
+ *
+ * @return array System fonts.
  */
 function ogf_system_fonts() {
 	$system_fonts = array(
@@ -303,6 +311,8 @@ function ogf_system_fonts() {
 
 /**
  * Return the full range of font variants.
+ *
+ * @return array Font variants.
  */
 function ogf_font_variants() {
 	return array(
@@ -332,6 +342,7 @@ function ogf_font_variants() {
  * Check if a font is a system font (not Google Font).
  *
  * @param string $font_id The ID of the font to check.
+ * @return bool
  */
 function ogf_is_system_font( $font_id ) {
 	if ( ! is_string( $font_id ) ) {
@@ -348,6 +359,7 @@ function ogf_is_system_font( $font_id ) {
  * Check if a font is a custom font (not Google Font).
  *
  * @param string $font_id The ID of the font to check.
+ * @return bool
  */
 function ogf_is_custom_font( $font_id ) {
 	if ( ! is_string( $font_id ) ) {
@@ -364,9 +376,9 @@ function ogf_is_custom_font( $font_id ) {
  * Check if a font is a Typekit font (not Google Font).
  *
  * @param string $font_id The ID of the font to check.
+ * @return bool
  */
 function ogf_is_typekit_font( $font_id ) {
-
 	if ( ! is_string( $font_id ) ) {
 		return false;
 	}
@@ -381,6 +393,7 @@ function ogf_is_typekit_font( $font_id ) {
  * Check if a font is a Google font.
  *
  * @param string $font_id The ID of the font to check.
+ * @return bool
  */
 function ogf_is_google_font( $font_id ) {
 	if ( ! is_string( $font_id ) ) {
@@ -392,4 +405,13 @@ function ogf_is_google_font( $font_id ) {
 	}
 
 	return false;
+}
+
+/**
+ * Check if WooCommerce is activated
+ */
+if ( ! function_exists( 'is_woocommerce_activated' ) ) {
+    function is_woocommerce_activated() {
+        if ( class_exists( 'woocommerce' ) ) { return true; } else { return false; }
+    }
 }

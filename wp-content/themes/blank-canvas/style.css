@@ -56,7 +56,7 @@ Modified and used as a block pattern image.
 
 @import "stylesheets/navbar.css";
 @import "variables.css";
-@import "stylesheets/header.css";
+@import "stylesheets/main.css";
 @import "stylesheets/sidebarstyles.css";
 @import "stylesheets/most-recent-sidebar.css";
 @import "stylesheets/articles.css";
@@ -64,6 +64,7 @@ Modified and used as a block pattern image.
 @import "stylesheets/guestbook.css";
 @import "stylesheets/footer.css";
 @import "stylesheets/atelier.css";
+@import "stylesheets/atelierhome.css";
 
 /* Remove extra margin from articles on single post pages. */
 
@@ -141,7 +142,7 @@ Modified and used as a block pattern image.
 #main {
   display: flex;
   color: white;
-  padding: 0.9rem;
+  padding: 0;
   min-height: 90vh;
   grid-gap: 0.9rem;
 }

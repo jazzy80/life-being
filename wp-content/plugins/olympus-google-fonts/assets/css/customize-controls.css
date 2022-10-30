@@ -1,5 +1,16 @@
+.customize-control-checkbox label {
+    vertical-align: top;
+    font-weight: 600;
+}
+
 #customize-theme-controls #sub-accordion-section-ogf_basic,
 #customize-theme-controls #sub-accordion-section-ogf_theme,
+#customize-theme-controls #sub-accordion-section-ogf_woocommerce,
+#customize-theme-controls #sub-accordion-section-ogf_wc_shop,
+#customize-theme-controls #sub-accordion-section-ogf_wc_single,
+#customize-theme-controls #sub-accordion-section-ogf_wc_block,
+#customize-theme-controls #sub-accordion-section-ogf_wc_cart,
+#customize-theme-controls #sub-accordion-section-ogf_wc_checkout,
 #customize-theme-controls #sub-accordion-section-ogf_custom,
 #customize-theme-controls #sub-accordion-section-ogf_advanced__branding,
 #customize-theme-controls #sub-accordion-section-ogf_advanced__navigation,
@@ -20,65 +31,61 @@
 	display: none;
 }
 
-.typography-font-size,
-.typography-line-height,
-.typography-font-color,
-.typography-letter-spacing,
-.typography-text-transform {
-	display: none;
-}
-
-.customize-control-typography li.typography-font-family select {
+.customize-control-ogf-typography li.typography-font-family select {
 	width: 85%;
 }
 
-.customize-control-typography li.typography-font-style,
-.customize-control-typography li.typography-font-weight {
+.customize-control-ogf-typography li.typography-font-style,
+.customize-control-ogf-typography li.typography-font-weight {
 	width: 50%;
 	float: left;
 }
 
-.customize-control-typography li.typography-font-color .wp-picker-clear {
+.customize-control-ogf-typography li.typography-font-color .wp-picker-clear {
 	min-height: 30px;
 }
 
-.customize-control-typography li.typography-font-color,
-.customize-control-typography li.typography-font-size,
-.customize-control-typography li.typography-line-height,
-.customize-control-typography li.typography-letter-spacing {
+.customize-control-ogf-typography li.typography-font-color,
+.customize-control-ogf-typography li.typography-font-size,
+.customize-control-ogf-typography li.typography-line-height,
+.customize-control-ogf-typography li.typography-letter-spacing {
 	clear: both;
 	max-width: 94%;
 	padding-top: 10px;
 }
 
-.customize-control-typography li.typography-font-style select,
-.customize-control-typography li.typography-font-weight select {
+.customize-control-ogf-typography li.typography-font-style select,
+.customize-control-ogf-typography li.typography-font-weight select {
 	width: 90%;
 }
 
-.customize-control-typography li.typography-text-transform select {
+.customize-control-ogf-typography li.typography-text-decoration select,
+.customize-control-ogf-typography li.typography-text-transform select {
     width: 93%;
 }
 
-.customize-control-typography li.typography-font-weight {
+.customize-control-ogf-typography li.typography-font-weight {
 	clear: both;
 }
 
-.customize-control-typography li.typography-font-size input,
-.customize-control-typography li.typography-line-height input {
+.customize-control-ogf-typography li.typography-font-size input,
+.customize-control-ogf-typography li.typography-line-height input {
 	width: 50px;
 	float: right;
 }
 
-.customize-control-typography .advanced-settings-wrapper {
+.customize-control-ogf-typography .advanced-settings-wrapper {
 	display: none;
 }
 
-.customize-control-typography .advanced-settings-wrapper.show {
+.customize-control-ogf-typography .advanced-settings-wrapper.show {
 	display: block !important;
 	margin-top: 10px;
-	padding: 10px;
 	background: #dadada;
+}
+
+.customize-control-ogf-typography .inner {
+	padding: 10px
 }
 
 .advanced-settings-wrapper:after {
@@ -113,11 +120,11 @@
 	padding: 2px;
 }
 
-.customize-control-typography input[type='range'] {
+.customize-control-ogf-typography input[type='range'] {
 	width: 90%;
 }
 
-.customize-control-typography .customize-control-notifications-container {
+.customize-control-ogf-typography .customize-control-notifications-container {
 	display: none;
 }
 
@@ -128,10 +135,10 @@
 	position: relative;
 	vertical-align: middle;
 	font-size: 13px;
-	   -moz-user-select: none;
-		-ms-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
 	-webkit-user-select: none;
-			user-select: none;
+	user-select: none;
 }
 
 .chosen-container * {
@@ -149,7 +156,7 @@
 	border-top: 0;
 	background: #ffffff;
 	-webkit-box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
-			box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
+	box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
 }
 
 .chosen-container.chosen-with-drop .chosen-drop {
@@ -166,7 +173,7 @@
 	color: #999999;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	font-weight: normal;
+	font-weight: 400;
 	white-space: nowrap;
 }
 
@@ -353,7 +360,7 @@
 
 .chosen-container .chosen-results li.group-result {
 	display: list-item;
-	font-weight: bold;
+	font-weight: 400;
 	cursor: default;
 }
 
@@ -700,79 +707,93 @@
 .slider-custom-control {
 	margin-bottom: 30px;
 }
+
 .slider-custom-control input[type=number]::-webkit-inner-spin-button,
 .slider-custom-control input[type=number]::-webkit-outer-spin-button {
 	-webkit-appearance: none;
 	margin: 0;
 }
-.slider-custom-control input[type=number] {
-	-moz-appearance: textfield;
-}
+
 .slider-custom-control  .customize-control-title {
 	display: inline-block;
 }
+
 .slider-custom-control input[type=number] {
 	text-align: right;
 	width: 50px;
 	float: right;
+	-moz-appearance: textfield;
 }
+
 .slider-custom-control .slider {
 	width: 65%;
 	float: left;
-	margin: 10px 0 10px;
+	margin: 10px 0 10px 6px;
 }
+
 .slider-custom-control .slider-reset {
 	float: right;
 	cursor: pointer;
 }
+
 .slider-custom-control .slider-value {
 	border: none;
 	text-align: right;
 	width: 50px;
 	margin-right: 5px;
 }
+
 .slider-custom-control .slider-value,
 .slider-custom-control .slider-unit {
 	float: right;
 }
+
 .slider-custom-control .ui-widget.ui-widget-content {
 	border: 1px solid #f4f4f4;
 }
+
 .slider-custom-control .ui-corner-all,
 .slider-custom-control .ui-corner-bottom,
 .slider-custom-control .ui-corner-right,
 .slider-custom-control .ui-corner-br {
 	border-bottom-right-radius: 3px;
 }
+
 .slider-custom-control .ui-corner-all,
 .slider-custom-control .ui-corner-bottom,
 .slider-custom-control .ui-corner-left,
 .slider-custom-control .ui-corner-bl {
 	border-bottom-left-radius: 3px;
 }
+
 .slider-custom-control .ui-corner-all,
 .slider-custom-control .ui-corner-top,
 .slider-custom-control .ui-corner-right,
 .slider-custom-control .ui-corner-tr {
 	border-top-right-radius: 3px;
 }
+
 .slider-custom-control .ui-corner-all,
 .slider-custom-control .ui-corner-top,
 .slider-custom-control .ui-corner-left,
 .slider-custom-control .ui-corner-tl {
 	border-top-left-radius: 3px;
 }
+
 .slider-custom-control .ui-widget-content {
 	background: #f4f4f4 none repeat scroll 0 0;
 	color: #333;
 }
+
 .slider-custom-control .ui-slider-horizontal {
 	height: 3px;
 }
+
 .slider-custom-control .ui-slider {
 	position: relative;
 	text-align: left;
 }
+
 .slider-custom-control .ui-state-default,
 .slider-custom-control .ui-widget-content .ui-state-default,
 .slider-custom-control .ui-widget-header .ui-state-default,
@@ -782,13 +803,15 @@
 	background: #2885bb none repeat scroll 0 0;
 	border: 1px solid #2885bb;
 	color: #454545;
-	font-weight: normal;
+	font-weight: 400;
 }
+
 .slider-custom-control .ui-slider-horizontal .ui-slider-handle {
 	margin-left: -7px;
 	top: -7px;
 	border-radius: 50%;
 }
+
 .slider-custom-control .ui-slider .ui-slider-handle {
 	cursor: pointer;
 	height: 14px;
@@ -796,11 +819,13 @@
 	width: 14px;
 	z-index: 2;
 }
+
 .slider-custom-control .dashicons-image-rotate {
 	color: #989898;
 	font-size: 16px;
 	margin-top: 3px;
 }
+
 .slider-custom-control .dashicons-image-rotate:hover {
 	color: #a7a7a7;
 }
@@ -834,4 +859,8 @@
 	background-repeat: no-repeat !important;
 	background-size: 16px !important;
 	background-position: 15px 50% !important;
+}
+
+.customize-control-ogf-typography .customize-control-title {
+	font-size: 13px;
 }

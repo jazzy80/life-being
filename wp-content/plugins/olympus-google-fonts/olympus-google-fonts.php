@@ -5,7 +5,7 @@
  * Plugin Name: Fonts Plugin | Google Fonts Typography
  * Plugin URI:  https://wordpress.org/plugins/olympus-google-fonts/
  * Description: The easiest to use Google Fonts Plugin. No coding required. Optimized for Speed. 1000+ font choices.
- * Version:     3.0.12
+ * Version:     3.2.1
  * Author:      Fonts Plugin
  * Author URI:  https://fontsplugin.com/?utm_source=wporg&utm_medium=readme&utm_campaign=description
  * Text Domain: olympus-google-fonts
@@ -28,6 +28,8 @@ add_action( 'plugins_loaded', 'ogf_initiate', 10 );
 
 /**
  * Add a redirection check on activation.
+ *
+ * @return void
  */
 function ogf_activate() {
 	add_option( 'ogf_do_activation_redirect', true );

@@ -14,13 +14,6 @@ if ( ! class_exists( 'OGF_Classic_Editor' ) ) :
 	class OGF_Classic_Editor {
 
 		/**
-		 * WP_Customize object.
-		 *
-		 * @var WP_Customize_Manager
-		 */
-		private $wp_customize;
-
-		/**
 		 * OGF_Fonts object.
 		 *
 		 * @var object
@@ -65,12 +58,14 @@ if ( ! class_exists( 'OGF_Classic_Editor' ) ) :
 			add_filter( 'tiny_mce_before_init', array( $this, 'tinymce_custom_options' ) );
 			add_filter( 'ogf_classic_font_formats', array( $this, 'tinymce_add_fonts' ) );
 			add_action( 'admin_init', array( $this, 'google_fonts_enqueue' ) );
+			add_action( 'admin_init', array( $this, 'typekit_fonts_enqueue' ) );
 		}
 
 		/**
 		 * Add buttons to the editor.
 		 *
-		 * @param array $buttons Tiny MCE buttons.
+		 * @param array $buttons Tiny MCE buttons array.
+		 * @return array Modified Tiny MCE buttons array.
 		 */
 		public function tinymce_add_buttons( $buttons ) {
 			return array_merge(
@@ -83,6 +78,7 @@ if ( ! class_exists( 'OGF_Classic_Editor' ) ) :
 		 * Customize the Tiny MCE settings.
 		 *
 		 * @param array $opt Tiny MCE options.
+		 * @return array Modified Tiny MCE options.
 		 */
 		public function tinymce_custom_options( $opt ) {
 			$base_type     = get_theme_mod( 'ogf_body_font' );
@@ -130,30 +126,26 @@ if ( ! class_exists( 'OGF_Classic_Editor' ) ) :
 		/**
 		 * Add fonts to the classic editor list.
 		 *
-		 * @param array $old_default The default fonts.
+		 * @param string $old_default The default fonts.
+		 * @return string Modified fonts string.
 		 */
 		public function tinymce_add_fonts( $old_default ) {
 			$new_default = '';
 			$choices     = $this->ogf_fonts->choices;
 			foreach ( array_unique( $choices ) as $font ) {
-				if ( ogf_is_system_font( $font ) ) {
-					// do nothing.
-				} elseif ( ogf_is_custom_font( $font ) ) {
-					$fonts = ogf_custom_fonts();
-					$font = str_replace( 'cf-', '', $font );
-					if ( array_key_exists( $font, $fonts ) ) {
-						$new_default .= $fonts[ $font ]['label'] . '=' . $fonts[ $font ]['stack'] . ';';
-					}
-				} elseif ( ogf_is_typekit_font( $font ) ) {
-					$fonts = ogf_typekit_fonts();
-					$font = str_replace( 'tk-', '', $font );
-					if ( array_key_exists( $font, $fonts ) ) {
-						$new_default .= $fonts[ $font ]['label'] . '=' . $fonts[ $font ]['stack'] . ';';
-					}
-				} else {
+				if ( ogf_is_google_font( $font ) ) {
 					$new_default .= $this->ogf_fonts->get_font_name( $font ) . '=' . $this->ogf_fonts->get_font_name( $font ) . ';';
 				}
 			}
+
+			foreach ( array_unique( $this->custom_fonts ) as $font ) {
+				$new_default .= $font['label'] . '=' . $font['stack'] . ';';
+			}
+
+			foreach ( $this->typekit_fonts as $font ) {
+				$new_default .= $font['label'] . '=' . str_replace( '"', '', $font['stack'] ) . ';';
+			}
+
 			$new_default .= $old_default;
 			return $new_default;
 		}
@@ -167,6 +159,26 @@ if ( ! class_exists( 'OGF_Classic_Editor' ) ) :
 				$editor_styles[] = $this->ogf_fonts->build_url();
 			}
 		}
+
+		/**
+		 * Enqueue the Typekit Fonts in TinyMCE.
+		 */
+		public function typekit_fonts_enqueue() {
+			global $editor_styles;
+
+			$typekit_data = get_option( 'fp-typekit-data', array() );
+
+			if ( is_array( $typekit_data ) ) {
+				foreach ( $typekit_data as $id => $values ) {
+					// skip if the kit is disabled.
+					if ( $values['enabled'] === false ) {
+						continue;
+					}
+
+					$editor_styles[] = esc_url( 'https://use.typekit.com/' . $id . '.css' );
+			}
+		}
+	}
 
 	}
 endif;

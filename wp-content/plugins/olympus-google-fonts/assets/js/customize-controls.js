@@ -1,9 +1,42 @@
 /* global ogf_font_variants, ogf_font_array, ajaxurl, fontsReset, location */
 ( function( api ) {
-	api.controlConstructor[ 'typography' ] = api.Control.extend(
+	api.controlConstructor[ 'ogf-typography' ] = api.Control.extend(
 		{
 			ready: function() {
 				const control = this;
+				const controlClass = '.customize-control-ogf-typography';
+				const footerActions = jQuery( '#customize-footer-actions' );
+				//
+				// Do stuff when device icons are clicked
+				jQuery( control.selector + ' .ogf-device-controls > div' ).on( 'click', function( event ) {
+					console.log(event);
+					var device = jQuery( this ).data( 'option' );
+					wp.customize.previewedDevice.set( device );
+
+					jQuery( controlClass + ' .ogf-device-controls div' ).each( function() {
+						var _this = jQuery( this );
+
+						if ( device === _this.attr( 'data-option' ) ) {
+							_this.addClass( 'selected' );
+							_this.siblings().removeClass( 'selected' );
+						}
+					} );
+
+				});
+
+				// Set the selected devices in our control when the Customizer devices are clicked
+				footerActions.find( '.devices button' ).on( 'click', function() {
+					var device = jQuery( this ).data( 'device' );
+
+					jQuery( controlClass + ' .ogf-device-controls div' ).each( function() {
+						var _this = jQuery( this );
+
+						if ( device === _this.attr( 'data-option' ) ) {
+							_this.addClass( 'selected' );
+							_this.siblings().removeClass( 'selected' );
+						}
+					} );
+				});
 
 				// Load the Google Font for the preview.
 				function addGoogleFont( fontName ) {
@@ -288,7 +321,7 @@ jQuery( document ).ready( function() {
 
 /* === Multiple Fonts Control === */
 ( function( api ) {
-	api.controlConstructor[ 'typography-multiselect' ] = api.Control.extend( {
+	api.controlConstructor[ 'ogf-typography-multiselect' ] = api.Control.extend( {
 		ready: function() {
 			const control = this;
 			// Initialize chosen.js
@@ -306,13 +339,12 @@ jQuery( document ).ready( function() {
 
 
 (function($){
-    /* Show/Hide Read More link inside Site Preview */
-    wp.customize( 'fpp_use_woff2', function( use_woff2 ) {
-        use_woff2.bind( function( value ) {
+    wp.customize( 'fpp_host_locally', function( fpp_host_locally ) {
+        fpp_host_locally.bind( function( value ) {
             if( true == value ){
-                $('#customize-control-fpp_preloading').hide();
+                $('#customize-control-fpp_use_woff2').show();
             } else {
-                $('#customize-control-fpp_preloading').show();
+                $('#customize-control-fpp_use_woff2').hide();
             }
         } );
     } );

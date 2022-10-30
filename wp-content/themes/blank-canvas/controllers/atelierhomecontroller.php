@@ -1,11 +1,10 @@
 <?php
 // Controller for rendering the Atelier page.
 namespace controllers;
-class AtelierController extends BaseController {
+class AtelierHomeController extends BaseController {
   public function create_view(): \views\IView {
     return $this -> builder
-                 -> build_atelier($this -> page)
-                 -> build_jsfiles($this -> page)
+                 -> build_atelier_home($this -> page)
                  -> get();
   }
 }

@@ -9,7 +9,8 @@ define('CONTACT',       'contact');
 define('GUESTBOOK',     'guest book');
 define('VITALITY',      'vitality');
 define('BEINGME',       'being me, being you');
-define('ATELIER',       'life being atelier');
+define('ATELIER',        'life being atelier');
+define('ATELIERGALLERY', 'life being gallery');
 
 define(
   'BASE_URL',
@@ -22,7 +23,7 @@ define(
   'PAGES_NEEDING_VITALITY', [VITALITY]
 );
 
-define('PAGES_NEEDING_LITE_HEADER', [HOME_PAGE]);
+define('PAGES_NEEDING_LITE_HEADER', [HOME_PAGE, ATELIER, ATELIERGALLERY]);
 
 // Define the pagination size for blogs etc.
 define('PAGINATION_SIZE', 5);
@@ -32,10 +33,11 @@ define('JS_FILE_PREFIX', '/scripts/dist/');
 
 //Load javascript files for a specific page.
 define('LOAD_JAVASCRIPT', [
-  BLOG_PAGE   => [JS_FILE_PREFIX . 'blogsmain.js'],
-  POETRY_PAGE => [JS_FILE_PREFIX . 'poetrymain.js'],
-  GUESTBOOK   => [JS_FILE_PREFIX . 'guestbook.js'],
-  ATELIER     => [JS_FILE_PREFIX . 'ateliermain.js'],
+  BLOG_PAGE          => [JS_FILE_PREFIX . 'blogsmain.js'],
+  POETRY_PAGE        => [JS_FILE_PREFIX . 'poetrymain.js'],
+  GUESTBOOK          => [JS_FILE_PREFIX . 'guestbookmain.js'],
+  ATELIER            => [JS_FILE_PREFIX . 'ateliermain.js'],
+  ATELIERGALLERY     => [JS_FILE_PREFIX . 'ateliermain.js'],
 ]);
 
 // autoloader for classes and interfaces.

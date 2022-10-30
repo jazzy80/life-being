@@ -50,8 +50,12 @@ class PageBuilder implements AbstractBuilder {
       return $this -> add_component(new \views\JsFilesView($page));
   }
 
-  public function build_atelier(\WP_Post $page): AbstractBuilder {
-    return $this -> add_component(new \views\AtelierView($page));
+  public function build_atelier_home(\WP_Post $page): AbstractBuilder {
+    return $this -> add_component(new \views\AtelierHomeView($page));
+  }
+
+  public function build_atelier_gallery(\WP_Post $page): AbstractBuilder {
+    return $this -> add_component(new \views\AtelierGalleryView($page));
   }
 
   public function get(): \views\IView {

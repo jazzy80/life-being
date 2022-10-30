@@ -1,0 +1,25 @@
+.image-container {
+  display: flex;
+  border-bottom: 2px #454a46 solid;
+}
+
+.main {
+  background-color: var(--secondary-background-color);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 !important;
+}
+
+.image {
+  width: clamp(90px, 50vw, 500px);
+  border: 3px white solid;
+}
+
+/* color: #454a46; */
+.image-caption {
+  margin: auto;
+  color: #bccbbf;
+  font-size: clamp(0.5rem, 4vw, 4rem);
+  text-decoration: none;
+}

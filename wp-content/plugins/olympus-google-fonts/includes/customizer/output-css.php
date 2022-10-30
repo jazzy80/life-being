@@ -22,6 +22,7 @@ function ogf_output_css() {
 		foreach ( ogf_get_custom_elements() as $id => $values ) {
 			ogf_generate_css( $values['selectors'], $id );
 		}
+		do_action( 'ogf_after_inline_styles' );
 		?>
 	</style>
 	<!-- Fonts Plugin CSS -->
@@ -31,6 +32,8 @@ add_action( 'wp_head', 'ogf_output_css', 1000 );
 
 /**
  * Return the CSS for enqueing Custom Font Uploads.
+ *
+ * @return string @font-face output.
  */
 function ogf_return_custom_font_css() {
 	$fonts = OGF_Fonts_Taxonomy::get_fonts();
@@ -89,6 +92,7 @@ function ogf_generate_css( $selector, $option_name ) {
 	$color          = get_theme_mod( $option_name . '_font_color', false );
 	$text_transform = get_theme_mod( $option_name . '_text_transform', false );
 	$letter_spacing = get_theme_mod( $option_name . '_letter_spacing', false );
+	$text_decoration = get_theme_mod( $option_name . '_text_decoration', false );
 
 	$return = '';
 
@@ -97,7 +101,7 @@ function ogf_generate_css( $selector, $option_name ) {
 			 ( $weight !== '0' && $weight ) ||
 			 ( $style !== 'default' && $style ) ||
 			   $font_size || $letter_spacing || $text_transform ||
-			   $color ) {
+			   $color || $text_decoration ) {
 
 		$return .= $selector . ' {' . PHP_EOL;
 
@@ -170,6 +174,14 @@ function ogf_generate_css( $selector, $option_name ) {
 			);
 		}
 
+		// Return text-decoration CSS.
+		if ( $text_decoration ) {
+			$return .= sprintf(
+				'text-decoration: %s;' . PHP_EOL,
+				esc_attr( $text_decoration ) . ogf_is_forced()
+			);
+		}
+
 		$return .= ' }' . PHP_EOL;
 
 		echo wp_kses_post( $return );
@@ -185,7 +197,6 @@ function ogf_generate_css( $selector, $option_name ) {
  */
 function ogf_build_font_stack( $font_id ) {
 	if ( strpos( $font_id, 'sf-' ) !== false ) {
-
 		$system_fonts = ogf_system_fonts();
 
 		$font_id = str_replace( 'sf-', '', $font_id );
@@ -196,7 +207,6 @@ function ogf_build_font_stack( $font_id ) {
 
 		}
 	} elseif ( strpos( $font_id, 'cf-' ) !== false ) {
-
 		$custom_fonts = ogf_custom_fonts();
 
 		$font_id = str_replace( 'cf-', '', $font_id );
@@ -205,27 +215,29 @@ function ogf_build_font_stack( $font_id ) {
 			return $custom_fonts[ $font_id ]['stack'];
 		}
 	} elseif ( strpos( $font_id, 'tk-' ) !== false ) {
-
 		$typekit_fonts = ogf_typekit_fonts();
 
 		if ( array_key_exists( $font_id, $typekit_fonts ) ) {
 			return $typekit_fonts[ $font_id ]['stack'];
 		}
 	} else {
-
 		$google_fonts = ogf_fonts_array();
 
 		if ( array_key_exists( $font_id, $google_fonts ) ) {
 
 			$stack = '"' . $google_fonts[ $font_id ]['f'] . '"';
-
 			return $stack;
 		}
 	}
+
+	// If the code gets this far a font has gone missing.
+	return 'sans-serif';
 }
 
 /**
  * Check if the styles should be forced.
+ *
+ * @return string
  */
 function ogf_is_forced() {
 	if ( 1 === (int) get_theme_mod( 'ogf_force_styles' ) ) {

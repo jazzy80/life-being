@@ -10,7 +10,7 @@
   --upper-navbar-link-color: #525a4a;
   --upper-navbar-background-color: rgba(255, 255, 255, 0.5);
   --main-background-color: #faf0be;
-  --secondary-background-color: #3b533b;
+  --secondary-background-color: #486648e6;
   --navbar-font-size: clamp(1rem, 2vw, 1.2rem);
   --sidebar-font-size: calc(var(--navbar-font-size) - 0.2rem);
   --button-main-color: #7e4caa;
@@ -29,6 +29,11 @@ body {
   background-position: 50% 75%;
 }
 
+a,
+button {
+  font-family: 'Cinzel', serif;
+}
+
 button {
   border-radius: 15px;
   background-color: var(--button-main-color);
@@ -39,6 +44,14 @@ button:hover {
   background-color: var(--title-color) !important;
 }
 
+p {
+  font-family: 'Della Respira', serif !important;
+}
+
+p * {
+  font-family: 'Della Respira', serif !important;
+}
+
 a {
   border-bottom-color: var(--link-underline-color);
   color: var(--lower-navbar-link-color);
@@ -46,7 +59,8 @@ a {
 
 a:hover {
   color: var(--title-color) !important;
-  transition: color 300ms ease-in-out;
+  border-bottom-color: var(--link-underline-color);
+  transition: color 400ms ease-in-out;
 }
 
 .overlay {
