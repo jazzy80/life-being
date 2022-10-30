@@ -7,8 +7,8 @@ class AtelierView implements IView {
   }
   function display(): string {
     return '<div class="atelier">
-        <ul class="atelier-image-list"></ul>
         <div class="zoom-image"></div>
+        <ul class="atelier-image-list"></ul>
       </div>';
   }
 }
