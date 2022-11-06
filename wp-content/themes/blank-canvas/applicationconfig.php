@@ -14,7 +14,7 @@ define('ATELIERGALLERY', 'life being gallery');
 
 define(
   'BASE_URL',
-  (isset($SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http')
+  (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http')
     . "://" . $_SERVER['SERVER_NAME']
 );
 define('ROOT_DIR', $_SERVER['DOCUMENT_ROOT']);
