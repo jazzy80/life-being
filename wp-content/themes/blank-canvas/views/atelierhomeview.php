@@ -21,7 +21,7 @@ class AtelierHomeView implements IView {
             <a href="/life-being-gallery?category=poetry-art" class="image-caption"> Poetry Art</a>
         </div>
         <div class="image-container">
-            <a href="/life-being-gallery?category=being-art" class="image-caption">Being Arts</a>
+            <a href="/life-being-gallery?category=being-art" class="image-caption">Being Art</a>
             <img class="image" src="/resources/being-art-communicatie-bomen.png">
         </div>
         <div class="image-container">
