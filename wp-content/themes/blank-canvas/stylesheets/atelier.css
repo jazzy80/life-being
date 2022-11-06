@@ -13,10 +13,7 @@
 
 .atelier-image-list {
   margin: 0;
-  display: flex;
-  padding: 0.2rem 0;
-  justify-content: center;
-  flex-direction: column;
+  padding: 0.8rem 0.5rem;
   height: 100vh;
   list-style: none;
   overflow-y: scroll;
@@ -39,6 +36,16 @@
   display: flex;
   margin: auto;
   padding: 1rem;
+  animation-duration: 0.2s;
+  animation-name: zoom-image;
+}
+
+@keyframes zoom-image {
+  0% { transform: scale(0); }
+  25% { transform: scale(0.25); }
+  50% { transform: scale(0.5); }
+  75% { transform: scale(0.75); }
+  100% { transform: scale(1); }
 }
 
 .image-selected {
