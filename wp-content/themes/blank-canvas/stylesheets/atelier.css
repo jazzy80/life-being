@@ -20,6 +20,10 @@
   overflow-x: hidden;
 }
 
+.zoom-image > img {
+  max-height: 42rem;
+}
+
 .atelier-image-list img {
   cursor: pointer;
   width: clamp(9rem, 15vw, 10rem);
@@ -39,10 +43,6 @@
   padding: 0.3rem;
   animation-duration: 0.2s;
   animation-name: zoom-image;
-}
-
-.zoom-image > img {
-  max-height: 35rem;
 }
 
 @keyframes zoom-image {
