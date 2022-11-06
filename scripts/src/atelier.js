@@ -1,7 +1,7 @@
-(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 var effect_1 = require("./functional/effect");
+var IMAGE_LIST_WIDTH = 200;
 var ATELIER_IMAGE_LIST = 'atelier-image-list';
 var IMAGE_DETAIL = 'zoom-image';
 var IMAGE_LIST_ELEMENT = 'image-list-item';
@@ -38,6 +38,7 @@ function createImageTagsFromUrl(url) {
     var atelierImage = effect_1.Effect.unit(function () { return document.createElement('img'); });
     return atelierImage.map(function (image) {
         image.src = url;
+        image.width = IMAGE_LIST_WIDTH;
         return image;
     });
 }
@@ -73,44 +74,4 @@ function generateCategoryParam() {
     var categoryParam = new URLSearchParams(location.search).get('category');
     return categoryParam ? "?category=".concat(categoryParam) : '';
 }
-addEventListener('DOMContentLoaded', function () {
-    return init().then(function (effect) { return effect.run(); });
-});
-
-},{"./functional/effect":2}],2:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Effect = void 0;
-var Effect = /** @class */ (function () {
-    function Effect(run) {
-        this.run = run;
-    }
-    Effect.unit = function (f) {
-        return new Effect(f);
-    };
-    Effect.forEach = function (la, f) {
-        return new Effect(function () { return la.map(function (a) { return f(a).run(); }); });
-    };
-    Effect.forEach_ = function (la, f) {
-        return new Effect(function () { return la.forEach(function (a) { return f(a).run(); }); });
-    };
-    Effect.when = function (cond, effect) {
-        return new Effect(function () {
-            if (cond)
-                return effect.run();
-            return;
-        });
-    };
-    Effect.prototype.flatMap = function (f) {
-        var a = this.run();
-        return new Effect(function () { return f(a).run(); });
-    };
-    Effect.prototype.map = function (f) {
-        var _this = this;
-        return new Effect(function () { return f(_this.run()); });
-    };
-    return Effect;
-}());
-exports.Effect = Effect;
-
-},{}]},{},[2,1]);
+init().then(function (effect) { return effect.run(); });

@@ -22,6 +22,7 @@
 
 .atelier-image-list img {
   cursor: pointer;
+  width: clamp(9rem, 15vw, 10rem);
 }
 
 .atelier-image-list img ~ img {
@@ -35,9 +36,13 @@
 .zoom-image {
   display: flex;
   margin: auto;
-  padding: 1rem;
+  padding: 0.3rem;
   animation-duration: 0.2s;
   animation-name: zoom-image;
+}
+
+.zoom-image > img {
+  max-height: 35rem;
 }
 
 @keyframes zoom-image {

@@ -1,8 +1,5 @@
 import {Effect} from './functional/effect';
 
-const IMAGE_DETAIL_HEIGHT = 600;
-const IMAGE_LIST_WIDTH = 200;
-
 const ATELIER_IMAGE_LIST = 'atelier-image-list';
 const IMAGE_DETAIL = 'zoom-image';
 const IMAGE_LIST_ELEMENT = 'image-list-item';
@@ -42,7 +39,6 @@ function createImageTagsFromUrl(url: string): Effect<HTMLImageElement> {
     const atelierImage = Effect.unit(() => document.createElement('img'));
     return atelierImage.map(image => {
       image.src = url;
-      image.width = IMAGE_LIST_WIDTH;
       return image;
     });
   }
@@ -90,7 +86,6 @@ function showImage(url: string): Effect<void> {
     Effect.unit(() => document.createElement('img')).map(image =>
    {
     image.classList.add(IMAGE_DETAIL);
-    image.height = IMAGE_DETAIL_HEIGHT;
     image.src = url;
     imageContainer.innerHTML = '';
     imageContainer.appendChild(image);
@@ -102,4 +97,8 @@ function generateCategoryParam(): string {
   return categoryParam ? `?category=${categoryParam}`: '';
 }
 
-init().then(effect => effect.run());
+addEventListener(
+  'DOMContentLoaded',
+  () =>
+    init().then(effect => effect.run())
+  );
