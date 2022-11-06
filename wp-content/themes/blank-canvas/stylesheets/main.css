@@ -96,7 +96,7 @@ a:hover {
 .logo {
   margin: 0.3rem 0 0.3rem 5%;
   z-index: 1;
-  width: clamp(8rem, 14vw, 10rem);
+  width: clamp(6rem, 5vw, 10rem);
 }
 
 .subtitle {
