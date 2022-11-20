@@ -26,7 +26,7 @@ var AlphaNumValidator = /** @class */ (function (_super) {
         return _this;
     }
     AlphaNumValidator.prototype.validate = function (field) {
-        return /^[a-zA-Z0-9!?,.() ]*$/.test(field.value);
+        return /^[a-zA-Z0-9!?,.()\n\r ]*$/.test(field.value);
     };
     return AlphaNumValidator;
 }(fieldvalidator_1.FieldValidator));
@@ -227,7 +227,7 @@ function removeErrors() {
 }
 init();
 
-},{"./classes/alphanumvalidator":1,"./classes/compositevalidator":2,"./classes/textlengthvalidator":3,"./utils/overlay":6}],5:[function(require,module,exports){
+},{"./classes/alphanumvalidator":1,"./classes/compositevalidator":2,"./classes/textlengthvalidator":3,"./utils/overlay":7}],5:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FieldValidator = void 0;
@@ -242,6 +242,10 @@ var FieldValidator = /** @class */ (function () {
 exports.FieldValidator = FieldValidator;
 
 },{}],6:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+},{}],7:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeOverlay = exports.addOverlay = void 0;
@@ -267,4 +271,4 @@ function removeOverlay() {
 }
 exports.removeOverlay = removeOverlay;
 
-},{}]},{},[4]);
+},{}]},{},[4,5,3,1,2,6,7]);
