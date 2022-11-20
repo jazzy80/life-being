@@ -1,7 +1,8 @@
 <?php
 namespace views;
 class LowerNavBarView implements IView {
-  public function __construct(array $menu_items) {
+  public function __construct(\models\PageModel $page_model, array $menu_items) {
+    $this -> page_model = $page_model;
     $this -> menu_items = $menu_items;
   }
 
@@ -11,15 +12,20 @@ class LowerNavBarView implements IView {
       <input id="menu-toggle" type="checkbox"/>
       <ul class="nav-links lower-navbar-links">
     EOL;
+    $root_page = $this -> page_model -> get_page_root_parent(
+      $this -> page_model -> get_current_page()
+    );
     $navbar_links = array_reduce(
       $this -> menu_items,
       fn(string $html_page, \WP_Post $menu_item) =>
         $html_page .
-        "<li>
-          <a href=" . $menu_item -> url . ">" .
+        '<li>
+          <a ' . ($this -> page_model -> get_url_for_post($root_page) === $menu_item -> url
+                    ? 'class="active-link"' : '') .
+            'href="' . $menu_item -> url . '">' .
             $menu_item -> title .
-          "</a>
-        </li>",
+          '</a>
+        </li>',
         ''
       );
     $hamburger_menu = <<< EOL

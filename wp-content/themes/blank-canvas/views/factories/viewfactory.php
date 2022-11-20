@@ -20,7 +20,7 @@ class ViewFactory implements AbstractViewFactory {
 }
   public function create_header(): \views\IView {
     // Create a lower and upper navbar.
-    $lower_navbar = new \views\LowerNavBarView($this -> menu_items);
+    $lower_navbar = new \views\LowerNavBarView($this -> page_model, $this -> menu_items);
     $upper_navbar = new \views\UpperNavBarView;
     // Create the header for the page and render it, using the created navbars.
     return new \views\HeaderView(new \utils\Just($upper_navbar), new \utils\Just($lower_navbar));

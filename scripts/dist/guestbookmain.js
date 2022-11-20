@@ -26,7 +26,7 @@ var AlphaNumValidator = /** @class */ (function (_super) {
         return _this;
     }
     AlphaNumValidator.prototype.validate = function (field) {
-        return /^[a-zA-Z0-9!?,.()\n\r ]*$/.test(field.value);
+        return /^[a-zA-Z0-9!?,.()'\n\r ]*$/.test(field.value);
     };
     return AlphaNumValidator;
 }(fieldvalidator_1.FieldValidator));

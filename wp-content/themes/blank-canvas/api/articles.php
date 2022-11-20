@@ -14,10 +14,10 @@ function get_articles_for_page(
 
 // General function to retrieve articles.
 function get_articles(models\PageModel $page_model, WP_REST_Request $req, WP_Post $article_page) {
-// Get the page number from retrieve '$data' object.
+// Get the page number from the request.
 $page_number = intval(filter_var($req['page'], FILTER_SANITIZE_STRING));
 
-// Articles are defined as child pages of the `$articel page`.
+// Articles are defined as child pages of the `$artical page`.
 $articles = $page_model -> find_child_pages_of_parent($article_page);
 
 // Get the articles for the specified `$page_number`.

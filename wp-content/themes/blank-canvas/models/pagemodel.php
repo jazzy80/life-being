@@ -16,6 +16,15 @@ class PageModel {
     return get_post();
   }
 
+  public function get_page_root_parent(\WP_Post $page): \WP_Post {
+    if ($page -> post_parent === 0) return $page;
+    return $this -> get_page_root_parent(get_post($page -> post_parent));
+  }
+
+  public function get_url_for_post(\WP_Post $page): string {
+    return get_permalink($page);
+  }
+
   public function get_page_menu(): array {
     return wp_get_nav_menus();
   }

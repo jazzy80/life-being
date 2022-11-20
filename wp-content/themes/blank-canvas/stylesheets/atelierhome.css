@@ -11,6 +11,10 @@
   margin: 0 !important;
 }
 
+#main {
+  margin-top: 2px;
+}
+
 .image {
   width: clamp(90px, 50vw, 500px);
   border: 3px white solid;
