@@ -59,7 +59,7 @@ class ViewFactory implements AbstractViewFactory {
        fn($recent_blog) =>
   			new \views\MostRecentArticleView(
           $recent_blog,
-          "Meest recent blog"
+          "Meest recente blog"
         )
       )
     );
