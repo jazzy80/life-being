@@ -1,0 +1,42 @@
+.illustrations-container {
+  background-color: var(--secondary-background-color);
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+}
+
+.big-dreams {
+  background-color: #03a9f4;
+}
+
+.books-and-more {
+  background-color: #f84343;
+}
+
+.day-dreams {
+  background-color: #fff400;
+}
+
+.illustrations-container > div {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 20px;
+}
+
+.illustrations-container div + div {
+  border-left: 1px black solid;
+  margin-left: 0.7rem;
+}
+
+.illustrations-container a {
+  border-bottom: 0;
+  text-decoration: none;
+}
+
+.illustrations-container img {
+  width: 400px;
+}

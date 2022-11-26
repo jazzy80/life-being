@@ -20,6 +20,12 @@ class MaybeCompanion {
       );
     }
 
+    // Nullable types will evaluate to `None`.
+    public static function cond(?bool $a, $t): Maybe {
+      if ($a) return new Just($t);
+      else return new None;
+    }
+
     public static function to_maybe($a): Maybe {
       if (!$a) return new None;
       return new Just($a);

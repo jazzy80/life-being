@@ -19,6 +19,8 @@ class ControllerFactory implements AbstractControllerFactory {
      return new \controllers\AtelierHomeController($builder, $provider);
     case ATELIERGALLERY:
       return new \controllers\AtelierGalleryController($builder, $provider);
+    case CHILD_ILLUSTRATIONS:
+      return new \controllers\ChildIllustrationsContoller($builder, $provider);
     default: return new \controllers\DefaultController($builder, $provider);
    }
   }

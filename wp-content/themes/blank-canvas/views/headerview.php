@@ -2,11 +2,17 @@
 // Class representing the Header portion of the UI.
 namespace views;
 class HeaderView implements IView {
+  private \utils\Maybe $header_subtitle;
+  private \utils\Maybe $upper_navbar;
+  private \utils\Maybe $lower_navbar;
+
   public function __construct(
+    \utils\Maybe $header_subtitle,
     // Navbars are optional.
     \utils\Maybe /* <IView> */ $upper_navbar,
     \utils\Maybe /* <IView> */ $lower_navbar
   ) {
+    $this -> header_subtitle = $header_subtitle;
     $this -> upper_navbar = $upper_navbar;
     $this -> lower_navbar = $lower_navbar;
   }
@@ -20,8 +26,10 @@ class HeaderView implements IView {
       <div class="title-with-btns">
         <i class="fas fa-chevron-left prev-button"></i>
         <div class="titles">
-          <h1 class="title">Life Being</h1>
-          <h3 class="subtitle">Spirit of Being You</h3>
+          <h1 class="title">Life being</h1>
+          <h3 class="subtitle">'
+          . $this -> header_subtitle -> get_or_else(DEFAULT_HEADER_SUBTITLE) .
+          '</h3>
         </div>
         <i class="fas fa-chevron-right next-button"></i>
       </div>'

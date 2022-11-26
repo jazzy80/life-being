@@ -18,7 +18,7 @@ class AtelierHomeView implements IView {
         </div>
         <div class="image-container">
             <img class="image" src="/resources/christall light.jpg">
-            <a href="/life-being-gallery?category=kristallen" class="image-caption">Kristallen</a>
+            <a href="/life-being-gallery?category=kristallen" class="image-caption">Christall light</a>
         </div>
         <div class="image-container">
             <a href="/life-being-gallery?category=poetry-art" class="image-caption"> Poetry Art</a>
