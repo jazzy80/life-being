@@ -5,7 +5,7 @@ class ChildIllustrationsView implements IView {
     return <<< EOL
     <div class="illustrations-container">
       <div class="big-dreams">
-        <a href="/big-dreams">
+        <a href="#">
           <img src="/resources/dreamcloud.big dreams.svg">
         </a>
       </div>

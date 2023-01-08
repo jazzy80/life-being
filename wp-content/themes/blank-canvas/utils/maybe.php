@@ -1,8 +1,8 @@
 <?php
+  namespace utils;
   /**
   *Maybe is a type that either contains a value `Just` or nothing `None`
   **/
-  namespace utils;
   interface Maybe {
     // bind(A => Maybe<B>): Maybe<B>.
     public function bind(callable $fb): Maybe;

@@ -2,7 +2,10 @@
 namespace views\builders;
 interface AbstractBuilder {
   public function build_header(): AbstractBuilder;
-  public function build_lite_header(\utils\Maybe $page_title): AbstractBuilder;
+  public function build_lite_header(
+    \utils\Maybe $header_title,
+    \utils\Maybe $header_subtitle
+  ): AbstractBuilder;
   public function build_left_pane(): AbstractBuilder;
   public function build_right_pane(): AbstractBuilder;
   public function build_text_body(): AbstractBuilder;

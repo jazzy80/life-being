@@ -1,72 +1,85 @@
-import {Effect} from './functional/effect';
+import { Effect } from "./functional/effect";
 
-const ATELIER_IMAGE_LIST = 'atelier-image-list';
-const IMAGE_DETAIL = 'zoom-image';
-const IMAGE_LIST_ELEMENT = 'image-list-item';
+const atelierImageList = "atelier-image-list";
+const imageDetail = "zoom-image";
+const imageListElement = "image-list-item";
 
-const IMAGE_SELECTED = 'image-selected';
+const imageSelected = "image-selected";
 
-function init(): Promise<Effect<void>> {
-  const atelierList = document.querySelector(`.${ATELIER_IMAGE_LIST}`) as HTMLUListElement;
+async function init(): Promise<Effect<void>> {
+  const atelierList = document.querySelector(
+    `.${atelierImageList}`
+  ) as HTMLImageElement;
   const categoryParam = generateCategoryParam();
-  return fetch(`/wp-json/api/atelier/${categoryParam}`)
-    .then(response => response.json())
-    .then((images: string[]) => {
-      const imgTags = Effect.forEach(images, createImageTagsFromUrl);
-      return imgTags.flatMap(images => {
-        const [firstImage] = images;
-        return Effect.when(
-          !!firstImage, setImageSelected(firstImage).flatMap(_ =>
-            showImage(firstImage.src)).flatMap(_ =>
-              addEventListenerToImages(images, imagesClickHandleCb).flatMap(_ =>
-                convertImagesToListItems(images).flatMap(liElements =>
-                  Effect.unit(() => atelierList.append(...liElements))
-              )
+  const response = await fetch(`/wp-json/api/atelier/${categoryParam}`);
+  const images = await response.json();
+  const imgTags = Effect.forEach(images, createImageTagsFromUrl);
+
+  return imgTags.flatMap((images) => {
+    const [firstImage] = images;
+    return Effect.when(
+      Boolean(firstImage),
+      setImageSelected(firstImage)
+        .flatMap(() => showImage(firstImage.src))
+        .flatMap(() =>
+          addEventListenerToImages(images, imagesClickHandleCb).flatMap(() =>
+            convertImagesToListItems(images).flatMap((liElements) =>
+              Effect.unit(() => {
+                atelierList.append(...liElements);
+              })
             )
           )
         )
-    });
+    );
   });
 }
 
-function imagesClickHandleCb(image: HTMLImageElement, images: HTMLImageElement[]): Effect<void> {
-    return removeSelectedFromImages(image, images).flatMap(_ =>
-      setImageSelected(image).flatMap(_ =>
-        showImage(image.src)));
+function imagesClickHandleCb(
+  image: HTMLImageElement,
+  images: HTMLImageElement[]
+): Effect<void> {
+  return removeSelectedFromImages(image, images).flatMap(() =>
+    setImageSelected(image).flatMap(() => showImage(image.src))
+  );
 }
 
 function createImageTagsFromUrl(url: string): Effect<HTMLImageElement> {
-    const atelierImage = Effect.unit(() => document.createElement('img'));
-    return atelierImage.map(image => {
-      image.src = url;
-      return image;
-    });
-  }
+  const atelierImage = Effect.unit(() => document.createElement("img"));
+  return atelierImage.map((image) => {
+    image.src = url;
+    return image;
+  });
+}
 
-function convertImagesToListItems(images: HTMLImageElement[]): Effect<HTMLLIElement[]> {
-    return Effect.forEach(
-      images,
-      (image) => {
-        return Effect.unit(() => document.createElement('li')).map(liElement => {
-          liElement.classList.add(IMAGE_LIST_ELEMENT);
-          liElement.appendChild(image);
-          return liElement;
-      });
+function convertImagesToListItems(
+  images: HTMLImageElement[]
+): Effect<HTMLLIElement[]> {
+  return Effect.forEach(images, (image) => {
+    return Effect.unit(() => document.createElement("li")).map((liElement) => {
+      liElement.classList.add(imageListElement);
+      liElement.appendChild(image);
+      return liElement;
     });
-  }
+  });
+}
 
 function addEventListenerToImages(
   images: HTMLImageElement[],
   cb: (image: HTMLImageElement, images: HTMLImageElement[]) => Effect<void>
 ): Effect<void> {
-      return Effect.forEach_(
-        images,
-        (i) => Effect.unit(() => i.addEventListener('click', () => cb(i, images).run()))
-      );
-    }
+  return Effect.forEach_(images, (i) =>
+    Effect.unit(() => {
+      i.addEventListener("click", () => {
+        cb(i, images).run();
+      });
+    })
+  );
+}
 
 function setImageSelected(image: HTMLImageElement): Effect<void> {
-  return Effect.unit(() => image.classList.add(IMAGE_SELECTED));
+  return Effect.unit(() => {
+    image.classList.add(imageSelected);
+  });
 }
 
 function removeSelectedFromImages(
@@ -74,31 +87,34 @@ function removeSelectedFromImages(
   images: HTMLImageElement[]
 ): Effect<void> {
   return Effect.forEach_(
-    images.filter(i => i !== image),
-    (i) => Effect.unit(() => i.classList.remove(IMAGE_SELECTED))
+    images.filter((i) => i !== image),
+    (i) =>
+      Effect.unit(() => {
+        i.classList.remove(imageSelected);
+      })
   );
 }
 
 function showImage(url: string): Effect<void> {
   return Effect.unit(
-    () => document.querySelector(`.${IMAGE_DETAIL}`) as HTMLDivElement
-  ).flatMap(imageContainer =>
-    Effect.unit(() => document.createElement('img')).map(image =>
-   {
-    image.classList.add(IMAGE_DETAIL);
-    image.src = url;
-    imageContainer.innerHTML = '';
-    imageContainer.appendChild(image);
-  }));
+    () => document.querySelector(`.${imageDetail}`) as HTMLImageElement
+  ).flatMap((imageContainer) =>
+    Effect.unit(() => document.createElement("img")).map((image) => {
+      image.classList.add(imageSelected);
+      image.src = url;
+      imageContainer.innerHTML = "";
+      imageContainer.appendChild(image);
+    })
+  );
 }
 
 function generateCategoryParam(): string {
-  const categoryParam = new URLSearchParams(location.search).get('category');
-  return categoryParam ? `?category=${categoryParam}`: '';
+  const categoryParam = new URLSearchParams(location.search).get("category");
+  return categoryParam ? `?category=${categoryParam}` : "";
 }
 
-addEventListener(
-  'DOMContentLoaded',
-  () =>
-    init().then(effect => effect.run())
-  );
+addEventListener("DOMContentLoaded", async () =>
+  init().then((effect) => {
+    effect.run();
+  })
+);

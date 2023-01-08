@@ -1,0 +1,40 @@
+.bigdreams-container {
+  background-color: #486648;
+  border-radius: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto !important;
+  padding: 2rem 0;
+}
+
+.bigdreams-images {
+  margin-top: 4rem;
+  display: grid;
+  grid-template-columns: 25% 25% 25%;
+  grid-column-gap: 5rem;
+  grid-row-gap: 8rem;
+  justify-content: center;
+}
+
+.bigdreams-toolbar {
+  margin-top: 6rem;
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+}
+
+.image-frame {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttons {
+  margin-top: 5rem;
+  display: flex;
+  width: 30%;
+  justify-content: space-between;
+}

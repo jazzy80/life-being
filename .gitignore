@@ -50,3 +50,5 @@ wp-settings.php
 wp-signup.php
 wp-trackback.php
 xmlrpc.php
+node_modules/
+.vscode/

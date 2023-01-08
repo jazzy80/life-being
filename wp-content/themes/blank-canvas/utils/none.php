@@ -1,8 +1,8 @@
 <?php
+namespace utils;
 /**
 * `None` represents a Maybe that does not contain a value.
 **/
-namespace utils;
 class None implements Maybe {
   public function bind(callable $fb): Maybe {return $this;}
   public function map(callable $fb): Maybe {return $this;}

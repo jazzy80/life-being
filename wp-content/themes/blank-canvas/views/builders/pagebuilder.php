@@ -16,10 +16,14 @@ class PageBuilder implements AbstractBuilder {
       return $this -> add_component($this -> view_factory -> create_header());
   }
 
-  public function build_lite_header(\utils\Maybe $header_title): AbstractBuilder {
+  public function build_lite_header(
+    \utils\Maybe $header_title,
+    \utils\Maybe $header_subtitle
+  ): AbstractBuilder {
     return $this -> add_component(
       new \views\HeaderView(
         $header_title,
+        $header_subtitle,
         new \utils\Just(
           new \views\UpperNavBarView
         ), new \utils\None
@@ -61,6 +65,10 @@ class PageBuilder implements AbstractBuilder {
 
   public function build_child_illustrations(\WP_Post $page): AbstractBuilder {
     return $this -> add_component(new \views\ChildIllustrationsView($page));
+  }
+
+  public function build_bigdreams(\WP_Post $page): AbstractBuilder {
+    return $this -> add_component(new \views\BigDreamsView($page));
   }
 
   public function get(): \views\IView {

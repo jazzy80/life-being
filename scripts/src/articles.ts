@@ -61,7 +61,7 @@ function fetchArticles(
   url: string,
   pageNumber: number,
   callBackFn: (articles: IArticle[], count: number) => void
-): void {
+): void{
   fetch(`${url}/${pageNumber}`).then((response) => response.json()).then((data) => {
     callBackFn(data.blogs, data.count);
   });

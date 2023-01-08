@@ -25,6 +25,7 @@ class ViewFactory implements AbstractViewFactory {
     // Create the header for the page and render it, using the created navbars.
     return new \views\HeaderView(
       new \utils\None,
+      new \utils\None,
       new \utils\Just($upper_navbar),
       new \utils\Just($lower_navbar)
     );
@@ -51,49 +52,22 @@ class ViewFactory implements AbstractViewFactory {
   }
 
   public function create_right_pane(): \views\IView {
-  	// Retrieve the most recent blog, poem and inspire pages as a
-    // Maybe, since some pages might not be found.
-  	$blog_page =    $this -> page_model -> get_page_from_title(BLOG_PAGE);
-  	$poetry_page =  $this -> page_model -> get_page_from_title(POETRY_PAGE);
-  	$inspire_page = $this -> page_model -> get_page_from_title(INSPIRE_PAGE);
-
-    // Create articleViews from the pages.
-    $recent_blog_view = $blog_page -> bind(fn($blog) =>
-	   $this -> page_model -> find_most_recent_child_page($blog) -> map(
-       fn($recent_blog) =>
-  			new \views\MostRecentArticleView(
-          $recent_blog,
-          "Meest recente blog"
-        )
-      )
+    // Retrieve most recent article pages.
+    $most_recent_pages = array_map(
+      function(array $page_title_pair): \utils\Maybe {
+        [$page_title, $sub_title] = $page_title_pair;
+        return $this -> page_model -> get_page_from_title($page_title) -> bind(
+          fn($page) => $this -> page_model -> find_most_recent_child_page($page)
+           -> map(fn($child) => new \views\MostRecentArticleView($child, $sub_title))
+        );
+      },
+      PAGES_IN_RIGHT_PANE
     );
-    $recent_poetry_view = $poetry_page -> bind(fn($poetry) =>
-		  $this -> page_model -> find_most_recent_child_page($poetry) -> map(
-        fn($recent_poetry) =>
-        new \views\MostRecentArticleView(
-          $recent_poetry,
-          "Meest recente gedicht"
-        )
-      )
-    );
-  	$recent_inspire_view = $inspire_page -> bind(fn($inspire) =>
-    	  $this -> page_model -> find_most_recent_child_page($inspire) -> map(
-          fn($recent_inspire) =>
-          new \views\MostRecentArticleView(
-            $recent_inspirce,
-            "Meest recent inspire"
-         )
-       )
-     );
      // Use the compositeView to combine the view into a right pane.
      return new \views\decorators\SideBarDecorator(
        new \views\CompositeView(
 	       \utils\MaybeCompanion::flattenArray(
-      	     [
-              $recent_blog_view,
-              $recent_poetry_view,
-              $recent_inspire_view
-      		   ]
+           $most_recent_pages
            )
          ),
          ViewFactory :: SIDEBAR_CLASS

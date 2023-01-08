@@ -1,8 +1,8 @@
 <?php
+namespace utils;
 /**
 *`Just` represent a `Maybe` that has a value.
 **/
-namespace utils;
 class Just implements Maybe {
   public function __construct($a) {
     $this -> a = $a;
