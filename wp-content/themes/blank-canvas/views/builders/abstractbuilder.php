@@ -12,6 +12,7 @@ interface AbstractBuilder {
   public function build_vitality(): AbstractBuilder;
   public function build_guestbook(array $guest_book_entries): AbstractBuilder;
   public function build_jsfiles(\WP_Post $page): AbstractBuilder;
+  public function build_bigdreams(\WP_Post $page): AbstractBuilder;
   public function get(): \views\IView;
 }
 ?>

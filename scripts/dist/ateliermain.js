@@ -1,116 +1,124 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var effect_1 = require("./functional/effect");
-var ATELIER_IMAGE_LIST = 'atelier-image-list';
-var IMAGE_DETAIL = 'zoom-image';
-var IMAGE_LIST_ELEMENT = 'image-list-item';
-var IMAGE_SELECTED = 'image-selected';
+const effect_1 = require("./functional/effect");
+const atelierImageList = "atelier-image-list";
+const imageDetail = "zoom-image";
+const imageListElement = "image-list-item";
+const imageSelected = "image-selected";
 function init() {
-    var atelierList = document.querySelector(".".concat(ATELIER_IMAGE_LIST));
-    var categoryParam = generateCategoryParam();
-    return fetch("/wp-json/api/atelier/".concat(categoryParam))
-        .then(function (response) { return response.json(); })
-        .then(function (images) {
-        var imgTags = effect_1.Effect.forEach(images, createImageTagsFromUrl);
-        return imgTags.flatMap(function (images) {
-            var firstImage = images[0];
-            return effect_1.Effect.when(!!firstImage, setImageSelected(firstImage).flatMap(function (_) {
-                return showImage(firstImage.src);
-            }).flatMap(function (_) {
-                return addEventListenerToImages(images, imagesClickHandleCb).flatMap(function (_) {
-                    return convertImagesToListItems(images).flatMap(function (liElements) {
-                        return effect_1.Effect.unit(function () { return atelierList.append.apply(atelierList, liElements); });
-                    });
-                });
-            }));
+    return __awaiter(this, void 0, void 0, function* () {
+        const atelierList = document.querySelector(`.${atelierImageList}`);
+        const categoryParam = generateCategoryParam();
+        const response = yield fetch(`/wp-json/api/atelier/${categoryParam}`);
+        const images = yield response.json();
+        const imgTags = effect_1.Effect.forEach(images, createImageTagsFromUrl);
+        return imgTags.flatMap((images) => {
+            console.log(images);
+            const [firstImage] = images;
+            return effect_1.Effect.when(Boolean(firstImage), setImageSelected(firstImage)
+                .flatMap(() => showImage(firstImage.src))
+                .flatMap(() => addEventListenerToImages(images, imagesClickHandleCb).flatMap(() => convertImagesToListItems(images).flatMap((liElements) => effect_1.Effect.unit(() => {
+                atelierList.append(...liElements);
+            })))));
         });
     });
 }
 function imagesClickHandleCb(image, images) {
-    return removeSelectedFromImages(image, images).flatMap(function (_) {
-        return setImageSelected(image).flatMap(function (_) {
-            return showImage(image.src);
-        });
-    });
+    return removeSelectedFromImages(image, images).flatMap(() => setImageSelected(image).flatMap(() => showImage(image.src)));
 }
 function createImageTagsFromUrl(url) {
-    var atelierImage = effect_1.Effect.unit(function () { return document.createElement('img'); });
-    return atelierImage.map(function (image) {
+    const atelierImage = effect_1.Effect.unit(() => document.createElement("img"));
+    return atelierImage.map((image) => {
         image.src = url;
         return image;
     });
 }
 function convertImagesToListItems(images) {
-    return effect_1.Effect.forEach(images, function (image) {
-        return effect_1.Effect.unit(function () { return document.createElement('li'); }).map(function (liElement) {
-            liElement.classList.add(IMAGE_LIST_ELEMENT);
+    return effect_1.Effect.forEach(images, (image) => {
+        return effect_1.Effect.unit(() => document.createElement("li")).map((liElement) => {
+            liElement.classList.add(imageListElement);
             liElement.appendChild(image);
             return liElement;
         });
     });
 }
 function addEventListenerToImages(images, cb) {
-    return effect_1.Effect.forEach_(images, function (i) { return effect_1.Effect.unit(function () { return i.addEventListener('click', function () { return cb(i, images).run(); }); }); });
+    return effect_1.Effect.forEach_(images, (i) => effect_1.Effect.unit(() => {
+        i.addEventListener("click", () => {
+            cb(i, images).run();
+        });
+    }));
 }
 function setImageSelected(image) {
-    return effect_1.Effect.unit(function () { return image.classList.add(IMAGE_SELECTED); });
-}
-function removeSelectedFromImages(image, images) {
-    return effect_1.Effect.forEach_(images.filter(function (i) { return i !== image; }), function (i) { return effect_1.Effect.unit(function () { return i.classList.remove(IMAGE_SELECTED); }); });
-}
-function showImage(url) {
-    return effect_1.Effect.unit(function () { return document.querySelector(".".concat(IMAGE_DETAIL)); }).flatMap(function (imageContainer) {
-        return effect_1.Effect.unit(function () { return document.createElement('img'); }).map(function (image) {
-            image.classList.add(IMAGE_DETAIL);
-            image.src = url;
-            imageContainer.innerHTML = '';
-            imageContainer.appendChild(image);
-        });
+    return effect_1.Effect.unit(() => {
+        image.classList.add(imageSelected);
     });
 }
-function generateCategoryParam() {
-    var categoryParam = new URLSearchParams(location.search).get('category');
-    return categoryParam ? "?category=".concat(categoryParam) : '';
+function removeSelectedFromImages(image, images) {
+    return effect_1.Effect.forEach_(images.filter((i) => i !== image), (i) => effect_1.Effect.unit(() => {
+        i.classList.remove(imageSelected);
+    }));
 }
-addEventListener('DOMContentLoaded', function () {
-    return init().then(function (effect) { return effect.run(); });
-});
+function showImage(url) {
+    return effect_1.Effect.unit(() => document.querySelector(`.${imageDetail}`)).flatMap((imageContainer) => effect_1.Effect.unit(() => document.createElement("img")).map((image) => {
+        image.classList.add(imageSelected);
+        image.src = url;
+        imageContainer.innerHTML = "";
+        imageContainer.appendChild(image);
+    }));
+}
+function generateCategoryParam() {
+    const categoryParam = new URLSearchParams(location.search).get("category");
+    return categoryParam ? `?category=${categoryParam}` : "";
+}
+addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, void 0, function* () {
+    return init().then((effect) => {
+        effect.run();
+    });
+}));
 
 },{"./functional/effect":2}],2:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Effect = void 0;
-var Effect = /** @class */ (function () {
-    function Effect(run) {
+class Effect {
+    constructor(run) {
         this.run = run;
     }
-    Effect.unit = function (f) {
+    static unit(f) {
         return new Effect(f);
-    };
-    Effect.forEach = function (la, f) {
-        return new Effect(function () { return la.map(function (a) { return f(a).run(); }); });
-    };
-    Effect.forEach_ = function (la, f) {
-        return new Effect(function () { return la.forEach(function (a) { return f(a).run(); }); });
-    };
-    Effect.when = function (cond, effect) {
-        return new Effect(function () {
+    }
+    static forEach(la, f) {
+        return new Effect(() => la.map((a) => f(a).run()));
+    }
+    static forEach_(la, f) {
+        return new Effect(() => la.forEach((a) => f(a).run()));
+    }
+    static when(cond, effect) {
+        return new Effect(() => {
             if (cond)
                 return effect.run();
             return;
         });
-    };
-    Effect.prototype.flatMap = function (f) {
-        var a = this.run();
-        return new Effect(function () { return f(a).run(); });
-    };
-    Effect.prototype.map = function (f) {
-        var _this = this;
-        return new Effect(function () { return f(_this.run()); });
-    };
-    return Effect;
-}());
+    }
+    flatMap(f) {
+        const a = this.run();
+        return new Effect(() => f(a).run());
+    }
+    map(f) {
+        return new Effect(() => f(this.run()));
+    }
+}
 exports.Effect = Effect;
 
-},{}]},{},[2,1]);
+},{}]},{},[1,2]);

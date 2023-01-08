@@ -1,18 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeOverlay = exports.addOverlay = void 0;
-var OVERLAY_SELECTOR = '.overlay';
+const OVERLAY_SELECTOR = '.overlay';
 function addOverlay() {
-    var overlay = document.querySelector(OVERLAY_SELECTOR)
+    const overlay = document.querySelector(OVERLAY_SELECTOR)
         || document.createElement('div');
     overlay.classList.add('overlay');
-    var body = document.body;
+    const body = document.body;
     body.style.overflowY = 'hidden';
     body.prepend(overlay);
 }
 exports.addOverlay = addOverlay;
 function removeOverlay() {
-    var overlay = document.querySelector(OVERLAY_SELECTOR);
+    const overlay = document.querySelector(OVERLAY_SELECTOR);
     // Check if overlay is already active.
     if (overlay) {
         // Remove it

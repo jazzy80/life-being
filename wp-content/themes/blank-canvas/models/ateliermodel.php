@@ -2,6 +2,8 @@
 namespace models;
 
 class AtelierModel {
+  private \wpdb $db_client;
+
   function __construct(\wpdb $db_client) {
     $this -> db_client = $db_client;
   }

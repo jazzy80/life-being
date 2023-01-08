@@ -6,6 +6,8 @@
 namespace controllers;
 abstract class BaseController {
   protected \views\builders\AbstractBuilder $builder;
+  protected \serviceproviders\ModelProvider $provider;
+  protected \WP_Post $page;
 
   public function __construct(
     \views\builders\AbstractBuilder $builder,

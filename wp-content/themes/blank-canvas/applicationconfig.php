@@ -62,6 +62,7 @@ define(
 
 // Define the pagination size for blogs etc.
 define('PAGINATION_SIZE', 5);
+define('PAGINATION_CHILD_BEING', 9);
 
 //Javascript files prefix
 define('JS_FILE_PREFIX', '/scripts/dist/');
@@ -73,6 +74,7 @@ define('LOAD_JAVASCRIPT', [
   GUESTBOOK          => [JS_FILE_PREFIX . 'guestbookmain.js'],
   ATELIER            => [JS_FILE_PREFIX . 'ateliermain.js'],
   ATELIERGALLERY     => [JS_FILE_PREFIX . 'ateliermain.js'],
+  BIG_DREAMS         => [JS_FILE_PREFIX . 'bigdreamsmain.js'],
 ]);
 
 // autoloader for classes and interfaces.

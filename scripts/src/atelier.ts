@@ -16,6 +16,7 @@ async function init(): Promise<Effect<void>> {
   const imgTags = Effect.forEach(images, createImageTagsFromUrl);
 
   return imgTags.flatMap((images) => {
+    console.log(images);
     const [firstImage] = images;
     return Effect.when(
       Boolean(firstImage),
