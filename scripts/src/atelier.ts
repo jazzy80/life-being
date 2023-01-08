@@ -12,11 +12,11 @@ async function init(): Promise<Effect<void>> {
   ) as HTMLImageElement;
   const categoryParam = generateCategoryParam();
   const response = await fetch(`/wp-json/api/atelier/${categoryParam}`);
-  const images = await response.json();
+  const body: { images: Array<string>; count: number } = await response.json();
+  const images = body.images;
   const imgTags = Effect.forEach(images, createImageTagsFromUrl);
 
   return imgTags.flatMap((images) => {
-    console.log(images);
     const [firstImage] = images;
     return Effect.when(
       Boolean(firstImage),
@@ -79,7 +79,7 @@ function addEventListenerToImages(
 
 function setImageSelected(image: HTMLImageElement): Effect<void> {
   return Effect.unit(() => {
-    image.classList.add(imageSelected);
+    image.classList.add(imageSelected, imageDetail);
   });
 }
 
@@ -101,7 +101,7 @@ function showImage(url: string): Effect<void> {
     () => document.querySelector(`.${imageDetail}`) as HTMLImageElement
   ).flatMap((imageContainer) =>
     Effect.unit(() => document.createElement("img")).map((image) => {
-      image.classList.add(imageSelected);
+      image.classList.add(imageSelected, imageDetail);
       image.src = url;
       imageContainer.innerHTML = "";
       imageContainer.appendChild(image);

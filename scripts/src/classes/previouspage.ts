@@ -1,4 +1,4 @@
-import { IPage } from '../interfaces/ipage';
+import { IPage } from "../interfaces/ipage";
 
 export class PreviousPage implements IPage {
   nextPredicate: (pageNumber: number) => boolean;

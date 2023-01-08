@@ -20,7 +20,8 @@ function init() {
         const atelierList = document.querySelector(`.${atelierImageList}`);
         const categoryParam = generateCategoryParam();
         const response = yield fetch(`/wp-json/api/atelier/${categoryParam}`);
-        const images = yield response.json();
+        const body = yield response.json();
+        const images = body.images;
         const imgTags = effect_1.Effect.forEach(images, createImageTagsFromUrl);
         return imgTags.flatMap((images) => {
             console.log(images);
@@ -61,7 +62,7 @@ function addEventListenerToImages(images, cb) {
 }
 function setImageSelected(image) {
     return effect_1.Effect.unit(() => {
-        image.classList.add(imageSelected);
+        image.classList.add(imageSelected, imageDetail);
     });
 }
 function removeSelectedFromImages(image, images) {
@@ -71,7 +72,7 @@ function removeSelectedFromImages(image, images) {
 }
 function showImage(url) {
     return effect_1.Effect.unit(() => document.querySelector(`.${imageDetail}`)).flatMap((imageContainer) => effect_1.Effect.unit(() => document.createElement("img")).map((image) => {
-        image.classList.add(imageSelected);
+        image.classList.add(imageSelected, imageDetail);
         image.src = url;
         imageContainer.innerHTML = "";
         imageContainer.appendChild(image);

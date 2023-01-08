@@ -12,7 +12,8 @@ function get_atelier_images(WP_REST_Request $req): array {
   $category = $req -> get_query_params()['category'];
   $page = $req -> get_query_params()['page'];
   $images = $atelier_model -> get_atelier_images_by_category($category);
-  if ($page) return array_slice($images, $page * PAGINATION_CHILD_BEING, PAGINATION_CHILD_BEING);
-  return $images;
+  return [
+    'count' => sizeof($images), 
+    'images' => $page ?  array_slice($images, $page * PAGINATION_CHILD_BEING, PAGINATION_CHILD_BEING) : $images
+  ];
 }
-?>

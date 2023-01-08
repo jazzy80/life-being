@@ -1,10 +1,9 @@
 import { Effect } from "./functional/effect";
 
 async function init(): Promise<Effect<void>> {
-  const response = await fetch(
-    "/wp-json/api/atelier/?category=big-dreams&page=0"
-  );
-  const images: Array<string> = await response.json();
+  const body = await fetchImages(0);
+  const images = body.images;
+  const amountOfPages = Math.ceil(images.length / body.count);
   return Effect.forEach_(images, (imageSrc: string) =>
     createImage(imageSrc)
       .map((image) => {
@@ -14,8 +13,17 @@ async function init(): Promise<Effect<void>> {
         imageContainer.append(image);
       })
       .flatMap(() => setPaginationText(images.length))
-      .flatMap(() => setButtons())
+      .flatMap(() => setButtons(amountOfPages, 0))
   );
+}
+
+async function fetchImages(
+  page: number
+): Promise<{ images: string[]; count: number }> {
+  const response = await fetch(
+    `/wp-json/api/atelier/?category=big-dreams&page=${page}`
+  );
+  return response.json();
 }
 
 function setPaginationText(count: number): Effect<void> {
@@ -26,7 +34,7 @@ function setPaginationText(count: number): Effect<void> {
   });
 }
 
-function setButtons(): Effect<void> {
+function setButtons(amountOfPages: number, currentPage: number): Effect<void> {
   return Effect.unit(
     () => document.querySelector(".prev-btn") as HTMLButtonElement
   ).map((button) => {

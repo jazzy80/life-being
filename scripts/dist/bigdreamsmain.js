@@ -11,10 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const effect_1 = require("./functional/effect");
-function init() {
+function fetchImages(page) {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield fetch("/wp-json/api/atelier/?category=big-dreams&page=0");
-        const images = yield response.json();
+        const response = yield fetch(`/wp-json/api/atelier/?category=big-dreams&page=${page}`);
+        const body = yield response.json();
+        const images = body.images;
         return effect_1.Effect.forEach_(images, (imageSrc) => createImage(imageSrc)
             .map((image) => {
             const imageContainer = document.querySelector(".bigdreams-images");
@@ -50,7 +51,7 @@ function createImage(src) {
         });
     });
 }
-init().then((effect) => effect.run((x) => x));
+fetchImages(0).then((effect) => effect.run());
 
 },{"./functional/effect":2}],2:[function(require,module,exports){
 "use strict";
@@ -60,27 +61,28 @@ class Effect {
     constructor(run) {
         this.run = run;
     }
-    static unit(value) {
-        return new Effect((cb) => cb(value()));
+    static unit(f) {
+        return new Effect(f);
     }
     static forEach(la, f) {
-        return la.reduce((effect, a) => effect.flatMap((b) => f(a).map((b2) => [...b, b2])), Effect.unit(() => []));
+        return new Effect(() => la.map((a) => f(a).run()));
     }
     static forEach_(la, f) {
-        return new Effect(() => la.forEach((a) => f(a).run((x) => x)));
+        return new Effect(() => la.forEach((a) => f(a).run()));
     }
     static when(cond, effect) {
-        return new Effect((cb) => {
+        return new Effect(() => {
             if (cond)
-                return effect.run(cb);
+                return effect.run();
             return;
         });
     }
     flatMap(f) {
-        return new Effect((cb) => this.run((a) => f(a).run(cb)));
+        const a = this.run();
+        return new Effect(() => f(a).run());
     }
     map(f) {
-        return new Effect((cb) => this.run((a) => cb(f(a))));
+        return new Effect(() => f(this.run()));
     }
 }
 exports.Effect = Effect;

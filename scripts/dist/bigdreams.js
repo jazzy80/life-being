@@ -10,10 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const effect_1 = require("./functional/effect");
-function init() {
+function fetchImages(page) {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield fetch("/wp-json/api/atelier/?category=big-dreams&page=0");
-        const images = yield response.json();
+        const response = yield fetch(`/wp-json/api/atelier/?category=big-dreams&page=${page}`);
+        const body = yield response.json();
+        const images = body.images;
         return effect_1.Effect.forEach_(images, (imageSrc) => createImage(imageSrc)
             .map((image) => {
             const imageContainer = document.querySelector(".bigdreams-images");
@@ -49,4 +50,4 @@ function createImage(src) {
         });
     });
 }
-init().then((effect) => effect.run());
+fetchImages(0).then((effect) => effect.run());
