@@ -9,82 +9,89 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const effect_1 = require("./functional/effect");
+function init() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let currentPage = 0;
+        const prevButtons = document.querySelectorAll(".prev-btn");
+        const nextButtons = document.querySelectorAll(".next-btn");
+        setUpPage(currentPage, [prevButtons, nextButtons]);
+        prevButtons.forEach((prevButton) => {
+            prevButton.addEventListener("click", () => {
+                setUpPage(--currentPage, [prevButtons, nextButtons]);
+            });
+        });
+        nextButtons.forEach((nextButton) => {
+            nextButton.addEventListener("click", () => {
+                setUpPage(++currentPage, [prevButtons, nextButtons]);
+            });
+        });
+    });
+}
+function setUpPage(currentPage, buttons) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const body = yield fetchImages(currentPage);
+        const imageSrcs = body.images;
+        const amountOfPages = imageSrcs.length === 0 ? 0 : Math.ceil(body.count / 9);
+        const imageContainer = document.querySelector(".bigdreams-images");
+        imageContainer.innerHTML = "";
+        const loader = document.querySelector(".loader");
+        const content = document.querySelector(".content");
+        loader.style.display = "block";
+        content.style.display = "none";
+        setPaginationText(currentPage, imageSrcs.length, body.count);
+        setButtons(buttons, currentPage, amountOfPages);
+        const images = yield Promise.all(imageSrcs.map(createImageFromSrc));
+        images.forEach((image) => imageContainer.appendChild(image));
+        loader.style.display = "none";
+        content.style.display = "flex";
+    });
+}
 function fetchImages(page) {
     return __awaiter(this, void 0, void 0, function* () {
         const response = yield fetch(`/wp-json/api/atelier/?category=big-dreams&page=${page}`);
-        const body = yield response.json();
-        const images = body.images;
-        return effect_1.Effect.forEach_(images, (imageSrc) => createImage(imageSrc)
-            .map((image) => {
-            const imageContainer = document.querySelector(".bigdreams-images");
-            imageContainer.append(image);
-        })
-            .flatMap(() => setPaginationText(images.length))
-            .flatMap(() => setButtons()));
+        return response.json();
     });
 }
-function setPaginationText(count) {
-    return effect_1.Effect.unit(() => document.querySelector(".pagination-text")).map((paginationText) => {
-        paginationText.textContent = `Foto's 1 t/m 9 getoond van de ${count}`;
+function setPaginationText(currentPage, items, count) {
+    const paginationText = document.querySelector(".pagination-text");
+    const min = currentPage * 9 + 1;
+    const max = min + items - 1;
+    paginationText.textContent = `Foto's ${min} t/m ${max} getoond van de ${count}`;
+}
+function setButtons(buttons, currentPage, amountOfPages) {
+    const [prevs, nexts] = buttons;
+    prevs.forEach((prev) => {
+        enableButton(prev);
+        if (currentPage === 0)
+            disableButton(prev);
+    });
+    nexts.forEach((next) => {
+        enableButton(next);
+        if (currentPage === amountOfPages - 1)
+            disableButton(next);
     });
 }
-function setButtons() {
-    return effect_1.Effect.unit(() => document.querySelector(".prev-btn")).map((button) => {
-        button.classList.add("paginator-btn-disabled");
-        button.disabled = true;
+function disableButton(button) {
+    button.classList.add("paginator-btn-disabled");
+    button.style.visibility = "hidden";
+}
+function enableButton(button) {
+    button.classList.remove("paginator-btn-disabled");
+    button.style.visibility = "visible";
+}
+function createImageFromSrc(src) {
+    const imageFrame = document.createElement("div");
+    imageFrame.classList.add("image-frame");
+    const imageText = document.createElement("span");
+    const image = new Image();
+    imageFrame.append(image);
+    return new Promise((resolve) => {
+        image.src = src;
+        image.onload = () => {
+            resolve(imageFrame);
+        };
     });
 }
-function createImage(src) {
-    return effect_1.Effect.unit(() => {
-        const imageFrame = document.createElement("div");
-        imageFrame.classList.add("image-frame");
-        return imageFrame;
-    }).flatMap((imageFrame) => {
-        const imageText = document.createElement("span");
-        return effect_1.Effect.unit(() => {
-            const image = document.createElement("img");
-            image.src = src;
-            imageFrame.append(imageText, image);
-            return imageFrame;
-        });
-    });
-}
-fetchImages(0).then((effect) => effect.run());
+init();
 
-},{"./functional/effect":2}],2:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Effect = void 0;
-class Effect {
-    constructor(run) {
-        this.run = run;
-    }
-    static unit(f) {
-        return new Effect(f);
-    }
-    static forEach(la, f) {
-        return new Effect(() => la.map((a) => f(a).run()));
-    }
-    static forEach_(la, f) {
-        return new Effect(() => la.forEach((a) => f(a).run()));
-    }
-    static when(cond, effect) {
-        return new Effect(() => {
-            if (cond)
-                return effect.run();
-            return;
-        });
-    }
-    flatMap(f) {
-        const a = this.run();
-        return new Effect(() => f(a).run());
-    }
-    map(f) {
-        return new Effect(() => f(this.run()));
-    }
-}
-exports.Effect = Effect;
-
-},{}]},{},[1,2]);
+},{}]},{},[1]);

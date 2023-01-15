@@ -7,6 +7,24 @@
   align-items: center;
   margin: 0 auto !important;
   padding: 2rem 0;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.content {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loader {
+  animation: 1s linear infinite spinner;
+  border: solid 5px red;
+  border-radius: 50%;
+  border-bottom-color: green;
+  height: 5rem;
+  width: 5rem;
+  margin: auto;
 }
 
 .bigdreams-images {
@@ -37,4 +55,19 @@
   display: flex;
   width: 30%;
   justify-content: space-between;
+}
+
+.prev-btn,
+.next-btn {
+  visibility: hidden;
+  background-color: #f44336;
+}
+
+@keyframes spinner {
+  0% {
+    transform: translate3d(-50%, -50%, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate3d(-50%, -50%, 0) rotate(360deg);
+  }
 }

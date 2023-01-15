@@ -23,7 +23,6 @@ function init() {
         const images = body.images;
         const imgTags = effect_1.Effect.forEach(images, createImageTagsFromUrl);
         return imgTags.flatMap((images) => {
-            console.log(images);
             const [firstImage] = images;
             return effect_1.Effect.when(Boolean(firstImage), setImageSelected(firstImage)
                 .flatMap(() => showImage(firstImage.src))
