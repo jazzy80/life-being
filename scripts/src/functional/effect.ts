@@ -16,8 +16,7 @@ export class Effect<A> {
     });
   }
   flatMap<B>(f: (a: A) => Effect<B>): Effect<B> {
-    const a = this.run();
-    return new Effect(() => f(a).run());
+    return new Effect(() => f(this.run()).run());
   }
   map<B>(f: (a: A) => B): Effect<B> {
     return new Effect(() => f(this.run()));
