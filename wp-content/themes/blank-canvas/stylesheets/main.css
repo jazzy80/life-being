@@ -31,13 +31,13 @@ body {
 
 a,
 button {
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
 }
 
 button {
   border-radius: 15px;
   background-color: var(--button-main-color);
-  transition: background-color 600ms ease-in-out;
+  transition: background-color 300ms ease-in-out;
 }
 
 button:hover {
@@ -45,11 +45,11 @@ button:hover {
 }
 
 p {
-  font-family: 'Della Respira', serif !important;
+  font-family: "Della Respira", serif !important;
 }
 
 p * {
-  font-family: 'Della Respira', serif !important;
+  font-family: "Della Respira", serif !important;
 }
 
 a {
@@ -143,7 +143,7 @@ a:hover {
 
 /* Dark overlay over background image, to improve contrast of titles */
 .header::after {
-  content: '';
+  content: "";
   position: absolute;
   background-color: black;
   top: 0;

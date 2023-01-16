@@ -22,9 +22,9 @@ function init() {
         const response = yield fetch(`/wp-json/api/atelier/${categoryParam}`);
         const body = yield response.json();
         const images = body.images;
+        console.log(images);
         const imgTags = effect_1.Effect.forEach(images, createImageTagsFromUrl);
         return imgTags.flatMap((images) => {
-            console.log(images);
             const [firstImage] = images;
             return effect_1.Effect.when(Boolean(firstImage), setImageSelected(firstImage)
                 .flatMap(() => showImage(firstImage.src))

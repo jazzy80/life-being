@@ -1,107 +1,105 @@
 async function init(): Promise<void> {
   let currentPage = 0;
-  const prevButtons = document.querySelectorAll(
-    ".prev-btn"
-  ) as NodeListOf<HTMLButtonElement>;
-  const nextButtons = document.querySelectorAll(
-    ".next-btn"
-  ) as NodeListOf<HTMLButtonElement>;
-  setUpPage(currentPage, [prevButtons, nextButtons]);
-  prevButtons.forEach((prevButton) => {
-    prevButton.addEventListener("click", () => {
-      setUpPage(--currentPage, [prevButtons, nextButtons]);
-    });
+  const category = generateCategoryParam();
+  const prevButton = document.querySelector(".prev-btn") as HTMLButtonElement;
+  const nextButton = document.querySelector(".next-btn") as HTMLButtonElement;
+  setTitle(category.split("=")[1]);
+  setUpPage(category, currentPage, [prevButton, nextButton]);
+  prevButton.addEventListener("click", () => {
+    setUpPage(category, --currentPage, [prevButton, nextButton]);
   });
-  nextButtons.forEach((nextButton) => {
-    nextButton.addEventListener("click", () => {
-      setUpPage(++currentPage, [prevButtons, nextButtons]);
-    });
+  nextButton.addEventListener("click", () => {
+    setUpPage(category, ++currentPage, [prevButton, nextButton]);
   });
 }
 
 async function setUpPage(
+  category: string,
   currentPage: number,
-  buttons: NodeListOf<HTMLButtonElement>[]
+  buttons: HTMLButtonElement[]
 ): Promise<void> {
-  const body = await fetchImages(currentPage);
+  const body = await fetchImages(category, currentPage);
   const imageSrcs = body.images;
-  const amountOfPages = imageSrcs.length === 0 ? 0 : Math.ceil(body.count / 9);
+  const paginationSize = body.paginationSize;
+  const amountOfPages =
+    imageSrcs.length === 0 ? 0 : Math.ceil(body.count / paginationSize);
   const imageContainer = document.querySelector(
     ".bigdreams-images"
   ) as HTMLDivElement;
   imageContainer.innerHTML = "";
-  const loader = document.querySelector(".loader") as HTMLDivElement;
-  const content = document.querySelector(".content") as HTMLDivElement;
-  loader.style.display = "block";
-  content.style.display = "none";
-  setPaginationText(currentPage, imageSrcs.length, body.count);
+  setPaginationText(currentPage, imageSrcs.length, body.count, paginationSize);
   setButtons(buttons, currentPage, amountOfPages);
-  const images = await Promise.all(imageSrcs.map(createImageFromSrc));
-  images.forEach((image) => imageContainer.appendChild(image));
-  loader.style.display = "none";
-  content.style.display = "flex";
+  imageSrcs
+    .map(createImageFromSrc)
+    .forEach((image) => imageContainer.appendChild(image));
 }
 
 async function fetchImages(
+  category: string,
   page: number
-): Promise<{ images: string[]; count: number }> {
-  const response = await fetch(
-    `/wp-json/api/atelier/?category=big-dreams&page=${page}`
-  );
+): Promise<{ images: string[]; count: number; paginationSize: number }> {
+  const response = await fetch(`/wp-json/api/atelier/${category}&page=${page}`);
   return response.json();
 }
 
 function setPaginationText(
   currentPage: number,
   items: number,
-  count: number
+  count: number,
+  paginationSize: number
 ): void {
   const paginationText = document.querySelector(
     ".pagination-text"
   ) as HTMLHeadingElement;
-  const min = currentPage * 9 + 1;
+  const min = currentPage * paginationSize + 1;
   const max = min + items - 1;
   paginationText.textContent = `Foto's ${min} t/m ${max} getoond van de ${count}`;
 }
 
 function setButtons(
-  buttons: NodeListOf<HTMLButtonElement>[],
+  buttons: HTMLButtonElement[],
   currentPage: number,
   amountOfPages: number
 ): void {
-  const [prevs, nexts] = buttons;
-  prevs.forEach((prev) => {
-    enableButton(prev);
-    if (currentPage === 0) disableButton(prev);
-  });
-  nexts.forEach((next) => {
-    enableButton(next);
-    if (currentPage === amountOfPages - 1) disableButton(next);
-  });
+  const [prev, next] = buttons;
+  enableButton(prev);
+  enableButton(next);
+  if (currentPage === 0) disableButton(prev);
+  if (currentPage === amountOfPages - 1) disableButton(next);
+  buttons.forEach((b) => (b.style.visibility = "visible"));
 }
 
 function disableButton(button: HTMLButtonElement): void {
   button.classList.add("paginator-btn-disabled");
-  button.style.visibility = "hidden";
+  button.disabled = true;
 }
 
 function enableButton(button: HTMLButtonElement): void {
   button.classList.remove("paginator-btn-disabled");
-  button.style.visibility = "visible";
+  button.disabled = false;
 }
 
-function createImageFromSrc(src: string): Promise<HTMLDivElement> {
+function setTitle(category: string): void {
+  const title = category.replace(/-/g, " ");
+  const titleElement = document.querySelector(
+    ".bigdreams-title"
+  ) as HTMLHeadElement;
+  titleElement.textContent = title;
+}
+
+function createImageFromSrc(src: string): HTMLDivElement {
   const imageFrame = document.createElement("div");
   imageFrame.classList.add("image-frame");
   const imageText = document.createElement("span");
   const image = new Image();
   imageFrame.append(image);
-  return new Promise((resolve) => {
-    image.src = src;
-    image.onload = () => {
-      resolve(imageFrame);
-    };
-  });
+  image.src = src;
+  return imageFrame;
+}
+
+function generateCategoryParam(): string {
+  const categoryParam = new URLSearchParams(location.search).get("category");
+  return categoryParam ? `?category=${categoryParam}` : "";
 }
 
 init();

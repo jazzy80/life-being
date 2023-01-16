@@ -57,7 +57,7 @@
 }
 
 .paginator-btn-disabled {
-  background-color: #838387;
+  background-color: #838387 !important;
   pointer-events: none;
 }
 

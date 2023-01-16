@@ -9,7 +9,7 @@ class AtelierModel {
   }
 
   function get_atelier_images_by_category(string $category): array {
-    return $this -> db_client -> get_results(
+    return array_map(fn($result) => $result -> guid, $this -> db_client -> get_results(
       $this -> db_client -> prepare(
         <<< EOL
         SELECT guid FROM wp_posts wp
@@ -19,8 +19,7 @@ class AtelierModel {
         EOL,
         array($category)
       ),
-      ARRAY_N
-    );
+    ));
   }
 }
 ?>

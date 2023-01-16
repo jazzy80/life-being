@@ -3,7 +3,6 @@
   border-radius: 2rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   margin: 0 auto !important;
   padding: 2rem 0;
@@ -11,24 +10,8 @@
   width: 100%;
 }
 
-.content {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-}
-
-.loader {
-  animation: 1s linear infinite spinner;
-  border: solid 5px red;
-  border-radius: 50%;
-  border-bottom-color: green;
-  height: 5rem;
-  width: 5rem;
-  margin: auto;
-}
-
 .bigdreams-images {
-  margin-top: 4rem;
+  margin-top: 3rem;
   display: grid;
   grid-template-columns: 25% 25% 25%;
   grid-column-gap: 5rem;
@@ -37,10 +20,12 @@
 }
 
 .bigdreams-toolbar {
-  margin-top: 6rem;
+  margin-top: 3rem;
   display: flex;
-  justify-content: space-between;
+  align-items: baseline;
+  justify-content: center;
   width: 80%;
+  text-align: center;
 }
 
 .image-frame {
@@ -52,22 +37,17 @@
 
 .buttons {
   margin-top: 5rem;
+  margin-left: 0.8rem;
   display: flex;
-  width: 30%;
-  justify-content: space-between;
+  visibility: hidden;
+}
+
+.buttons > * {
+  margin-right: 0.3rem;
+  padding: 0.7rem;
 }
 
 .prev-btn,
 .next-btn {
-  visibility: hidden;
   background-color: #f44336;
-}
-
-@keyframes spinner {
-  0% {
-    transform: translate3d(-50%, -50%, 0) rotate(0deg);
-  }
-  100% {
-    transform: translate3d(-50%, -50%, 0) rotate(360deg);
-  }
 }

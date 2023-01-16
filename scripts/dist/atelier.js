@@ -21,6 +21,7 @@ function init() {
         const response = yield fetch(`/wp-json/api/atelier/${categoryParam}`);
         const body = yield response.json();
         const images = body.images;
+        console.log(images);
         const imgTags = effect_1.Effect.forEach(images, createImageTagsFromUrl);
         return imgTags.flatMap((images) => {
             const [firstImage] = images;
