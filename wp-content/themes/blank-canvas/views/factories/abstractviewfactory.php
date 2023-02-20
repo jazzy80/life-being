@@ -6,7 +6,6 @@ interface AbstractViewFactory {
   public function create_header(): \views\IView;
   public function create_left_pane(): \views\IView;
   public function create_right_pane(): \views\IView;
-  public function create_vitality_menu(): \views\IView;
   public function create_text_body(): \views\IView;
 }
 ?>

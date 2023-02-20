@@ -20,27 +20,17 @@ class ViewFactory implements AbstractViewFactory {
 }
   public function create_header(): \views\IView {
     // Create a lower and upper navbar.
-    $lower_navbar = new \views\LowerNavBarView($this -> page_model, $this -> menu_items);
-    $upper_navbar = new \views\UpperNavBarView;
+    $upper_navbar = new \views\UpperNavBarView($this -> page_model, $this -> menu_items);
     // Create the header for the page and render it, using the created navbars.
     return new \views\HeaderView(
       new \utils\None,
       new \utils\None,
       new \utils\Just($upper_navbar),
-      new \utils\Just($lower_navbar)
     );
   }
 
   public function create_text_body(): \views\IView {
     return new \views\TextBodyView($this -> page);
-  }
-
-  public function create_vitality_menu(): \views\IView {
-    return new \views\VitalityView(
-      $this -> page_model,
-      $this -> page,
-      $this -> page_model -> get_vitality_menu_items($this -> menus)
-    );
   }
 
   public function create_left_pane(): \views\IView {

@@ -86,4 +86,14 @@ spl_autoload_register(function ($class): bool {
   }
   return false;
 });
+
+function group_by(array $arr, callable $key) {
+  $new = [];
+  foreach ($arr as $item) {
+    $group_by_key = $key($item);
+    if ($new[$group_by_key]) array_push($new[$group_by_key], $item);
+    else $new[$group_by_key] = [$item];
+  }
+  return $new;
+}
 ?>

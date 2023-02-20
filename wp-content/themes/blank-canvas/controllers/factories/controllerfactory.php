@@ -10,9 +10,6 @@ class ControllerFactory implements AbstractControllerFactory {
 
     switch (strtolower($page -> post_title)) {
     case HOME_PAGE: return new \controllers\HomeController($builder, $provider);
-    case VITALITY:
-    case $page_model -> is_page_needing_vitality($page):
-     return new \controllers\VitalityController($builder, $provider);
     case GUESTBOOK:
      return new \controllers\GuestBookController($builder, $provider);
     case ATELIER:
