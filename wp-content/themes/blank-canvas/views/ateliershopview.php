@@ -1,10 +1,9 @@
 <?php
 namespace views;
-class BigDreamsView implements IView {
+class AtelierShopView implements IView {
   public function display(): string {
     return <<< EOL
     <div class="bigdreams-container">
-      <h1 class="bigdreams-title"></h1>
       <a href="/being-child-illustrations">
         Terug
       </a>

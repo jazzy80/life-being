@@ -14,7 +14,6 @@ function init() {
         const category = generateCategoryParam();
         const prevButton = document.querySelector(".prev-btn");
         const nextButton = document.querySelector(".next-btn");
-        setTitle(category.split("=")[1]);
         setUpPage(category, currentPage, [prevButton, nextButton]);
         prevButton.addEventListener("click", () => {
             setUpPage(category, --currentPage, [prevButton, nextButton]);
@@ -27,21 +26,21 @@ function init() {
 function setUpPage(category, currentPage, buttons) {
     return __awaiter(this, void 0, void 0, function* () {
         const body = yield fetchImages(category, currentPage);
-        const imageSrcs = body.images;
+        const products = body.products;
         const paginationSize = body.paginationSize;
-        const amountOfPages = imageSrcs.length === 0 ? 0 : Math.ceil(body.count / paginationSize);
+        const amountOfPages = products.length === 0 ? 0 : Math.ceil(body.count / paginationSize);
         const imageContainer = document.querySelector(".bigdreams-images");
         imageContainer.innerHTML = "";
-        setPaginationText(currentPage, imageSrcs.length, body.count, paginationSize);
+        setPaginationText(currentPage, products.length, body.count, paginationSize);
         setButtons(buttons, currentPage, amountOfPages);
-        imageSrcs
+        products
             .map(createImageFromSrc)
             .forEach((image) => imageContainer.appendChild(image));
     });
 }
 function fetchImages(category, page) {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield fetch(`/wp-json/api/atelier/${category}&page=${page}`);
+        const response = yield fetch(`/wp-json/api/products/?page=${page}`);
         return response.json();
     });
 }
@@ -49,7 +48,7 @@ function setPaginationText(currentPage, items, count, paginationSize) {
     const paginationText = document.querySelector(".pagination-text");
     const min = currentPage * paginationSize + 1;
     const max = min + items - 1;
-    paginationText.textContent = `Foto's ${min} t/m ${max} getoond van de ${count}`;
+    paginationText.textContent = `Producten ${min} t/m ${max} getoond van de ${count}`;
 }
 function setButtons(buttons, currentPage, amountOfPages) {
     const [prev, next] = buttons;
@@ -69,18 +68,19 @@ function enableButton(button) {
     button.classList.remove("paginator-btn-disabled");
     button.disabled = false;
 }
-function setTitle(category) {
-    const title = category.replace(/-/g, " ");
-    const titleElement = document.querySelector(".bigdreams-title");
-    titleElement.textContent = title;
-}
-function createImageFromSrc(src) {
+function createImageFromSrc(product) {
     const imageFrame = document.createElement("div");
     imageFrame.classList.add("image-frame");
-    const imageText = document.createElement("span");
     const image = new Image();
-    imageFrame.append(image);
-    image.src = src;
+    image.classList.add("product-image");
+    const name = document.createElement("span");
+    name.classList.add("product-name");
+    const price = document.createElement("span");
+    name.classList.add("product-price");
+    name.append(document.createTextNode(product.name));
+    price.append(document.createTextNode(`\u20AC${product.price}`));
+    imageFrame.append(image, name, price);
+    image.src = product.image_url;
     return imageFrame;
 }
 function generateCategoryParam() {

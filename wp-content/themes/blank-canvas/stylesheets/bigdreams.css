@@ -13,8 +13,8 @@
 .bigdreams-images {
   margin-top: 3rem;
   display: grid;
-  grid-template-columns: 25% 25% 25%;
-  grid-column-gap: 5rem;
+  grid-template-columns: 25% 25% 25% 25%;
+  grid-column-gap: 0.5rem;
   grid-row-gap: 8rem;
   justify-content: center;
 }
@@ -33,6 +33,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.product-image {
+  width: 80%;
+}
+
+.product-name {
+  font-size: 16pt;
 }
 
 .buttons {

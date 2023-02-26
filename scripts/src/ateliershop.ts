@@ -3,7 +3,6 @@ async function init(): Promise<void> {
   const category = generateCategoryParam();
   const prevButton = document.querySelector(".prev-btn") as HTMLButtonElement;
   const nextButton = document.querySelector(".next-btn") as HTMLButtonElement;
-  setTitle(category.split("=")[1]);
   setUpPage(category, currentPage, [prevButton, nextButton]);
   prevButton.addEventListener("click", () => {
     setUpPage(category, --currentPage, [prevButton, nextButton]);
@@ -19,26 +18,34 @@ async function setUpPage(
   buttons: HTMLButtonElement[]
 ): Promise<void> {
   const body = await fetchImages(category, currentPage);
-  const imageSrcs = body.images;
+  const products = body.products;
   const paginationSize = body.paginationSize;
   const amountOfPages =
-    imageSrcs.length === 0 ? 0 : Math.ceil(body.count / paginationSize);
+    products.length === 0 ? 0 : Math.ceil(body.count / paginationSize);
   const imageContainer = document.querySelector(
     ".bigdreams-images"
   ) as HTMLDivElement;
   imageContainer.innerHTML = "";
-  setPaginationText(currentPage, imageSrcs.length, body.count, paginationSize);
+  setPaginationText(currentPage, products.length, body.count, paginationSize);
   setButtons(buttons, currentPage, amountOfPages);
-  imageSrcs
+  products
     .map(createImageFromSrc)
     .forEach((image) => imageContainer.appendChild(image));
+}
+
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: string;
+  image_url: string;
 }
 
 async function fetchImages(
   category: string,
   page: number
-): Promise<{ images: string[]; count: number; paginationSize: number }> {
-  const response = await fetch(`/wp-json/api/atelier/${category}&page=${page}`);
+): Promise<{ products: Product[]; count: number; paginationSize: number }> {
+  const response = await fetch(`/wp-json/api/products/?page=${page}`);
   return response.json();
 }
 
@@ -53,7 +60,7 @@ function setPaginationText(
   ) as HTMLHeadingElement;
   const min = currentPage * paginationSize + 1;
   const max = min + items - 1;
-  paginationText.textContent = `Foto's ${min} t/m ${max} getoond van de ${count}`;
+  paginationText.textContent = `Producten ${min} t/m ${max} getoond van de ${count}`;
 }
 
 function setButtons(
@@ -79,21 +86,19 @@ function enableButton(button: HTMLButtonElement): void {
   button.disabled = false;
 }
 
-function setTitle(category: string): void {
-  const title = category.replace(/-/g, " ");
-  const titleElement = document.querySelector(
-    ".bigdreams-title"
-  ) as HTMLHeadElement;
-  titleElement.textContent = title;
-}
-
-function createImageFromSrc(src: string): HTMLDivElement {
+function createImageFromSrc(product: Product): HTMLDivElement {
   const imageFrame = document.createElement("div");
   imageFrame.classList.add("image-frame");
-  const imageText = document.createElement("span");
   const image = new Image();
-  imageFrame.append(image);
-  image.src = src;
+  image.classList.add("product-image");
+  const name = document.createElement("span");
+  name.classList.add("product-name");
+  const price = document.createElement("span");
+  name.classList.add("product-price");
+  name.append(document.createTextNode(product.name));
+  price.append(document.createTextNode(`\u20AC${product.price}`));
+  imageFrame.append(image, name, price);
+  image.src = product.image_url;
   return imageFrame;
 }
 
