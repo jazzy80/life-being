@@ -37,6 +37,7 @@ class UpperNavBarView implements IView
         $navbar_links = array_reduce(
             $root_menu_items,
             function (string $html_page, \WP_Post $menu_item) use ($root_page, $grouped_childs_by_parent) {
+                $tag_name = $menu_item -> url === '#' || $menu_item->url === '' ? 'span' : 'a';
                 if ($grouped_childs_by_parent[$menu_item->ID] === null) {
                     return $html_page .
                     '<li>
@@ -47,9 +48,9 @@ class UpperNavBarView implements IView
                     </li>';
                 }
                 return
-                $html_page . '<div class="dropdown">
-                   <li><a href="#" class="dropbtn">' . $menu_item->title . '</a></li>
-                   <div class="dropdown-content">' .
+                $html_page . '<div class="dropdown">' . 
+                   '<li><' . $tag_name . ' href="#" class="dropbtn">' . $menu_item->title . '</' . $tag_name . '></li>' .
+                   '<div class="dropdown-content">' .
                        $this->get_child_menu_items_html($grouped_childs_by_parent, $menu_item) .
                    '</div>
                 </div>';

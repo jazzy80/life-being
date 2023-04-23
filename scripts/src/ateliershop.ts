@@ -96,7 +96,9 @@ function createImageFromSrc(product: Product): HTMLDivElement {
   const price = document.createElement("span");
   name.classList.add("product-price");
   name.append(document.createTextNode(product.name));
-  price.append(document.createTextNode(`\u20AC${product.price}`));
+  price.append(
+    document.createTextNode(`\u20AC${parseFloat(product.price).toFixed(2)}`)
+  );
   imageFrame.append(image, name, price);
   image.src = product.image_url;
   return imageFrame;

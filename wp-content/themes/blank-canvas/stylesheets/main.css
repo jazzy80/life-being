@@ -159,6 +159,11 @@ a:hover {
   display: inline-block;
 }
 
+.dropbtn {
+  font-size: 14pt;
+  font-weight: normal;
+}
+
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
   display: none;
