@@ -9,7 +9,7 @@ define('CONTACT',             'contact');
 define('GUESTBOOK',           'guest book');
 define('VITALITY',            'vitality');
 define('BEINGME',             'being me, being you');
-define('ATELIERSHOP',         'life being atelier shop');
+define('ATELIERSHOP',         'atelier shop');
 
 #  Define the `BASE_URL`(root) for the server.
 define(

@@ -197,6 +197,10 @@ a:hover {
   background-color: #3e8e41;
 }
 
+.pagination-text {
+  font-size: 12pt;
+}
+
 /* Mobile(small screen)-specific styles */
 @media screen and (max-width: 850px) {
   .title {

@@ -75,11 +75,14 @@ function createImageFromSrc(product) {
     image.classList.add("product-image");
     const name = document.createElement("span");
     name.classList.add("product-name");
+    const description = document.createElement("span");
+    description.classList.add("product-description");
     const price = document.createElement("span");
     name.classList.add("product-price");
     name.append(document.createTextNode(product.name));
+    description.append(document.createTextNode(product.description));
     price.append(document.createTextNode(`\u20AC${parseFloat(product.price).toFixed(2)}`));
-    imageFrame.append(image, name, price);
+    imageFrame.append(image, name, description, price);
     image.src = product.image_url;
     return imageFrame;
 }

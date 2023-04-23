@@ -4,9 +4,6 @@ class AtelierShopView implements IView {
   public function display(): string {
     return <<< EOL
     <div class="bigdreams-container">
-      <a href="/being-child-illustrations">
-        Terug
-      </a>
       <div class="bigdreams-toolbar">
         <h4 class="pagination-text"></h4>
         <div class="buttons">
