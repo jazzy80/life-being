@@ -12,38 +12,65 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 function init() {
     return __awaiter(this, void 0, void 0, function* () {
         let currentPage = 0;
-        const category = generateCategoryParam();
         const prevButton = document.querySelector(".prev-btn");
         const nextButton = document.querySelector(".next-btn");
-        setUpPage(category, currentPage, [prevButton, nextButton]);
+        setUpPage(currentPage, [prevButton, nextButton]);
         prevButton.addEventListener("click", () => {
-            setUpPage(category, --currentPage, [prevButton, nextButton]);
+            setUpPage(--currentPage, [prevButton, nextButton]);
         });
         nextButton.addEventListener("click", () => {
-            setUpPage(category, ++currentPage, [prevButton, nextButton]);
+            setUpPage(++currentPage, [prevButton, nextButton]);
         });
     });
 }
-function setUpPage(category, currentPage, buttons) {
+function setUpPage(currentPage, buttons, category = "") {
     return __awaiter(this, void 0, void 0, function* () {
-        const body = yield fetchImages(category, currentPage);
+        const body = yield fetchProducts(category, currentPage);
         const products = body.products;
         const paginationSize = body.paginationSize;
         const amountOfPages = products.length === 0 ? 0 : Math.ceil(body.count / paginationSize);
         const imageContainer = document.querySelector(".bigdreams-images");
+        //const categories = await fetchCategories();
+        const categories = [
+            ["Alles", ""],
+            ...products
+                .map((p) => [p.category_name, p.category_slug])
+                .filter(([name, _]) => Boolean(name))
+        ];
         imageContainer.innerHTML = "";
         setPaginationText(currentPage, products.length, body.count, paginationSize);
+        setFilterMenu(categories, buttons);
         setButtons(buttons, currentPage, amountOfPages);
         products
-            .map(createImageFromSrc)
-            .forEach((image) => imageContainer.appendChild(image));
+            .map(createProductUIComponent)
+            .forEach((c) => imageContainer.appendChild(c));
     });
 }
-function fetchImages(category, page) {
+function fetchProducts(category, page) {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield fetch(`/wp-json/api/products/?page=${page}`);
+        const response = yield fetch(`/wp-json/api/products/?page=${page}&category=${category}`);
         return response.json();
     });
+}
+function setFilterMenu(categories, buttons) {
+    const toolbar = document.querySelector(".bigdreams-toolbar");
+    const isFilterMenuCreated = document.querySelector("select");
+    if (!isFilterMenuCreated) {
+        const filterMenu = document.createElement("select");
+        filterMenu.addEventListener("change", () => {
+            setUpPage(0, buttons, filterMenu.value);
+        });
+        categories
+            .map(([name, slug]) => {
+            const option = document.createElement("option");
+            option.classList.add("filter-menu");
+            option.value = slug;
+            option.textContent = name;
+            return option;
+        })
+            .forEach((o) => filterMenu.appendChild(o));
+        toolbar.appendChild(filterMenu);
+    }
 }
 function setPaginationText(currentPage, items, count, paginationSize) {
     const paginationText = document.querySelector(".pagination-text");
@@ -69,7 +96,7 @@ function enableButton(button) {
     button.classList.remove("paginator-btn-disabled");
     button.disabled = false;
 }
-function createImageFromSrc(product) {
+function createProductUIComponent(product) {
     const imageFrame = document.createElement("div");
     imageFrame.classList.add("image-frame");
     const image = new Image();
@@ -86,10 +113,6 @@ function createImageFromSrc(product) {
     imageFrame.append(image, name, description, price);
     image.src = product.image_url;
     return imageFrame;
-}
-function generateCategoryParam() {
-    const categoryParam = new URLSearchParams(location.search).get("category");
-    return categoryParam ? `?category=${categoryParam}` : "";
 }
 init();
 

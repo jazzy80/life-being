@@ -1,23 +1,22 @@
 async function init(): Promise<void> {
   let currentPage = 0;
-  const category = generateCategoryParam();
   const prevButton = document.querySelector(".prev-btn") as HTMLButtonElement;
   const nextButton = document.querySelector(".next-btn") as HTMLButtonElement;
-  setUpPage(category, currentPage, [prevButton, nextButton]);
+  setUpPage(currentPage, [prevButton, nextButton]);
   prevButton.addEventListener("click", () => {
-    setUpPage(category, --currentPage, [prevButton, nextButton]);
+    setUpPage(--currentPage, [prevButton, nextButton]);
   });
   nextButton.addEventListener("click", () => {
-    setUpPage(category, ++currentPage, [prevButton, nextButton]);
+    setUpPage(++currentPage, [prevButton, nextButton]);
   });
 }
 
 async function setUpPage(
-  category: string,
   currentPage: number,
-  buttons: HTMLButtonElement[]
+  buttons: HTMLButtonElement[],
+  category = ""
 ): Promise<void> {
-  const body = await fetchImages(category, currentPage);
+  const body = await fetchProducts(category, currentPage);
   const products = body.products;
   const paginationSize = body.paginationSize;
   const amountOfPages =
@@ -25,12 +24,21 @@ async function setUpPage(
   const imageContainer = document.querySelector(
     ".bigdreams-images"
   ) as HTMLDivElement;
+  //const categories = await fetchCategories();
+  const categories = [
+    ["Alles", ""],
+    ...products
+      .map((p) => [p.category_name, p.category_slug])
+      .filter(([name, _]) => Boolean(name))
+  ];
+
   imageContainer.innerHTML = "";
   setPaginationText(currentPage, products.length, body.count, paginationSize);
+  setFilterMenu(categories, buttons);
   setButtons(buttons, currentPage, amountOfPages);
   products
-    .map(createImageFromSrc)
-    .forEach((image) => imageContainer.appendChild(image));
+    .map(createProductUIComponent)
+    .forEach((c) => imageContainer.appendChild(c));
 }
 
 interface Product {
@@ -39,14 +47,44 @@ interface Product {
   description: string;
   price: string;
   image_url: string;
+  category_name: string;
+  category_slug: string;
 }
 
-async function fetchImages(
+async function fetchProducts(
   category: string,
   page: number
 ): Promise<{ products: Product[]; count: number; paginationSize: number }> {
-  const response = await fetch(`/wp-json/api/products/?page=${page}`);
+  const response = await fetch(
+    `/wp-json/api/products/?page=${page}&category=${category}`
+  );
   return response.json();
+}
+
+function setFilterMenu(
+  categories: string[][],
+  buttons: HTMLButtonElement[]
+): void {
+  const toolbar = document.querySelector(
+    ".bigdreams-toolbar"
+  ) as HTMLDivElement;
+  const isFilterMenuCreated = document.querySelector("select");
+  if (!isFilterMenuCreated) {
+    const filterMenu = document.createElement("select");
+    filterMenu.addEventListener("change", () => {
+      setUpPage(0, buttons, filterMenu.value);
+    });
+    categories
+      .map(([name, slug]) => {
+        const option = document.createElement("option");
+        option.classList.add("filter-menu");
+        option.value = slug;
+        option.textContent = name;
+        return option;
+      })
+      .forEach((o) => filterMenu.appendChild(o));
+    toolbar.appendChild(filterMenu);
+  }
 }
 
 function setPaginationText(
@@ -86,7 +124,7 @@ function enableButton(button: HTMLButtonElement): void {
   button.disabled = false;
 }
 
-function createImageFromSrc(product: Product): HTMLDivElement {
+function createProductUIComponent(product: Product): HTMLDivElement {
   const imageFrame = document.createElement("div");
   imageFrame.classList.add("image-frame");
   const image = new Image();
@@ -105,11 +143,6 @@ function createImageFromSrc(product: Product): HTMLDivElement {
   imageFrame.append(image, name, description, price);
   image.src = product.image_url;
   return imageFrame;
-}
-
-function generateCategoryParam(): string {
-  const categoryParam = new URLSearchParams(location.search).get("category");
-  return categoryParam ? `?category=${categoryParam}` : "";
 }
 
 init();
