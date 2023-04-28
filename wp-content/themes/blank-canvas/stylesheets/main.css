@@ -30,7 +30,8 @@ body {
 }
 
 a,
-button {
+button,
+label {
   font-family: "Cinzel", serif;
 }
 

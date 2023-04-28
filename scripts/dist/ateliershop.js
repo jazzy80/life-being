@@ -29,7 +29,6 @@ function setUpPage(currentPage, buttons, category = "") {
         const paginationSize = body.paginationSize;
         const amountOfPages = products.length === 0 ? 0 : Math.ceil(body.count / paginationSize);
         const imageContainer = document.querySelector(".bigdreams-images");
-        //const categories = await fetchCategories();
         const categories = [
             ["Alles", ""],
             ...products
@@ -52,24 +51,21 @@ function fetchProducts(category, page) {
     });
 }
 function setFilterMenu(categories, buttons) {
-    const toolbar = document.querySelector(".bigdreams-toolbar");
-    const isFilterMenuCreated = document.querySelector("select");
-    if (!isFilterMenuCreated) {
-        const filterMenu = document.createElement("select");
-        filterMenu.addEventListener("change", () => {
-            setUpPage(0, buttons, filterMenu.value);
-        });
-        categories
-            .map(([name, slug]) => {
-            const option = document.createElement("option");
-            option.classList.add("filter-menu");
-            option.value = slug;
-            option.textContent = name;
-            return option;
-        })
-            .forEach((o) => filterMenu.appendChild(o));
-        toolbar.appendChild(filterMenu);
-    }
+    const filterMenu = document.querySelector("select");
+    if (filterMenu.querySelector("option"))
+        return;
+    filterMenu.addEventListener("change", () => {
+        setUpPage(0, buttons, filterMenu.value);
+    });
+    categories
+        .map(([name, slug]) => {
+        const option = document.createElement("option");
+        option.classList.add("filter-menu");
+        option.value = slug;
+        option.textContent = name;
+        return option;
+    })
+        .forEach((o) => filterMenu.appendChild(o));
 }
 function setPaginationText(currentPage, items, count, paginationSize) {
     const paginationText = document.querySelector(".pagination-text");

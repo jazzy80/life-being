@@ -6,8 +6,8 @@
   align-items: center;
   margin: 0 auto !important;
   padding: 2rem 0;
-  min-height: 100vh;
   width: 100%;
+  min-height: 100%;
 }
 
 .bigdreams-images {
@@ -22,10 +22,20 @@
 .bigdreams-toolbar {
   margin-top: 0.5rem;
   display: flex;
-  align-items: baseline;
-  justify-content: center;
-  width: 80%;
+  justify-content: space-evenly;
+  width: 100%;
+  font-size: 12pt;
   text-align: center;
+}
+
+.filter-menu-container {
+  display: flex;
+  justify-items: center;
+  align-content: center;
+}
+
+.filter-menu-container label {
+  margin: auto 0.5rem;
 }
 
 .image-frame {
@@ -33,9 +43,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-family: "della respira";
 }
 
 .product-image {
+  border: 1px solid white;
+  border-radius: 15px;
   width: 80%;
 }
 
@@ -44,18 +57,38 @@
 }
 
 .buttons {
-  margin-top: 5rem;
+  margin-top: 0.5rem;
   margin-left: 0.8rem;
+  max-width: fit-content;
+  max-height: fit-content;
   display: flex;
-  visibility: hidden;
 }
 
 .buttons > * {
   margin-right: 0.3rem;
+  font-size: 6pt;
   padding: 0.7rem;
+}
+
+button {
+  border-radius: 50px !important;
+  visibility: hidden;
 }
 
 .prev-btn,
 .next-btn {
   background-color: #f44336;
+}
+
+.pagination {
+  margin: auto 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.filter-menu {
+  margin: auto;
+  border-radius: 10px;
+  font-family: "Cinzel";
 }

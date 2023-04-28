@@ -24,7 +24,6 @@ async function setUpPage(
   const imageContainer = document.querySelector(
     ".bigdreams-images"
   ) as HTMLDivElement;
-  //const categories = await fetchCategories();
   const categories = [
     ["Alles", ""],
     ...products
@@ -65,26 +64,20 @@ function setFilterMenu(
   categories: string[][],
   buttons: HTMLButtonElement[]
 ): void {
-  const toolbar = document.querySelector(
-    ".bigdreams-toolbar"
-  ) as HTMLDivElement;
-  const isFilterMenuCreated = document.querySelector("select");
-  if (!isFilterMenuCreated) {
-    const filterMenu = document.createElement("select");
-    filterMenu.addEventListener("change", () => {
-      setUpPage(0, buttons, filterMenu.value);
-    });
-    categories
-      .map(([name, slug]) => {
-        const option = document.createElement("option");
-        option.classList.add("filter-menu");
-        option.value = slug;
-        option.textContent = name;
-        return option;
-      })
-      .forEach((o) => filterMenu.appendChild(o));
-    toolbar.appendChild(filterMenu);
-  }
+  const filterMenu = document.querySelector("select") as HTMLSelectElement;
+  if (filterMenu.querySelector("option")) return;
+  filterMenu.addEventListener("change", () => {
+    setUpPage(0, buttons, filterMenu.value);
+  });
+  categories
+    .map(([name, slug]) => {
+      const option = document.createElement("option");
+      option.classList.add("filter-menu");
+      option.value = slug;
+      option.textContent = name;
+      return option;
+    })
+    .forEach((o) => filterMenu.appendChild(o));
 }
 
 function setPaginationText(
