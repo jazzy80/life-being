@@ -16,14 +16,14 @@ async function setUpPage(
   buttons: HTMLButtonElement[],
   category = ""
 ): Promise<void> {
+  const imageContainer = document.querySelector(
+    ".bigdreams-images"
+  ) as HTMLDivElement;
   const body = await fetchProducts(category, currentPage);
   const products = body.products;
   const paginationSize = body.paginationSize;
   const amountOfPages =
     products.length === 0 ? 0 : Math.ceil(body.count / paginationSize);
-  const imageContainer = document.querySelector(
-    ".bigdreams-images"
-  ) as HTMLDivElement;
   const categories = [
     ["Alles", ""],
     ...products
@@ -31,13 +31,13 @@ async function setUpPage(
       .filter(([name, _]) => Boolean(name))
   ];
 
-  imageContainer.innerHTML = "";
   setPaginationText(currentPage, products.length, body.count, paginationSize);
   setFilterMenu(categories, buttons);
   setButtons(buttons, currentPage, amountOfPages);
-  products
-    .map(createProductUIComponent)
-    .forEach((c) => imageContainer.appendChild(c));
+  const images = await Promise.all(products.map(createProductUIComponent));
+  imageContainer.innerHTML = "";
+
+  images.forEach((c) => imageContainer.appendChild(c));
 }
 
 interface Product {
@@ -117,25 +117,42 @@ function enableButton(button: HTMLButtonElement): void {
   button.disabled = false;
 }
 
-function createProductUIComponent(product: Product): HTMLDivElement {
+function createProductUIComponent(product: Product): Promise<HTMLDivElement> {
   const imageFrame = document.createElement("div");
   imageFrame.classList.add("image-frame");
   const image = new Image();
   image.classList.add("product-image");
-  const name = document.createElement("span");
+  const name = document.createElement("p");
   name.classList.add("product-name");
-  const description = document.createElement("span");
+  const description = document.createElement("p");
   description.classList.add("product-description");
-  const price = document.createElement("span");
-  name.classList.add("product-price");
+  const price = document.createElement("p");
+  price.classList.add("product-price");
   name.append(document.createTextNode(product.name));
   description.append(document.createTextNode(product.description));
   price.append(
     document.createTextNode(`\u20AC${parseFloat(product.price).toFixed(2)}`)
   );
-  imageFrame.append(image, name, description, price);
+  const productTextContainer = document.createElement("div");
+  productTextContainer.classList.add("product-text");
+  productTextContainer.append(name, description, price);
+  imageFrame.append(image, productTextContainer);
   image.src = product.image_url;
-  return imageFrame;
+  return new Promise((resolve) => {
+    image.onload = () => {
+      if (isLandscape(image)) {
+        imageFrame.style.borderTop = "1px solid white";
+        name.style.borderTop = "1px solid white";
+      } else {
+        image.style.height = "100%";
+      }
+      resolve(imageFrame);
+    };
+  });
+}
+
+function isLandscape(image: HTMLImageElement): boolean {
+  return image.height < image.width;
 }
 
 init();
