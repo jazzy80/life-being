@@ -5,19 +5,16 @@ class HeaderView implements IView {
   private \utils\Maybe $header_title;
   private \utils\Maybe $header_subtitle;
   private \utils\Maybe $upper_navbar;
-  private \utils\Maybe $lower_navbar;
 
   public function __construct(
     \utils\Maybe $header_title,
     \utils\Maybe $header_subtitle,
     // Navbars are optional.
-    \utils\Maybe /* <IView> */ $upper_navbar,
-    \utils\Maybe /* <IView> */ $lower_navbar
+    \utils\Maybe /* <IView> */ $upper_navbar
   ) {
     $this -> header_title = $header_title;
     $this -> header_subtitle = $header_subtitle;
     $this -> upper_navbar = $upper_navbar;
-    $this -> lower_navbar = $lower_navbar;
   }
 
   public function display(): string {
@@ -35,9 +32,8 @@ class HeaderView implements IView {
           '</h3>
         </div>
         <i class="fas fa-chevron-right next-button"></i>
-      </div>'
-      . $this -> lower_navbar -> map(fn(IView $v) => $v -> display()) -> get_or_else('') .
-    '</header>';
+      </div>
+    </header>';
   }
 }
 ?>

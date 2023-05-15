@@ -18,29 +18,19 @@ class ViewFactory implements AbstractViewFactory {
   // Retrieve all top level menu items for the navbar.
   $this -> menu_items = $this -> page_model -> get_nav_menu_items($this -> menus);
 }
-  public function create_header(): \views\IView {
+  public function create_header(\utils\Maybe $header_title, \utils\Maybe $header_subtitle): \views\IView {
     // Create a lower and upper navbar.
-    $lower_navbar = new \views\LowerNavBarView($this -> page_model, $this -> menu_items);
-    $upper_navbar = new \views\UpperNavBarView;
+    $upper_navbar = new \views\UpperNavBarView($this -> page_model, $this -> menu_items);
     // Create the header for the page and render it, using the created navbars.
     return new \views\HeaderView(
-      new \utils\None,
-      new \utils\None,
+      $header_title,
+      $header_subtitle,
       new \utils\Just($upper_navbar),
-      new \utils\Just($lower_navbar)
     );
   }
 
   public function create_text_body(): \views\IView {
     return new \views\TextBodyView($this -> page);
-  }
-
-  public function create_vitality_menu(): \views\IView {
-    return new \views\VitalityView(
-      $this -> page_model,
-      $this -> page,
-      $this -> page_model -> get_vitality_menu_items($this -> menus)
-    );
   }
 
   public function create_left_pane(): \views\IView {

@@ -12,23 +12,8 @@ class PageBuilder implements AbstractBuilder {
     $this -> components = $components;
   }
 
-  public function build_header(): AbstractBuilder {
-      return $this -> add_component($this -> view_factory -> create_header());
-  }
-
-  public function build_lite_header(
-    \utils\Maybe $header_title,
-    \utils\Maybe $header_subtitle
-  ): AbstractBuilder {
-    return $this -> add_component(
-      new \views\HeaderView(
-        $header_title,
-        $header_subtitle,
-        new \utils\Just(
-          new \views\UpperNavBarView
-        ), new \utils\None
-      )
-    );
+  public function build_header(\utils\Maybe $header_title, \utils\Maybe $header_subtitle): AbstractBuilder {
+      return $this -> add_component($this -> view_factory -> create_header($header_title, $header_subtitle));
   }
 
   public function build_left_pane(): AbstractBuilder {
@@ -43,10 +28,6 @@ class PageBuilder implements AbstractBuilder {
       return $this -> add_component($this -> view_factory -> create_text_body());
   }
 
-  public function build_vitality(): AbstractBuilder {
-      return $this -> add_component($this -> view_factory -> create_vitality_menu());
-  }
-
   public function build_guestbook(array $guest_book_entries): AbstractBuilder {
       return $this -> add_component(new \views\GuestBook($guest_book_entries));
   }
@@ -59,6 +40,10 @@ class PageBuilder implements AbstractBuilder {
     return $this -> add_component(new \views\AtelierHomeView($page));
   }
 
+  public function build_atelier_shop(\WP_Post $page): AbstractBuilder {
+    return $this -> add_component(new \views\AtelierShopView($page));
+  }
+
   public function build_atelier_gallery(\WP_Post $page): AbstractBuilder {
     return $this -> add_component(new \views\AtelierGalleryView($page));
   }
@@ -68,7 +53,7 @@ class PageBuilder implements AbstractBuilder {
   }
 
   public function build_bigdreams(\WP_Post $page): AbstractBuilder {
-    return $this -> add_component(new \views\BigDreamsView($page));
+    return $this -> add_component(new \views\AtelierShopView($page));
   }
 
   public function get(): \views\IView {

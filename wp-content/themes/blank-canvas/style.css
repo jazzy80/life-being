@@ -77,14 +77,30 @@ Modified and used as a block pattern image.
 
 /* Remove some top padding if the first block on the page is a full-width image, cover, media & text, or group block. */
 
-.single.hide-post-and-page-titles .entry-content > .wp-block-image.alignfull:first-child,
-.page.hide-post-and-page-titles .entry-content > .wp-block-image.alignfull:first-child,
-.single.hide-post-and-page-titles .entry-content > .wp-block-cover.alignfull:first-child,
-.page.hide-post-and-page-titles .entry-content > .wp-block-cover.alignfull:first-child,
-.single.hide-post-and-page-titles .entry-content > .wp-block-media-text.alignfull:first-child,
-.page.hide-post-and-page-titles .entry-content > .wp-block-media-text.alignfull:first-child,
-.single.hide-post-and-page-titles .entry-content > .wp-block-group.has-background.alignfull:first-child,
-.page.hide-post-and-page-titles .entry-content > .wp-block-group.has-background.alignfull:first-child {
+.single.hide-post-and-page-titles
+  .entry-content
+  > .wp-block-image.alignfull:first-child,
+.page.hide-post-and-page-titles
+  .entry-content
+  > .wp-block-image.alignfull:first-child,
+.single.hide-post-and-page-titles
+  .entry-content
+  > .wp-block-cover.alignfull:first-child,
+.page.hide-post-and-page-titles
+  .entry-content
+  > .wp-block-cover.alignfull:first-child,
+.single.hide-post-and-page-titles
+  .entry-content
+  > .wp-block-media-text.alignfull:first-child,
+.page.hide-post-and-page-titles
+  .entry-content
+  > .wp-block-media-text.alignfull:first-child,
+.single.hide-post-and-page-titles
+  .entry-content
+  > .wp-block-group.has-background.alignfull:first-child,
+.page.hide-post-and-page-titles
+  .entry-content
+  > .wp-block-group.has-background.alignfull:first-child {
   margin-top: calc(-1 * var(--global--spacing-vertical));
 }
 
@@ -92,12 +108,24 @@ Modified and used as a block pattern image.
 
 .page.hide-site-footer .entry-content > .wp-block-image.alignfull:last-child,
 .page.hide-site-footer .entry-content > .wp-block-cover.alignfull:last-child,
-.page.hide-site-footer .entry-content > .wp-block-media-text.alignfull:last-child,
-.single.hide-site-footer.hide-site-footer .entry-content > .wp-block-group.has-background.alignfull:last-child,
-.single.hide-site-footer.hide-comments .entry-content > .wp-block-image.alignfull:last-child,
-.single.hide-site-footer.hide-comments .entry-content > .wp-block-cover.alignfull:last-child,
-.single.hide-site-footer.hide-comments .entry-content > .wp-block-media-text.alignfull:last-child,
-.single.hide-site-footer.hide-comments .entry-content > .wp-block-group.has-background.alignfull:last-child {
+.page.hide-site-footer
+  .entry-content
+  > .wp-block-media-text.alignfull:last-child,
+.single.hide-site-footer.hide-site-footer
+  .entry-content
+  > .wp-block-group.has-background.alignfull:last-child,
+.single.hide-site-footer.hide-comments
+  .entry-content
+  > .wp-block-image.alignfull:last-child,
+.single.hide-site-footer.hide-comments
+  .entry-content
+  > .wp-block-cover.alignfull:last-child,
+.single.hide-site-footer.hide-comments
+  .entry-content
+  > .wp-block-media-text.alignfull:last-child,
+.single.hide-site-footer.hide-comments
+  .entry-content
+  > .wp-block-group.has-background.alignfull:last-child {
   margin-bottom: calc(-1 * var(--global--spacing-vertical));
 }
 
@@ -118,7 +146,8 @@ Modified and used as a block pattern image.
 
 .entry-content {
   padding: 1rem;
-  max-width: 60%;
+  min-width: 75%;
+  max-width: 90%;
   margin: 0 auto;
   text-align: center;
   min-height: 100%;

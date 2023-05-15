@@ -54,10 +54,7 @@ class PageModel {
   // Retrieve all published menu items.
   //The default predicate is to return all top level pages (no parent).
   public function get_nav_menu_items(array $menus): array {
-    return array_filter(
-      wp_get_nav_menu_items($menus[0]),
-      fn(\WP_Post $menu_item): bool => $menu_item -> post_parent == 0
-    );
+    return wp_get_nav_menu_items($menus[0]);
   }
 
   /*

@@ -9,10 +9,7 @@ define('CONTACT',             'contact');
 define('GUESTBOOK',           'guest book');
 define('VITALITY',            'vitality');
 define('BEINGME',             'being me, being you');
-define('ATELIER',             'life being atelier');
-define('ATELIERGALLERY',      'life being gallery');
-define('CHILD_ILLUSTRATIONS', 'being child illustrations');
-define('BIG_DREAMS',          'big dreams');
+define('ATELIERSHOP',         'atelier shop');
 
 #  Define the `BASE_URL`(root) for the server.
 define(
@@ -24,31 +21,14 @@ define('ROOT_DIR', $_SERVER['DOCUMENT_ROOT']);
 
 define('DEFAULT_HEADER_TITLE', 'Life Being');
 define('DEFAULT_HEADER_SUBTITLE', 'Spirit of being you');
-define('HEADER_TITLES',
-[
-  CHILD_ILLUSTRATIONS => 'Being Child',
-  BIG_DREAMS => 'Being Child'
-]
-);
+define('HEADER_TITLES', []);
 define(
   'HEADER_SUBTITLES',
   [
-    ATELIER => 'Atelier',
-    ATELIERGALLERY => 'Atelier',
-    CHILD_ILLUSTRATIONS => 'Illustrations',
-    BIG_DREAMS => 'Illustrations'
+    ATELIERSHOP => 'Atelier Shop'
   ]
 );
 
-//Define the pages that need the vitality menu.
-define(
-  'PAGES_NEEDING_VITALITY', [VITALITY]
-);
-
-// Define the pages that need a header without the lower navbar.
-define(
-  'PAGES_NEEDING_LITE_HEADER',
-  [HOME_PAGE, ATELIER, ATELIERGALLERY, CHILD_ILLUSTRATIONS, BIG_DREAMS]);
 
 //Define the pages and their titles, that make up the right recent articles pane.
 define(
@@ -63,6 +43,7 @@ define(
 // Define the pagination size for blogs etc.
 define('PAGINATION_SIZE', 5);
 define('PAGINATION_CHILD_BEING', 9);
+define('PRODUCTS_PAGINATION_SIZE', 9);
 
 //Javascript files prefix
 define('JS_FILE_PREFIX', '/scripts/dist/');
@@ -72,9 +53,7 @@ define('LOAD_JAVASCRIPT', [
   BLOG_PAGE          => [JS_FILE_PREFIX . 'blogsmain.js'],
   POETRY_PAGE        => [JS_FILE_PREFIX . 'poetrymain.js'],
   GUESTBOOK          => [JS_FILE_PREFIX . 'guestbookmain.js'],
-  ATELIER            => [JS_FILE_PREFIX . 'ateliermain.js'],
-  ATELIERGALLERY     => [JS_FILE_PREFIX . 'ateliermain.js'],
-  BIG_DREAMS         => [JS_FILE_PREFIX . 'bigdreamsmain.js'],
+  ATELIERSHOP         =>[JS_FILE_PREFIX . 'ateliershopmain.js'],
 ]);
 
 // autoloader for classes and interfaces.
@@ -86,4 +65,14 @@ spl_autoload_register(function ($class): bool {
   }
   return false;
 });
+
+function group_by(array $arr, callable $key) {
+  $new = [];
+  foreach ($arr as $item) {
+    $group_by_key = $key($item);
+    if ($new[$group_by_key]) array_push($new[$group_by_key], $item);
+    else $new[$group_by_key] = [$item];
+  }
+  return $new;
+}
 ?>
