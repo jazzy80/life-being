@@ -10,3 +10,4 @@ class NextPage {
     }
 }
 exports.NextPage = NextPage;
+//# sourceMappingURL=nextpage.js.map

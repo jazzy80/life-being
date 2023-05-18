@@ -144,3 +144,4 @@ function getButtonEventCb(page, fetchArticlesFn) {
         }
     };
 }
+//# sourceMappingURL=articles.js.map

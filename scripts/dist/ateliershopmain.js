@@ -12,8 +12,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 function init() {
     return __awaiter(this, void 0, void 0, function* () {
         let currentPage = 0;
-        const prevButton = document.querySelector(".prev-btn");
-        const nextButton = document.querySelector(".next-btn");
+        const prevButton = document.querySelector(".shop-prev-btn");
+        const nextButton = document.querySelector(".shop-next-btn");
         setUpPage(currentPage, [prevButton, nextButton]);
         prevButton.addEventListener("click", () => {
             setUpPage(--currentPage, [prevButton, nextButton]);
@@ -25,7 +25,7 @@ function init() {
 }
 function setUpPage(currentPage, buttons, category = "") {
     return __awaiter(this, void 0, void 0, function* () {
-        const imageContainer = document.querySelector(".bigdreams-images");
+        const imageContainer = document.querySelector(".ateliershop-images");
         const body = yield fetchProducts(category, currentPage);
         const products = body.products;
         const paginationSize = body.paginationSize;
