@@ -147,8 +147,9 @@ function createProductUIComponent(product: Product): Promise<HTMLDivElement> {
       if (isLandscape(image)) {
         imageFrame.style.borderTop = "1px solid white";
         name.style.borderTop = "1px solid white";
+        image.style.maxHeight = "250px";
       } else {
-        image.style.height = "100%";
+        image.style.maxHeight = "400px";
       }
       resolve(imageFrame);
     };
