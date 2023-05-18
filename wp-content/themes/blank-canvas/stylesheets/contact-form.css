@@ -8,11 +8,16 @@ div[role="form"] * {
 
 input,
 input[type="submit"] {
-  color: var(--upper-navbar-link-color);
+  color: white;
 }
 
 div[role="form"] input,
 textarea {
   border-radius: 10pt;
   background-color: #e6eee6;
+}
+
+.wpcf7-spinner {
+  position: absolute;
+  margin: auto 1.5rem;
 }
