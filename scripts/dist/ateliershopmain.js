@@ -104,7 +104,7 @@ function createProductUIComponent(product) {
     price.classList.add("product-price");
     name.append(document.createTextNode(product.name));
     description.append(document.createTextNode(product.description));
-    price.append(document.createTextNode(`\u20AC${parseFloat(product.price).toFixed(2)}`));
+    price.append(document.createTextNode(`Vanaf \u20AC${parseFloat(product.price).toFixed(2)}`));
     const productTextContainer = document.createElement("div");
     productTextContainer.classList.add("product-text");
     productTextContainer.append(name, description, price);

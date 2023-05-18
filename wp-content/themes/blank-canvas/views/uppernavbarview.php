@@ -49,7 +49,8 @@ class UpperNavBarView implements IView
                 }
                 return
                 $html_page . '<div class="dropdown">' . 
-                   '<li><' . $tag_name . ' href="#" class="dropbtn">' . $menu_item->title . '</' . $tag_name . '></li>' .
+                   '<li><' . $tag_name . ' href="#" class="link-like dropbtn">' . $menu_item->title 
+                   . '</' . $tag_name . '></li>' .
                    '<div class="dropdown-content">' .
                        $this->get_child_menu_items_html($grouped_childs_by_parent, $menu_item) .
                    '</div>

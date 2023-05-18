@@ -30,6 +30,7 @@ body {
 }
 
 a,
+.link-like,
 button,
 label {
   font-family: "Cinzel", serif;
@@ -53,9 +54,14 @@ p * {
   font-family: "Della Respira", serif !important;
 }
 
-a {
+a,
+.link-like {
   border-bottom-color: var(--link-underline-color);
   color: var(--lower-navbar-link-color);
+}
+
+.link-like {
+  border-bottom: 1px solid var(--link-underline-color);
 }
 
 a:hover {
@@ -158,11 +164,6 @@ a:hover {
 .dropdown {
   position: relative;
   display: inline-block;
-}
-
-.dropbtn {
-  font-size: 14pt;
-  font-weight: normal;
 }
 
 /* Dropdown Content (Hidden by Default) */
