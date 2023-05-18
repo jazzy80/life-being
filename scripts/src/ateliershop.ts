@@ -1,7 +1,11 @@
 async function init(): Promise<void> {
   let currentPage = 0;
-  const prevButton = document.querySelector(".prev-btn") as HTMLButtonElement;
-  const nextButton = document.querySelector(".next-btn") as HTMLButtonElement;
+  const prevButton = document.querySelector(
+    ".shop-prev-btn"
+  ) as HTMLButtonElement;
+  const nextButton = document.querySelector(
+    ".shop-next-btn"
+  ) as HTMLButtonElement;
   setUpPage(currentPage, [prevButton, nextButton]);
   prevButton.addEventListener("click", () => {
     setUpPage(--currentPage, [prevButton, nextButton]);
@@ -17,7 +21,7 @@ async function setUpPage(
   category = ""
 ): Promise<void> {
   const imageContainer = document.querySelector(
-    ".bigdreams-images"
+    ".ateliershop-images"
   ) as HTMLDivElement;
   const body = await fetchProducts(category, currentPage);
   const products = body.products;

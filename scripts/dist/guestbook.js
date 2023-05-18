@@ -102,3 +102,4 @@ function removeErrors() {
     Array.prototype.slice.call(errorFields).forEach((field) => field.remove());
 }
 init();
+//# sourceMappingURL=guestbook.js.map

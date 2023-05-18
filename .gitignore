@@ -34,6 +34,9 @@ gallery/
 *.sql
 *.sqlite
 
+#  Ignore javascript map files for debugging
+*.js.map
+
 index.php
 license.txt
 readme.html

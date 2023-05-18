@@ -1,4 +1,4 @@
-.bigdreams-container {
+.ateliershop-container {
   background-color: #486648;
   border-radius: 2rem;
   display: flex;
@@ -13,7 +13,7 @@
 .product-text {
   display: flex;
   flex-direction: column;
-  width: 300px;
+  max-width: 300px;
   min-height: 190px;
 }
 
@@ -21,7 +21,7 @@
   margin: auto;
 }
 
-.bigdreams-images {
+.ateliershop-images {
   margin-top: 3rem;
   display: grid;
   grid-template-columns: 33% 33% 33%;
@@ -32,7 +32,7 @@
   width: 100%;
 }
 
-.bigdreams-toolbar {
+.ateliershop-toolbar {
   margin-top: 0.5rem;
   display: flex;
   justify-content: space-evenly;
@@ -93,13 +93,14 @@
   padding: 0.7rem;
 }
 
-button {
+button.shop-prev-btn,
+button.shop-next-btn {
   border-radius: 50px !important;
   visibility: hidden;
 }
 
-.prev-btn,
-.next-btn {
+.shop-prev-btn,
+.shop-next-btn {
   background-color: #f44336;
 }
 
