@@ -13,7 +13,7 @@
 .product-text {
   display: flex;
   flex-direction: column;
-  max-width: 300px;
+  max-width: 100%;
   min-height: 190px;
 }
 
@@ -58,18 +58,19 @@
   align-items: center;
   font-family: "della respira";
   max-width: 80%;
+  min-height: 10rem;
 }
 
 .product-name {
   text-align: center;
-  font-size: clamp(0.9rem, 2vw, 2rem);
+  font-size: clamp(1.1rem, 2vw, 2rem);
   margin: 0 !important;
 }
 
 .product-description,
 .product-price {
   text-align: center;
-  font-size: clamp(0.7rem, 1.5vw, 1.2rem);
+  font-size: clamp(0.85rem, 1.5vw, 1.2rem);
   margin: 0 !important;
 }
 
