@@ -15,6 +15,7 @@ class ProductModel{
         SELECT wp.*, wt.name as category_name, wt.slug as category_slug FROM wp_products wp
         LEFT JOIN wp_category_product wcp on wp.id = wcp.product_id
         LEFT JOIN wp_terms wt on wt.term_id = wcp.category_id
+        ORDER BY id DESC;
         EOL,
         array()
         )
@@ -29,6 +30,7 @@ class ProductModel{
         INNER JOIN wp_category_product wcp on wp.id = wcp.product_id
         INNER JOIN wp_terms wt on wt.term_id = wcp.category_id
         WHERE LOWER(wt.slug) = LOWER(%s)
+        ORDER BY id DESC;
         EOL,
         array($category)
       ),

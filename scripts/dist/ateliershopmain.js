@@ -30,12 +30,12 @@ function setUpPage(currentPage, buttons, category = "") {
         const products = body.products;
         const paginationSize = body.paginationSize;
         const amountOfPages = products.length === 0 ? 0 : Math.ceil(body.count / paginationSize);
-        const categories = [
+        const categories = new Set([
             ["Alles", ""],
             ...products
                 .map((p) => [p.category_name, p.category_slug])
                 .filter(([name, _]) => Boolean(name))
-        ];
+        ].map((x) => JSON.stringify(x)));
         setPaginationText(currentPage, products.length, body.count, paginationSize);
         setFilterMenu(categories, buttons);
         setButtons(buttons, currentPage, amountOfPages);
@@ -57,7 +57,8 @@ function setFilterMenu(categories, buttons) {
     filterMenu.addEventListener("change", () => {
         setUpPage(0, buttons, filterMenu.value);
     });
-    categories
+    Array.from(categories)
+        .map((json) => JSON.parse(json))
         .map(([name, slug]) => {
         const option = document.createElement("option");
         option.classList.add("filter-menu");
