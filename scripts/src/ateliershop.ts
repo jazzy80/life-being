@@ -28,12 +28,16 @@ async function setUpPage(
   const paginationSize = body.paginationSize;
   const amountOfPages =
     products.length === 0 ? 0 : Math.ceil(body.count / paginationSize);
-  const categories = [
-    ["Alles", ""],
-    ...products
-      .map((p) => [p.category_name, p.category_slug])
-      .filter(([name, _]) => Boolean(name))
-  ];
+  const categories = new Set(
+    [
+      ["Alles", ""],
+      ...products
+        .map((p) => [p.category_name, p.category_slug])
+        .filter(([name, _]) => Boolean(name))
+      // JSON.stringify is used to ensure all entries are unique for the Set.
+      // In JS ["x"] != ["x"].
+    ].map((x) => JSON.stringify(x))
+  );
 
   setPaginationText(currentPage, products.length, body.count, paginationSize);
   setFilterMenu(categories, buttons);
@@ -65,7 +69,7 @@ async function fetchProducts(
 }
 
 function setFilterMenu(
-  categories: string[][],
+  categories: Set<string>,
   buttons: HTMLButtonElement[]
 ): void {
   const filterMenu = document.querySelector("select") as HTMLSelectElement;
@@ -73,7 +77,8 @@ function setFilterMenu(
   filterMenu.addEventListener("change", () => {
     setUpPage(0, buttons, filterMenu.value);
   });
-  categories
+  Array.from(categories)
+    .map((json) => JSON.parse(json))
     .map(([name, slug]) => {
       const option = document.createElement("option");
       option.classList.add("filter-menu");
