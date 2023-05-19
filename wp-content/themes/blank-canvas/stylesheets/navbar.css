@@ -1,9 +1,11 @@
 /* Navbars  */
 .navbar {
   display: flex;
+  flex-wrap: nowrap !important;
   background-color: var(--lower-navbar-color-transparant);
   z-index: 2;
   font-size: var(--navbar-font-size);
+  margin-right: 1rem;
 }
 
 .navbar li {
@@ -15,6 +17,7 @@
 .nav-links {
   display: flex;
   list-style: none;
+  margin: 0 !important;
 }
 
 .nav-links a {
@@ -63,14 +66,22 @@
 }
 
 /* Mobile(small screen)-specific styles */
-@media screen and (max-width: 860px) {
+@media screen and (max-width: 1000px) {
   .upper-navbar-links {
     flex-direction: column;
     min-height: fit-content;
     padding-left: 0;
   }
 
+  .navbar {
+    justify-content: space-evenly !important;
+  }
+
   .nav-links {
     justify-content: center;
+  }
+
+  .navbar li {
+    margin: 0.5rem;
   }
 }

@@ -1,20 +1,12 @@
-div[role="form"] {
-  text-align: left;
-}
-
-div[role="form"] * {
-  max-width: 100%;
-}
-
 input,
-input[type="submit"] {
-  color: white;
+textarea {
+  background-color: white !important;
+  border-radius: 10px !important;
 }
 
-div[role="form"] input,
-textarea {
-  border-radius: 10pt;
-  background-color: #e6eee6;
+input[type="submit"] {
+  background-color: var(--button-main-color) !important;
+  color: white;
 }
 
 .wpcf7-spinner {

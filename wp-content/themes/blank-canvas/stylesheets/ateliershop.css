@@ -3,9 +3,8 @@
   border-radius: 2rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
   margin: 0 auto !important;
-  padding: 2rem 0;
+  padding: 2rem 1rem;
   width: 100%;
   min-height: 100%;
 }
@@ -17,16 +16,12 @@
   min-height: 190px;
 }
 
-.spinner-border {
-  margin: auto;
-}
-
 .ateliershop-images {
   margin-top: 3rem;
   display: grid;
   grid-template-columns: 33% 33% 33%;
   grid-column-gap: 0.5rem;
-  grid-row-gap: 8rem;
+  grid-row-gap: clamp(1rem, 1vw, 8rem);
   justify-content: center;
   justify-items: center;
   width: 100%;
@@ -36,8 +31,9 @@
   margin-top: 0.5rem;
   display: flex;
   justify-content: space-evenly;
+  align-items: baseline;
   width: 100%;
-  font-size: 12pt;
+  font-size: clamp(0.45rem, 3vw, 1.4rem);
   text-align: center;
 }
 
@@ -81,8 +77,7 @@
 }
 
 .buttons {
-  margin-top: 0.5rem;
-  margin-left: 0.8rem;
+  margin: 3rem auto 0;
   max-width: fit-content;
   max-height: fit-content;
   display: flex;
@@ -105,11 +100,10 @@ button.shop-next-btn {
   background-color: #f44336;
 }
 
-.pagination {
-  margin: auto 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: baseline;
+.pagination-text {
+  margin-left: 1rem;
+  font-size: clamp(0.45rem, 3vw, 1.1rem);
+  height: fit-content;
 }
 
 .filter-menu {
