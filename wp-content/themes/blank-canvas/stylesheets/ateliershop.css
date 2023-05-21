@@ -9,6 +9,16 @@
   min-height: 100%;
 }
 
+.ateliershop-text {
+  text-align: center;
+  margin: 1.5rem;
+  font-size: 15pt;
+}
+
+.ateliershop-text a {
+  color: var(--lower-navbar-link-color);
+}
+
 .product-text {
   display: flex;
   flex-direction: column;
