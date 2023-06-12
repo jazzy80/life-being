@@ -35,11 +35,19 @@ function setUpPage(currentPage, buttons, category = "") {
             ...products
                 .map((p) => [p.category_name, p.category_slug])
                 .filter(([name, _]) => Boolean(name))
+            // JSON.stringify is used to ensure all entries are unique for the Set.
+            // In JS ["x"] != ["x"].
         ].map((x) => JSON.stringify(x)));
         setPaginationText(currentPage, products.length, body.count, paginationSize);
         setFilterMenu(categories, buttons);
         setButtons(buttons, currentPage, amountOfPages);
         const images = yield Promise.all(products.map(createProductUIComponent));
+        // Check of any images are in portrait mode, then add borders.
+        if (images.some((i) => {
+            const image = i.querySelector("img");
+            return !isLandscape(image);
+        }))
+            images.forEach(addBorderToProduct);
         imageContainer.innerHTML = "";
         images.forEach((c) => imageContainer.appendChild(c));
     });
@@ -112,18 +120,20 @@ function createProductUIComponent(product) {
     imageFrame.append(image, productTextContainer);
     image.src = product.image_url;
     return new Promise((resolve) => {
-        image.onload = () => {
-            if (isLandscape(image)) {
-                imageFrame.style.borderTop = "1px solid white";
-                name.style.borderTop = "1px solid white";
-                image.style.maxHeight = "250px";
-            }
-            else {
-                image.style.maxHeight = "400px";
-            }
-            resolve(imageFrame);
-        };
+        image.onload = () => resolve(imageFrame);
     });
+}
+function addBorderToProduct(imageFrame) {
+    const image = imageFrame.querySelector("img");
+    const name = imageFrame.querySelector(".product-text");
+    if (isLandscape(image)) {
+        imageFrame.style.borderTop = "1px solid white";
+        name.style.borderTop = "1px solid white";
+        image.style.maxHeight = "250px";
+    }
+    else {
+        image.style.maxHeight = "400px";
+    }
 }
 function isLandscape(image) {
     return image.height < image.width;

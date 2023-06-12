@@ -42,9 +42,19 @@ async function setUpPage(
   setPaginationText(currentPage, products.length, body.count, paginationSize);
   setFilterMenu(categories, buttons);
   setButtons(buttons, currentPage, amountOfPages);
-  const images = await Promise.all(products.map(createProductUIComponent));
-  imageContainer.innerHTML = "";
 
+  const images = await Promise.all(products.map(createProductUIComponent));
+
+  // Check if any images are in portrait mode, then add borders.
+  if (
+    images.some((i) => {
+      const image = i.querySelector("img") as HTMLImageElement;
+      return !isLandscape(image);
+    })
+  )
+    images.forEach(addBorderToProduct);
+
+  imageContainer.innerHTML = "";
   images.forEach((c) => imageContainer.appendChild(c));
 }
 
@@ -150,17 +160,22 @@ function createProductUIComponent(product: Product): Promise<HTMLDivElement> {
   imageFrame.append(image, productTextContainer);
   image.src = product.image_url;
   return new Promise((resolve) => {
-    image.onload = () => {
-      if (isLandscape(image)) {
-        imageFrame.style.borderTop = "1px solid white";
-        name.style.borderTop = "1px solid white";
-        image.style.maxHeight = "250px";
-      } else {
-        image.style.maxHeight = "400px";
-      }
-      resolve(imageFrame);
-    };
+    image.onload = () => resolve(imageFrame);
   });
+}
+
+function addBorderToProduct(imageFrame: HTMLDivElement): void {
+  const image = imageFrame.querySelector("img") as HTMLImageElement;
+  const name = imageFrame.querySelector(
+    ".product-text"
+  ) as HTMLParagraphElement;
+  if (isLandscape(image)) {
+    imageFrame.style.borderTop = "1px solid white";
+    name.style.borderTop = "1px solid white";
+    image.style.maxHeight = "250px";
+  } else {
+    image.style.maxHeight = "400px";
+  }
 }
 
 function isLandscape(image: HTMLImageElement): boolean {
