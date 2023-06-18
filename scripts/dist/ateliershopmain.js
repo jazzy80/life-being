@@ -9,61 +9,102 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-function init() {
-    return __awaiter(this, void 0, void 0, function* () {
-        let currentPage = 0;
-        const prevButton = document.querySelector(".shop-prev-btn");
-        const nextButton = document.querySelector(".shop-next-btn");
-        setUpPage(currentPage, [prevButton, nextButton]);
-        prevButton.addEventListener("click", () => {
-            setUpPage(--currentPage, [prevButton, nextButton]);
-        });
-        nextButton.addEventListener("click", () => {
-            setUpPage(++currentPage, [prevButton, nextButton]);
-        });
-    });
-}
-function setUpPage(currentPage, buttons, category = "") {
+function init(category = "") {
     return __awaiter(this, void 0, void 0, function* () {
         const imageContainer = document.querySelector(".ateliershop-images");
-        const body = yield fetchProducts(category, currentPage);
-        const products = body.products;
-        const paginationSize = body.paginationSize;
-        const amountOfPages = products.length === 0 ? 0 : Math.ceil(body.count / paginationSize);
+        imageContainer.innerHTML = "";
+        let currentPage = 0;
+        const nextButton = document.querySelector(".shop-next-btn");
+        // A button is cloned to reset all eventlisteners on it.
+        const newButton = document.createElement("button");
+        newButton.textContent = nextButton.innerText;
+        newButton.classList.add("shop-next-btn");
+        // Replace the old button with the clone.
+        nextButton.replaceWith(newButton);
+        // Spinning loader.
+        const loader = createLoader();
+        // Loader is shown instead of the button.
+        newButton.replaceWith(loader);
+        const body = yield fetchProducts(0, category);
+        // Calculate the total pages of products.
+        const amountOfPages = body.products.length === 0
+            ? 0
+            : Math.ceil(body.count / body.paginationSize);
+        // Store the processed images.
+        const processedImages = [];
+        // Create new images from the products can cache the result.
+        processedImages.push(...(yield setUpPage(body.products, [])));
+        // Remove the "more" button if there are no more products to fetch.
+        newButton.style.display = currentPage + 1 >= amountOfPages ? "none" : "block";
+        // After loading, replace the spinner with the "more" button.
+        loader.replaceWith(newButton);
+        // Fetch all categories.
         const categories = new Set([
             ["Alles", ""],
-            ...products
+            ...body.products
                 .map((p) => [p.category_name, p.category_slug, p.category_description])
                 .filter(([name, _]) => Boolean(name))
             // JSON.stringify is used to ensure all entries are unique for the Set.
             // In JS ["x"] != ["x"].
         ].map((x) => JSON.stringify(x)));
-        setPaginationText(currentPage, products.length, body.count, paginationSize);
-        setFilterMenu(categories, buttons);
-        setButtons(buttons, currentPage, amountOfPages);
+        // Use the categories to populate the categories select filter box.
+        setFilterMenu(categories);
+        // Setup the "More" button.
+        newButton.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
+            const loader = createLoader();
+            newButton.replaceWith(loader);
+            const newResult = yield fetchProducts(++currentPage, category);
+            processedImages.push(...(yield setUpPage(newResult.products, processedImages)));
+            loader.replaceWith(newButton);
+            newButton.style.display =
+                currentPage + 1 >= amountOfPages ? "none" : "block";
+        }));
+    });
+}
+function setUpPage(products, processed) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const imageContainer = document.querySelector(".ateliershop-images");
         const images = yield Promise.all(products.map(createProductUIComponent));
+        const updatedImages = [...processed, ...images];
         // Check if any images are in portrait mode, then add borders.
-        if (images.some((i) => {
+        if (updatedImages.some((i) => {
             const image = i.querySelector("img");
             return !isLandscape(image);
         }))
-            images.forEach(addBorderToProduct);
-        imageContainer.innerHTML = "";
+            updatedImages.forEach(addBorderToProduct);
         images.forEach((c) => imageContainer.appendChild(c));
+        return updatedImages;
     });
 }
-function fetchProducts(category, page) {
+function fetchProducts(page, category = "") {
     return __awaiter(this, void 0, void 0, function* () {
         const response = yield fetch(`/wp-json/api/products/?page=${page}&category=${category}`);
         return response.json();
     });
 }
-function setFilterMenu(categories, buttons) {
+function createLoader() {
+    const container = document.createElement("div");
+    container.classList.add("lds-roller");
+    container.innerHTML = `
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  `;
+    return container;
+}
+function setFilterMenu(categories) {
     const filterMenu = document.querySelector("select");
     if (filterMenu.querySelector("option"))
         return;
+    if (filterMenu.parentElement)
+        filterMenu.parentElement.style.visibility = "visible";
     filterMenu.addEventListener("change", () => {
-        setUpPage(0, buttons, filterMenu.value);
+        init(filterMenu.value);
     });
     Array.from(categories)
         .map((json) => JSON.parse(json))
@@ -76,30 +117,6 @@ function setFilterMenu(categories, buttons) {
     })
         .forEach((o) => filterMenu.appendChild(o));
 }
-function setPaginationText(currentPage, items, count, paginationSize) {
-    const paginationText = document.querySelector(".pagination-text");
-    const min = currentPage * paginationSize + 1;
-    const max = min + items - 1;
-    paginationText.textContent = `Producten ${min} t/m ${max} getoond van de ${count}`;
-}
-function setButtons(buttons, currentPage, amountOfPages) {
-    const [prev, next] = buttons;
-    enableButton(prev);
-    enableButton(next);
-    if (currentPage === 0)
-        disableButton(prev);
-    if (currentPage === amountOfPages - 1)
-        disableButton(next);
-    buttons.forEach((b) => (b.style.visibility = "visible"));
-}
-function disableButton(button) {
-    button.classList.add("paginator-btn-disabled");
-    button.disabled = true;
-}
-function enableButton(button) {
-    button.classList.remove("paginator-btn-disabled");
-    button.disabled = false;
-}
 function createProductUIComponent(product) {
     const imageFrame = document.createElement("div");
     imageFrame.classList.add("image-frame");
@@ -109,14 +126,11 @@ function createProductUIComponent(product) {
     name.classList.add("product-name");
     const description = document.createElement("p");
     description.classList.add("product-description");
-    const price = document.createElement("p");
-    price.classList.add("product-price");
     name.append(document.createTextNode(product.name));
     description.append(document.createTextNode(product.description));
-    price.append(document.createTextNode(`Vanaf \u20AC${parseFloat(product.price).toFixed(2)}`));
     const productTextContainer = document.createElement("div");
     productTextContainer.classList.add("product-text");
-    productTextContainer.append(name, description, price);
+    productTextContainer.append(name, description);
     imageFrame.append(image, productTextContainer);
     image.src = product.image_url;
     return new Promise((resolve) => {

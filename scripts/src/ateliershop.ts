@@ -1,37 +1,46 @@
-async function init(): Promise<void> {
-  let currentPage = 0;
-  const prevButton = document.querySelector(
-    ".shop-prev-btn"
-  ) as HTMLButtonElement;
-  const nextButton = document.querySelector(
-    ".shop-next-btn"
-  ) as HTMLButtonElement;
-  setUpPage(currentPage, [prevButton, nextButton]);
-  prevButton.addEventListener("click", () => {
-    setUpPage(--currentPage, [prevButton, nextButton]);
-  });
-  nextButton.addEventListener("click", () => {
-    setUpPage(++currentPage, [prevButton, nextButton]);
-  });
-}
-
-async function setUpPage(
-  currentPage: number,
-  buttons: HTMLButtonElement[],
-  category = ""
-): Promise<void> {
+async function init(category = ""): Promise<void> {
   const imageContainer = document.querySelector(
     ".ateliershop-images"
   ) as HTMLDivElement;
-  const body = await fetchProducts(category, currentPage);
-  const products = body.products;
-  const paginationSize = body.paginationSize;
+  imageContainer.innerHTML = "";
+  let currentPage = 0;
+  const nextButton = document.querySelector(
+    ".shop-next-btn"
+  ) as HTMLButtonElement;
+  // A button is cloned to reset all eventlisteners on it.
+  const newButton = document.createElement("button");
+  newButton.textContent = nextButton.innerText;
+  newButton.classList.add("shop-next-btn");
+  // Replace the old button with the clone.
+  nextButton.replaceWith(newButton);
+  // Spinning loader.
+  const loader = createLoader();
+  // Loader is shown instead of the button.
+  newButton.replaceWith(loader);
+  const body = await fetchProducts(0, category);
+
+  // Calculate the total pages of products.
   const amountOfPages =
-    products.length === 0 ? 0 : Math.ceil(body.count / paginationSize);
+    body.products.length === 0
+      ? 0
+      : Math.ceil(body.count / body.paginationSize);
+
+  // Store the processed images.
+  const processedImages: HTMLDivElement[] = [];
+
+  // Create new images from the products can cache the result.
+  processedImages.push(...(await setUpPage(body.products, [])));
+
+  // Remove the "more" button if there are no more products to fetch.
+  newButton.style.display = currentPage + 1 >= amountOfPages ? "none" : "block";
+  // After loading, replace the spinner with the "more" button.
+  loader.replaceWith(newButton);
+
+  // Fetch all categories.
   const categories = new Set(
     [
       ["Alles", ""],
-      ...products
+      ...body.products
         .map((p) => [p.category_name, p.category_slug, p.category_description])
         .filter(([name, _]) => Boolean(name))
       // JSON.stringify is used to ensure all entries are unique for the Set.
@@ -39,23 +48,44 @@ async function setUpPage(
     ].map((x) => JSON.stringify(x))
   );
 
-  setPaginationText(currentPage, products.length, body.count, paginationSize);
-  setFilterMenu(categories, buttons);
-  setButtons(buttons, currentPage, amountOfPages);
+  // Use the categories to populate the categories select filter box.
+  setFilterMenu(categories);
 
+  // Setup the "More" button.
+  newButton.addEventListener("click", async () => {
+    const loader = createLoader();
+    newButton.replaceWith(loader);
+    const newResult = await fetchProducts(++currentPage, category);
+    processedImages.push(
+      ...(await setUpPage(newResult.products, processedImages))
+    );
+    loader.replaceWith(newButton);
+    newButton.style.display =
+      currentPage + 1 >= amountOfPages ? "none" : "block";
+  });
+}
+
+async function setUpPage(
+  products: Product[],
+  processed: HTMLDivElement[]
+): Promise<HTMLDivElement[]> {
+  const imageContainer = document.querySelector(
+    ".ateliershop-images"
+  ) as HTMLDivElement;
   const images = await Promise.all(products.map(createProductUIComponent));
+  const updatedImages = [...processed, ...images];
 
   // Check if any images are in portrait mode, then add borders.
   if (
-    images.some((i) => {
+    updatedImages.some((i) => {
       const image = i.querySelector("img") as HTMLImageElement;
       return !isLandscape(image);
     })
   )
-    images.forEach(addBorderToProduct);
+    updatedImages.forEach(addBorderToProduct);
 
-  imageContainer.innerHTML = "";
   images.forEach((c) => imageContainer.appendChild(c));
+  return updatedImages;
 }
 
 interface Product {
@@ -70,8 +100,8 @@ interface Product {
 }
 
 async function fetchProducts(
-  category: string,
-  page: number
+  page: number,
+  category = ""
 ): Promise<{ products: Product[]; count: number; paginationSize: number }> {
   const response = await fetch(
     `/wp-json/api/products/?page=${page}&category=${category}`
@@ -79,14 +109,30 @@ async function fetchProducts(
   return response.json();
 }
 
-function setFilterMenu(
-  categories: Set<string>,
-  buttons: HTMLButtonElement[]
-): void {
+function createLoader(): HTMLDivElement {
+  const container = document.createElement("div");
+  container.classList.add("lds-roller");
+  container.innerHTML = `
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  `;
+  return container;
+}
+
+function setFilterMenu(categories: Set<string>): void {
   const filterMenu = document.querySelector("select") as HTMLSelectElement;
   if (filterMenu.querySelector("option")) return;
+  if (filterMenu.parentElement)
+    filterMenu.parentElement.style.visibility = "visible";
+
   filterMenu.addEventListener("change", () => {
-    setUpPage(0, buttons, filterMenu.value);
+    init(filterMenu.value);
   });
   Array.from(categories)
     .map((json) => JSON.parse(json))
@@ -100,43 +146,6 @@ function setFilterMenu(
     .forEach((o) => filterMenu.appendChild(o));
 }
 
-function setPaginationText(
-  currentPage: number,
-  items: number,
-  count: number,
-  paginationSize: number
-): void {
-  const paginationText = document.querySelector(
-    ".pagination-text"
-  ) as HTMLHeadingElement;
-  const min = currentPage * paginationSize + 1;
-  const max = min + items - 1;
-  paginationText.textContent = `Producten ${min} t/m ${max} getoond van de ${count}`;
-}
-
-function setButtons(
-  buttons: HTMLButtonElement[],
-  currentPage: number,
-  amountOfPages: number
-): void {
-  const [prev, next] = buttons;
-  enableButton(prev);
-  enableButton(next);
-  if (currentPage === 0) disableButton(prev);
-  if (currentPage === amountOfPages - 1) disableButton(next);
-  buttons.forEach((b) => (b.style.visibility = "visible"));
-}
-
-function disableButton(button: HTMLButtonElement): void {
-  button.classList.add("paginator-btn-disabled");
-  button.disabled = true;
-}
-
-function enableButton(button: HTMLButtonElement): void {
-  button.classList.remove("paginator-btn-disabled");
-  button.disabled = false;
-}
-
 function createProductUIComponent(product: Product): Promise<HTMLDivElement> {
   const imageFrame = document.createElement("div");
   imageFrame.classList.add("image-frame");
@@ -146,18 +155,11 @@ function createProductUIComponent(product: Product): Promise<HTMLDivElement> {
   name.classList.add("product-name");
   const description = document.createElement("p");
   description.classList.add("product-description");
-  const price = document.createElement("p");
-  price.classList.add("product-price");
   name.append(document.createTextNode(product.name));
   description.append(document.createTextNode(product.description));
-  price.append(
-    document.createTextNode(
-      `Vanaf \u20AC${parseFloat(product.price).toFixed(2)}`
-    )
-  );
   const productTextContainer = document.createElement("div");
   productTextContainer.classList.add("product-text");
-  productTextContainer.append(name, description, price);
+  productTextContainer.append(name, description);
   imageFrame.append(image, productTextContainer);
   image.src = product.image_url;
   return new Promise((resolve) => {
