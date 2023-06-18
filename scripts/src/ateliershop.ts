@@ -32,7 +32,7 @@ async function setUpPage(
     [
       ["Alles", ""],
       ...products
-        .map((p) => [p.category_name, p.category_slug])
+        .map((p) => [p.category_name, p.category_slug, p.category_description])
         .filter(([name, _]) => Boolean(name))
       // JSON.stringify is used to ensure all entries are unique for the Set.
       // In JS ["x"] != ["x"].
@@ -66,6 +66,7 @@ interface Product {
   image_url: string;
   category_name: string;
   category_slug: string;
+  category_description: string;
 }
 
 async function fetchProducts(
@@ -89,11 +90,11 @@ function setFilterMenu(
   });
   Array.from(categories)
     .map((json) => JSON.parse(json))
-    .map(([name, slug]) => {
+    .map(([name, slug, description]) => {
       const option = document.createElement("option");
       option.classList.add("filter-menu");
       option.value = slug;
-      option.textContent = name;
+      option.textContent = description ? `${name} - ${description}` : `${name}`;
       return option;
     })
     .forEach((o) => filterMenu.appendChild(o));

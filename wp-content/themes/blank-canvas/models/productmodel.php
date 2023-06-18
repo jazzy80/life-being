@@ -12,9 +12,15 @@ class ProductModel{
     return $this -> db_client -> get_results(
         $this -> db_client -> prepare(
         <<< EOL
-        SELECT wp.*, wt.name as category_name, wt.slug as category_slug FROM wp_products wp
+        SELECT 
+          wp.*, 
+          wt.name as category_name, 
+          wtt.description as category_description, 
+          wt.slug as category_slug 
+        FROM wp_products wp
         LEFT JOIN wp_category_product wcp on wp.id = wcp.product_id
         LEFT JOIN wp_terms wt on wt.term_id = wcp.category_id
+        LEFT JOIN wp_term_taxonomy wtt on wtt.term_id = wt.term_id
         ORDER BY id DESC;
         EOL,
         array()
