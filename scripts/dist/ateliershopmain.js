@@ -127,7 +127,7 @@ function createProductUIComponent(product) {
     const description = document.createElement("p");
     description.classList.add("product-description");
     name.append(document.createTextNode(product.name));
-    description.append(document.createTextNode(product.description));
+    description.innerHTML = product.description;
     const productTextContainer = document.createElement("div");
     productTextContainer.classList.add("product-text");
     productTextContainer.append(name, description);
