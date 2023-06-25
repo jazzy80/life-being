@@ -75,6 +75,8 @@
   font-size: clamp(1.3rem, 5vw, 1.6rem);
   min-width: 25vw;
   text-align: center;
+  border-bottom: 0;
+  color: #a072c1;
   margin: 0 !important;
 }
 

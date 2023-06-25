@@ -1,3 +1,6 @@
+import { Api } from "./config";
+import { Product } from "./interfaces/product";
+
 async function init(category = ""): Promise<void> {
   const imageContainer = document.querySelector(
     ".ateliershop-images"
@@ -88,17 +91,6 @@ async function setUpPage(
   return updatedImages;
 }
 
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: string;
-  image_url: string;
-  category_name: string;
-  category_slug: string;
-  category_description: string;
-}
-
 async function fetchProducts(
   page: number,
   category = ""
@@ -151,10 +143,11 @@ function createProductUIComponent(product: Product): Promise<HTMLDivElement> {
   imageFrame.classList.add("image-frame");
   const image = new Image();
   image.classList.add("product-image");
-  const name = document.createElement("p");
+  const name = document.createElement("a");
   name.classList.add("product-name");
   const description = document.createElement("p");
   description.classList.add("product-description");
+  name.href = `/product-details/?product=${product.id}`;
   name.append(document.createTextNode(product.name));
   description.innerHTML = product.description;
   const productTextContainer = document.createElement("div");

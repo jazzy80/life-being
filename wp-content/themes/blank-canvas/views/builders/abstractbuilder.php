@@ -8,6 +8,8 @@ interface AbstractBuilder {
   public function build_guestbook(array $guest_book_entries): AbstractBuilder;
   public function build_jsfiles(\WP_Post $page): AbstractBuilder;
   public function build_atelier_shop(\WP_Post $page): AbstractBuilder;
+  public function build_bigdreams(\WP_Post $page): AbstractBuilder;
+  public function build_product_details(\WP_Post $page): AbstractBuilder;
   public function get(): \views\IView;
 }
 ?>

@@ -42,5 +42,17 @@ class ProductModel{
       ),
     );
   }
+
+  function get_product_by_id($product_id): array{
+    return $this -> db_client -> get_results(
+      $this -> db_client -> prepare(
+        <<< EOL
+        SELECT * from wp_products wp
+        WHERE id = %d
+        EOL,
+        array($product_id)
+      ),
+    );
+  }
 }
 ?>

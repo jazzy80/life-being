@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 function init(category = "") {
     return __awaiter(this, void 0, void 0, function* () {
         const imageContainer = document.querySelector(".ateliershop-images");
@@ -122,10 +123,11 @@ function createProductUIComponent(product) {
     imageFrame.classList.add("image-frame");
     const image = new Image();
     image.classList.add("product-image");
-    const name = document.createElement("p");
+    const name = document.createElement("a");
     name.classList.add("product-name");
     const description = document.createElement("p");
     description.classList.add("product-description");
+    name.href = `/product-details/?product=${product.id}`;
     name.append(document.createTextNode(product.name));
     description.innerHTML = product.description;
     const productTextContainer = document.createElement("div");
@@ -154,4 +156,8 @@ function isLandscape(image) {
 }
 init();
 
-},{}]},{},[1]);
+},{}],2:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+},{}]},{},[1,2]);

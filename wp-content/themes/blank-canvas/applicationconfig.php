@@ -10,6 +10,7 @@ define('GUESTBOOK',           'guest book');
 define('VITALITY',            'vitality');
 define('BEINGME',             'being me, being you');
 define('ATELIERSHOP',         'atelier & shop');
+define('PRODUCTDETAILS',      'product details');
 
 #  Define the `BASE_URL`(root) for the server.
 define(
@@ -53,7 +54,8 @@ define('LOAD_JAVASCRIPT', [
   BLOG_PAGE          => [JS_FILE_PREFIX . 'blogsmain.js'],
   POETRY_PAGE        => [JS_FILE_PREFIX . 'poetrymain.js'],
   GUESTBOOK          => [JS_FILE_PREFIX . 'guestbookmain.js'],
-  ATELIERSHOP         =>[JS_FILE_PREFIX . 'ateliershopmain.js'],
+  ATELIERSHOP        => [JS_FILE_PREFIX . 'ateliershopmain.js'],
+  PRODUCTDETAILS     => [JS_FILE_PREFIX . 'productdetailsmain.js'],
 ]);
 
 // autoloader for classes and interfaces.

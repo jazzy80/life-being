@@ -56,6 +56,10 @@ class PageBuilder implements AbstractBuilder {
     return $this -> add_component(new \views\AtelierShopView($page));
   }
 
+  public function build_product_details(\WP_Post $page): AbstractBuilder {
+    return $this -> add_component(new \views\ProductDetailsView($page));
+  }
+
   public function get(): \views\IView {
     return new \views\CompositeView($this -> components);
   }
