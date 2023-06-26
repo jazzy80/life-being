@@ -19,6 +19,20 @@ require_once __DIR__ . '/api/guestbook.php';
 require_once __DIR__ . '/api/poetry.php';
 require_once __DIR__ . '/api/atelier.php';
 require_once __DIR__ . '/api/products.php';
+require_once __DIR__ . '/api/pages.php';
+
+function rest_cors() {
+	remove_filter( 'rest_pre_serve_request', 'rest_send_cors_headers' );
+	add_filter( 'rest_pre_serve_request', function( $value ) {
+	  header( 'Access-Control-Allow-Origin: http://localhost:8080' );
+	  header( 'Access-Control-Allow-Methods: GET' );
+	  header( 'Access-Control-Allow-Credentials: true' );
+	  header( 'Access-Control-Expose-Headers: Link', false );
+  
+	  return $value;
+	} );
+  }
+add_action( 'rest_api_init', 'rest_cors', 15 );
 
 if ( ! function_exists( 'blank_canvas_setup' ) ) :
 
@@ -193,16 +207,6 @@ function blank_canvas_enqueue() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'blank_canvas_enqueue', 11 );
-
-/**
- * Block Patterns.
- */
-require get_stylesheet_directory() . '/inc/block-patterns.php';
-
-/**
- * Customizer additions.
- */
-require get_stylesheet_directory() . '/inc/customizer.php';
 
 /**
  * Adds custom classes to the array of body classes.

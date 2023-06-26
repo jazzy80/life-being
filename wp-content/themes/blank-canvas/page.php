@@ -1,38 +1,17 @@
-<?php
-/**
- * The template for displaying all single posts
- *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
- *
- * @package Blank Canvas
- * @since 1.0.0
- */
-
-get_header();
-?>
-
-	<section id="primary" class="content-area">
-		<main id="main" class="site-main" role="main">
-
-			<?php
-			/* Start the Loop */
-			while ( have_posts() ) :
-				the_post();
-
-				get_template_part( 'template-parts/content/content-singular' );
-				
-				if ( true === get_theme_mod( 'show_comments', false ) ) :
-					// If comments are open or we have at least one comment, load up the comment template.
-					if ( comments_open() || get_comments_number() ) {
-						comments_template();
-					}
-				endif; 
-
-			endwhile; // End of the loop.
-			?>
-
-		</main><!-- #main -->
-	</section><!-- #primary -->
-
-<?php
-get_footer();
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="/hearticon.png">
+    <title>life-being-web</title>
+  <script defer src="/js/chunk-vendors.js"></script><script defer src="/js/app.js"></script></head>
+  <body>
+    <noscript>
+      <strong>We're sorry but life-being-web doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>
