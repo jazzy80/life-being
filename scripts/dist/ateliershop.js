@@ -9,6 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const api_1 = require("./api/api");
+const createLoader_1 = require("./utils/createLoader");
+const product_1 = require("./interfaces/product");
 function init(category = "") {
     return __awaiter(this, void 0, void 0, function* () {
         const imageContainer = document.querySelector(".ateliershop-images");
@@ -22,7 +25,7 @@ function init(category = "") {
         // Replace the old button with the clone.
         nextButton.replaceWith(newButton);
         // Spinning loader.
-        const loader = createLoader();
+        const loader = (0, createLoader_1.createLoader)();
         // Loader is shown instead of the button.
         newButton.replaceWith(loader);
         const body = yield fetchProducts(0, category);
@@ -42,7 +45,7 @@ function init(category = "") {
         const categories = new Set([
             ["Alles", ""],
             ...body.products
-                .map((p) => [p.category_name, p.category_slug, p.category_description])
+                .map((p) => [p.categoryName, p.categorySlug, p.categoryDescription])
                 .filter(([name, _]) => Boolean(name))
             // JSON.stringify is used to ensure all entries are unique for the Set.
             // In JS ["x"] != ["x"].
@@ -51,7 +54,7 @@ function init(category = "") {
         setFilterMenu(categories);
         // Setup the "More" button.
         newButton.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
-            const loader = createLoader();
+            const loader = (0, createLoader_1.createLoader)();
             newButton.replaceWith(loader);
             const newResult = yield fetchProducts(++currentPage, category);
             processedImages.push(...(yield setUpPage(newResult.products, processedImages)));
@@ -78,24 +81,14 @@ function setUpPage(products, processed) {
 }
 function fetchProducts(page, category = "") {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield fetch(`/wp-json/api/products/?page=${page}&category=${category}`);
-        return response.json();
+        const response = yield api_1.Api.GET(`products/?page=${page}&category=${category}`);
+        const json = yield response.json();
+        return {
+            products: json.products.map(product_1.FromJSON),
+            count: json.count,
+            paginationSize: json.paginationSize
+        };
     });
-}
-function createLoader() {
-    const container = document.createElement("div");
-    container.classList.add("lds-roller");
-    container.innerHTML = `
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  `;
-    return container;
 }
 function setFilterMenu(categories) {
     const filterMenu = document.querySelector("select");
@@ -133,7 +126,7 @@ function createProductUIComponent(product) {
     productTextContainer.classList.add("product-text");
     productTextContainer.append(name, description);
     imageFrame.append(image, productTextContainer);
-    image.src = product.image_url;
+    image.src = product.imageUrl;
     return new Promise((resolve) => {
         image.onload = () => resolve(imageFrame);
     });

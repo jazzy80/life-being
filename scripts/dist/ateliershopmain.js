@@ -10,6 +10,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Api = void 0;
+exports.Api = {
+    baseUrl: "/wp-json/api/",
+    GET(url) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield fetch(`${this.baseUrl}${url}`);
+        });
+    }
+};
+
+},{}],2:[function(require,module,exports){
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const api_1 = require("./api/api");
+const createLoader_1 = require("./utils/createLoader");
+const product_1 = require("./interfaces/product");
 function init(category = "") {
     return __awaiter(this, void 0, void 0, function* () {
         const imageContainer = document.querySelector(".ateliershop-images");
@@ -23,7 +48,7 @@ function init(category = "") {
         // Replace the old button with the clone.
         nextButton.replaceWith(newButton);
         // Spinning loader.
-        const loader = createLoader();
+        const loader = (0, createLoader_1.createLoader)();
         // Loader is shown instead of the button.
         newButton.replaceWith(loader);
         const body = yield fetchProducts(0, category);
@@ -43,7 +68,7 @@ function init(category = "") {
         const categories = new Set([
             ["Alles", ""],
             ...body.products
-                .map((p) => [p.category_name, p.category_slug, p.category_description])
+                .map((p) => [p.categoryName, p.categorySlug, p.categoryDescription])
                 .filter(([name, _]) => Boolean(name))
             // JSON.stringify is used to ensure all entries are unique for the Set.
             // In JS ["x"] != ["x"].
@@ -52,7 +77,7 @@ function init(category = "") {
         setFilterMenu(categories);
         // Setup the "More" button.
         newButton.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
-            const loader = createLoader();
+            const loader = (0, createLoader_1.createLoader)();
             newButton.replaceWith(loader);
             const newResult = yield fetchProducts(++currentPage, category);
             processedImages.push(...(yield setUpPage(newResult.products, processedImages)));
@@ -79,24 +104,14 @@ function setUpPage(products, processed) {
 }
 function fetchProducts(page, category = "") {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield fetch(`/wp-json/api/products/?page=${page}&category=${category}`);
-        return response.json();
+        const response = yield api_1.Api.GET(`products/?page=${page}&category=${category}`);
+        const json = yield response.json();
+        return {
+            products: json.products.map(product_1.FromJSON),
+            count: json.count,
+            paginationSize: json.paginationSize
+        };
     });
-}
-function createLoader() {
-    const container = document.createElement("div");
-    container.classList.add("lds-roller");
-    container.innerHTML = `
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  `;
-    return container;
 }
 function setFilterMenu(categories) {
     const filterMenu = document.querySelector("select");
@@ -134,7 +149,7 @@ function createProductUIComponent(product) {
     productTextContainer.classList.add("product-text");
     productTextContainer.append(name, description);
     imageFrame.append(image, productTextContainer);
-    image.src = product.image_url;
+    image.src = product.imageUrl;
     return new Promise((resolve) => {
         image.onload = () => resolve(imageFrame);
     });
@@ -156,8 +171,44 @@ function isLandscape(image) {
 }
 init();
 
-},{}],2:[function(require,module,exports){
+},{"./api/api":1,"./interfaces/product":3,"./utils/createLoader":4}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.FromJSON = void 0;
+function FromJSON(json) {
+    return {
+        id: json.id,
+        name: json.name,
+        description: json.description,
+        price: json.price,
+        imageUrl: json.image_url,
+        categoryName: json.category_name,
+        categorySlug: json.category_slug,
+        categoryDescription: json.category_description,
+        detailText: json.detail_text
+    };
+}
+exports.FromJSON = FromJSON;
 
-},{}]},{},[1,2]);
+},{}],4:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createLoader = void 0;
+function createLoader() {
+    const container = document.createElement("div");
+    container.classList.add("lds-roller");
+    container.innerHTML = `
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  `;
+    return container;
+}
+exports.createLoader = createLoader;
+
+},{}]},{},[2,3]);

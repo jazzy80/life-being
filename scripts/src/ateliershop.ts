@@ -1,5 +1,7 @@
-import { Api } from "./config";
-import { Product } from "./interfaces/product";
+import { Api } from "./api/api";
+import { Product as ApiProduct } from "./api/models/product";
+import { createLoader } from "./utils/createLoader";
+import { Product, FromJSON } from "./interfaces/product";
 
 async function init(category = ""): Promise<void> {
   const imageContainer = document.querySelector(
@@ -44,7 +46,7 @@ async function init(category = ""): Promise<void> {
     [
       ["Alles", ""],
       ...body.products
-        .map((p) => [p.category_name, p.category_slug, p.category_description])
+        .map((p) => [p.categoryName, p.categorySlug, p.categoryDescription])
         .filter(([name, _]) => Boolean(name))
       // JSON.stringify is used to ensure all entries are unique for the Set.
       // In JS ["x"] != ["x"].
@@ -95,26 +97,13 @@ async function fetchProducts(
   page: number,
   category = ""
 ): Promise<{ products: Product[]; count: number; paginationSize: number }> {
-  const response = await fetch(
-    `/wp-json/api/products/?page=${page}&category=${category}`
-  );
-  return response.json();
-}
-
-function createLoader(): HTMLDivElement {
-  const container = document.createElement("div");
-  container.classList.add("lds-roller");
-  container.innerHTML = `
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  `;
-  return container;
+  const response = await Api.GET(`products/?page=${page}&category=${category}`);
+  const json = await response.json();
+  return {
+    products: json.products.map(FromJSON),
+    count: json.count,
+    paginationSize: json.paginationSize
+  };
 }
 
 function setFilterMenu(categories: Set<string>): void {
@@ -154,7 +143,7 @@ function createProductUIComponent(product: Product): Promise<HTMLDivElement> {
   productTextContainer.classList.add("product-text");
   productTextContainer.append(name, description);
   imageFrame.append(image, productTextContainer);
-  image.src = product.image_url;
+  image.src = product.imageUrl;
   return new Promise((resolve) => {
     image.onload = () => resolve(imageFrame);
   });
