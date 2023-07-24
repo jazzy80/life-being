@@ -1,20 +1,10 @@
 <?php
-// init viewfactory.
-
-use utils\MaybeCompanion;
-
-$model_provider = new serviceproviders\ModelProviderImpl;
-$view_factory = new views\factories\ViewFactory (
-  $model_provider
-);
-$page = $model_provider -> get_page_model() -> get_current_page();
-$header_title = HEADER_TITLES[strtolower($page -> post_title)];
-$header_subtitle = HEADER_SUBTITLES[strtolower($page -> post_title)];
-// init builder.
-$builder = new views\builders\PageBuilder($view_factory);
-// the theme used is forcing the use of a seperate file for rendering the header of the document.
-echo $builder -> build_header(
-  MaybeCompanion :: cond($header_title, $header_title),
-  MaybeCompanion :: cond($header_subtitle, $header_subtitle)
-) -> get() -> display();
-?>
+$page_repository = new \data\page\PageRepository();
+$page = $page_repository->get_current_page();
+$header_title = HEADER_TITLES[strtolower($page->post_title)] ?? DEFAULT_HEADER_TITLE;
+$header_subtitle = HEADER_SUBTITLES[strtolower($page->post_title)] ?? DEFAULT_HEADER_SUBTITLE;
+$builder = new views\builders\PageBuilder();
+$navbar = new \views\UpperNavBarView($page_repository);
+$builder->add_page_component(new \views\HeaderView($header_title, $header_subtitle, $navbar));
+$header = $builder->build();
+echo $header->display();

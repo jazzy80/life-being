@@ -1,10 +1,6 @@
 <?php
 namespace views;
 class AtelierHomeView implements IView {
-  private \WP_POST $page;
-  function __construct(\WP_POST $page) {
-    $this -> page = $page;
-  }
   function display(): string {
     return <<< EOL
     <main class="main">
@@ -40,4 +36,3 @@ class AtelierHomeView implements IView {
     EOL;
   }
 }
-?>

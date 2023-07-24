@@ -1,8 +1,11 @@
 <?php
+
 namespace views;
 
-class ProductDetailsView implements IView {
-  public function display(): string {
+class ProductDetailsView implements IView
+{
+  public function display(): string
+  {
     return <<< EOL
     <div class="product-details">
       <div class="detail-row">
@@ -12,4 +15,3 @@ class ProductDetailsView implements IView {
     EOL;
   }
 }
-?>

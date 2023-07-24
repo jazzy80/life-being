@@ -1,10 +1,6 @@
 <?php
 namespace views;
 class AtelierGalleryView implements IView {
-  private \WP_POST $page;
-  function __construct(\WP_POST $page) {
-    $this -> page = $page;
-  }
   function display(): string {
     return '<div class="atelier">
         <span class="sidebar-back-link">
@@ -20,4 +16,3 @@ class AtelierGalleryView implements IView {
       </div>';
   }
 }
-?>

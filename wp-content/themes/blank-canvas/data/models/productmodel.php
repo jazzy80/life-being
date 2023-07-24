@@ -1,5 +1,5 @@
 <?php
-namespace models;
+namespace data\models;
 
 class ProductModel{
   private \wpdb $db_client;

@@ -68,13 +68,34 @@ spl_autoload_register(function ($class): bool {
   return false;
 });
 
-function group_by(array $arr, callable $key) {
+function group_by(array $arr, callable $key_func)
+{
   $new = [];
   foreach ($arr as $item) {
-    $group_by_key = $key($item);
-    if ($new[$group_by_key]) array_push($new[$group_by_key], $item);
-    else $new[$group_by_key] = [$item];
+    $group_by_key = $key_func($item);
+    if (array_safe_get($group_by_key, $new)) {
+      array_push($new[$group_by_key], $item);
+    } else {
+      $new[$group_by_key] = [$item];
+    }
   }
   return $new;
 }
-?>
+
+function array_flat_map(callable $fn, array $array): array
+{
+  $result = [];
+  $xss = array_map($fn, $array);
+  foreach ($xss as $xs) {
+    array_push($result, $xs);
+  }
+  return $result;
+}
+
+function array_safe_get(string|int $key, array $array): mixed
+{
+  if (!key_exists($key, $array)) {
+    return null;
+  }
+  return $array[$key];
+}

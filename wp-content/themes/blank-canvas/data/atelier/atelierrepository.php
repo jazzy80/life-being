@@ -1,7 +1,7 @@
 <?php
-namespace models;
+namespace data\atelier;
 
-class AtelierModel {
+class AtelierRepository {
   private \wpdb $db_client;
 
   function __construct(\wpdb $db_client) {
@@ -17,7 +17,7 @@ class AtelierModel {
         INNER JOIN wp_terms wt on wtr.term_taxonomy_id = wt.term_id
         WHERE LOWER(wt.slug) = LOWER(%s)
         EOL,
-        array($category)
+        $category
       ),
     ));
   }

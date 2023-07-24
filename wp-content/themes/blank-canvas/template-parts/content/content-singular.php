@@ -1,21 +1,15 @@
 <?php
-/**
- * Template part for displaying posts
- *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
- *
- * @package Blank Canvas
- * @since 1.0
- */
- $controller_factory = new controllers\factories\ControllerFactory;
- $model_provider = new serviceproviders\ModelProviderImpl;
- $view_factory = new \views\factories\ViewFactory(
-   $model_provider
- );
- $builder = new views\builders\PageBuilder($view_factory);
+$builder = new views\builders\PageBuilder();
+$page_repository = new \data\page\PageRepository();
+$current_page = $page_repository->get_current_page();
 
- $controller = $controller_factory -> get_controller($model_provider, $builder);
- $controller -> get();
+switch (strtolower($current_page->post_title)) {
+  case HOME_PAGE:
+    $builder->add_page_component(new \views\TextBodyView());
+    echo $builder->build()->display();
+    break;
+}
+
 ?>
 <!-- Add the main script for the site -->
 <script src="/scripts/dist/app.js"></script>

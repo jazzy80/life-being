@@ -24,4 +24,3 @@ class GuestBookEntry {
     return date_format(date_create($timestamp), 'h:m');
   }
 }
-?>
