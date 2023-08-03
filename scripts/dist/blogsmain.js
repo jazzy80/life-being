@@ -150,7 +150,7 @@ function getButtonEventCb(page, fetchArticlesFn) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const articles_1 = require("./articles");
-(0, articles_1.setUpArticles)("/wp-json/api/blogs");
+articles_1.setUpArticles("/wp-json/api/blogs");
 
 },{"./articles":1}],3:[function(require,module,exports){
 "use strict";

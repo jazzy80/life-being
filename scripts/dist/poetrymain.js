@@ -178,6 +178,6 @@ exports.PreviousPage = PreviousPage;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const articles_1 = require("./articles");
-(0, articles_1.setUpArticles)('/wp-json/api/poetry');
+articles_1.setUpArticles('/wp-json/api/poetry');
 
 },{"./articles":1}]},{},[4,1]);

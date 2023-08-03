@@ -21,7 +21,7 @@ function init() {
         const url = new URLSearchParams(document.location.search);
         const productId = url.get("product");
         const [product, _] = yield api_1.Api.GET(`product/${productId}`).then((x) => x.json());
-        setUpPage((0, product_1.FromJSON)(product));
+        setUpPage(product_1.FromJSON(product));
     });
 }
 function setUpPage(product) {

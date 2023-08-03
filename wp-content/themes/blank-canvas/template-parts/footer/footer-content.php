@@ -1,4 +1,4 @@
 <?php
-$footer = new \views\FooterView;
+$footer = new \Views\FooterView;
 echo $footer -> display();
 ?>

@@ -39,13 +39,13 @@ function getCommentForm() {
     return document.querySelector(GUESTBOOKFORM_SELECTOR);
 }
 function showCommentModal(form, fields) {
-    (0, overlay_1.addOverlay)();
+    overlay_1.addOverlay();
     showForm(form);
     resetForm(fields);
 }
 function removeCommentModal(form, fields) {
     hideForm(form);
-    (0, overlay_1.removeOverlay)();
+    overlay_1.removeOverlay();
     resetForm(fields);
 }
 function showForm(form) {

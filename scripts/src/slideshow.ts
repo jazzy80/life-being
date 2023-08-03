@@ -25,9 +25,8 @@ export function setUpSlideShow(): void {
   const page = window.location.pathname
     .split("/")
     // url must be a non-empty string.
-    .filter((url) => url !== undefined || url !== "")
+    .filter((url) => url !== undefined && url !== "")
     .join("/")
-    .replace(/^\/$/, "/home/");
 
   // If there is nothing after the hostName default to home.
   const files = fetch(`/wp-json/api/gallery-images/?page=${page || "home"}`);

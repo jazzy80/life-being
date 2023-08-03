@@ -2,7 +2,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const slideshow_1 = require("./slideshow");
-(0, slideshow_1.setUpSlideShow)();
+slideshow_1.setUpSlideShow();
 
 },{"./slideshow":2}],2:[function(require,module,exports){
 "use strict";
@@ -30,9 +30,8 @@ function setUpSlideShow() {
     const page = window.location.pathname
         .split("/")
         // url must be a non-empty string.
-        .filter((url) => url !== undefined || url !== "")
-        .join("/")
-        .replace(/^\/$/, "/home/");
+        .filter((url) => url !== undefined && url !== "")
+        .join("/");
     // If there is nothing after the hostName default to home.
     const files = fetch(`/wp-json/api/gallery-images/?page=${page || "home"}`);
     files

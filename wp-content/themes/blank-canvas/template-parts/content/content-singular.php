@@ -1,8 +1,8 @@
 <?php
 
 use \data\page\PageRepository;
-use views\builders\PageBuilder;
-use \views\TextBodyView;
+use Views\Builders\PageBuilder;
+use \Views\TextBodyView;
 
 $builder = new PageBuilder();
 $page_repository = new PageRepository();
