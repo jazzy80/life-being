@@ -99,3 +99,19 @@ function array_safe_get(string|int $key, array $array): mixed
   }
   return $array[$key];
 }
+
+function array_safe_head(array $arr): mixed
+{
+  if (count($arr) === 0) {
+    return null;
+  }
+  return $arr[0];
+}
+
+function array_safe_tail(array $arr): array
+{
+  if (count($arr) === 0) {
+    return [];
+  }
+  return array_slice($arr, 1);
+}
