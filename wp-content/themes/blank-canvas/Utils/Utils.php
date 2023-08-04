@@ -88,4 +88,20 @@ class Utils {
 
 		return array_slice( $arr, 1 );
 	}
+
+	/**
+	 * @param array $array<A>
+	 * @param callable $predicate<A => bool>
+	 *
+	 * @return mixed <A | null>
+	 *     return the first element for which the predicate is true null if no element is found.
+	 */
+	public static function find_if( array $array, callable $predicate ): mixed {
+		foreach ( $array as $element ) {
+			if ( $predicate( $element ) ) {
+				return $element;
+			}
+		}
+		return null;
+	}
 }

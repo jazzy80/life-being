@@ -1,10 +1,12 @@
 <?php
 
-namespace views\decorators;
+namespace Views\Decorators;
 
-class HTMLClassDecorator implements \views\IView
+use Views\IView;
+
+class HtmlClassDecorator implements IView
 {
-  private \views\IView $view;
+  private IView $view;
 
   private string $tag_name;
 

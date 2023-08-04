@@ -3,10 +3,38 @@
 namespace Views\ViewModels;
 
 class MenuItemViewModel {
-	public string $title;
-	public string $url;
-	public bool $is_active;
-	public array $children;
+	private string $title;
+	private string $url;
+	private bool $is_active;
+	private array $children;
+
+	/**
+	 * @return string
+	 */
+	public function get_title(): string {
+		return $this->title;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_url(): string {
+		return $this->url;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function is_is_active(): bool {
+		return $this->is_active;
+	}
+
+	/**
+	 * @return array<MenuItemViewModel>
+	 */
+	public function get_children(): array {
+		return $this->children;
+	}
 
 	public function __construct( string $title, string $url, bool $is_active, array $children ) {
 		$this->title     = $title;

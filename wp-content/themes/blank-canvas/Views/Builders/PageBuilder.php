@@ -2,18 +2,20 @@
 
 namespace Views\Builders;
 
+use Views\CompositeView;
+use Views\IView;
+
 class PageBuilder implements IPageBuilder
 {
-  private array $components = [];
+  private array $components;
 
-  public function add_page_component(\Views\IView $component): IPageBuilder
+  public function add_page_component( IView $component): IPageBuilder
   {
-    array_push($this->components, $component);
+    $this->components[] = $component;
     return $this;
   }
 
-  public function build(): \Views\IView
-  {
-    return new \Views\CompositeView($this->components);
+  public function build(): IView {
+    return new CompositeView($this->components);
   }
 }

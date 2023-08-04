@@ -11,6 +11,10 @@ class MenuItemsViewModel
         $this->menu_items = $menu_items;
     }
 
+
+	/**
+	 * @return array<MenuItemViewModel>
+	 */
 	public function get_menu_items(): array {
 		return $this -> menu_items;
 	}
