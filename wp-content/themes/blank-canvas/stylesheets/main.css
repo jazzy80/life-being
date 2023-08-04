@@ -11,7 +11,7 @@
   --upper-navbar-background-color: rgba(255, 255, 255, 0.5);
   --main-background-color: #faf0be;
   --secondary-background-color: #486648e6;
-  --navbar-font-size: clamp(1rem, 1.6vw, 1.4rem);
+  --navbar-font-size: clamp(1rem, 1.1vw, 1.4rem);
   --sidebar-font-size: calc(var(--navbar-font-size) - 0.2rem);
   --button-main-color: #7e4caa;
 }
