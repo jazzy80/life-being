@@ -49,10 +49,14 @@ function createProductRow(product) {
         description.innerHTML = product.description;
         const details = document.createElement("p");
         details.innerHTML = (_b = product.detailText) !== null && _b !== void 0 ? _b : "";
+        const productOptions = document.createElement("select");
+        productOptions.innerHTML = `<option>Maak een keuze</option>
+    </option><option value="List">Met Lijst</option>
+     <option value="FineArts">Fine Arts</option>`;
         const buyButton = document.createElement("button");
         buyButton.classList.add(BUY_BTN_CLASS);
         buyButton.innerHTML = BUY_STRING;
-        row.append(category, description, details, buyButton);
+        row.append(category, description, details, productOptions, buyButton);
     });
 }
 //# sourceMappingURL=productdetails.js.map
