@@ -1,7 +1,7 @@
-import { IArticle } from './interfaces/Iarticle';
-import { IPage } from './interfaces/ipage';
-import { PreviousPage } from './classes/previouspage';
-import { NextPage } from './classes/nextpage';
+import { IArticle } from "./interfaces/Iarticle";
+import { IPage } from "./interfaces/ipage";
+import { PreviousPage } from "./classes/previouspage";
+import { NextPage } from "./classes/nextpage";
 
 /*
 Setup function, to generate a list page for articles with pagination,
@@ -18,8 +18,9 @@ export function setUpArticles(url: string): void {
       setUpPaginatorButtons(
         new PreviousPage(0, totalPages),
         new NextPage(0, totalPages),
-          // refetch articles for the next or previous page, after a click.
-        (pageNumber: number) => fetchArticles(url, pageNumber, createListFromArticles)
+        // refetch articles for the next or previous page, after a click.
+        (pageNumber: number) =>
+          fetchArticles(url, pageNumber, createListFromArticles)
       );
     }
   });
@@ -30,16 +31,18 @@ function createListFromArticles(articles: IArticle[]) {
   // Get the article list if exists else create one and
   // attach the list to the Dom via the anchor element.
   // IIF pattern is used to avoid using a mutable variable.
-  const articleList = (document.querySelector('.articles') || createArticleList()) as HTMLUListElement;
+  const articleList = (document.querySelector(".articles") ||
+    createArticleList()) as HTMLUListElement;
   //  if the aricleList was created, it has no parent, in that case it needs to be atached to the DOM.
 
-  if (anchor && articleList.parentNode === null) attachElementToAnchor(articleList, anchor);
+  if (anchor && articleList.parentNode === null)
+    attachElementToAnchor(articleList, anchor);
   // Make sure the list is empty at the start.
-  articleList.innerHTML = '';
+  articleList.innerHTML = "";
 
   // Fill the list with the actual articles.
   articles.forEach((article: IArticle) => {
-    const {date, excerpt, featured_image_url: imageUrl, title, url} = article;
+    const { date, excerpt, featured_image_url: imageUrl, title, url } = article;
     const articleListElement = createArticleListItem(
       url,
       title,
@@ -51,7 +54,10 @@ function createListFromArticles(articles: IArticle[]) {
   });
 }
 
-function attachElementToAnchor(element: HTMLElement, anchor: HTMLElement | null): void {
+function attachElementToAnchor(
+  element: HTMLElement,
+  anchor: HTMLElement | null
+): void {
   if (anchor) {
     anchor.appendChild(element);
   }
@@ -61,19 +67,21 @@ function fetchArticles(
   url: string,
   pageNumber: number,
   callBackFn: (articles: IArticle[], count: number) => void
-): void{
-  fetch(`${url}/${pageNumber}`).then((response) => response.json()).then((data) => {
-    callBackFn(data.blogs, data.count);
-  });
+): void {
+  fetch(`${url}/${pageNumber}`)
+    .then((response) => response.json())
+    .then((data) => {
+      callBackFn(data.blogs, data.count);
+    });
 }
 
 function getDomAnchor(): HTMLDivElement | null {
-  return document.querySelector('.entry-content');
+  return document.querySelector(".entry-content");
 }
 
 function createArticleList(): HTMLUListElement {
-  const el = document.createElement('ul');
-  el.classList.add('articles');
+  const el = document.createElement("ul");
+  el.classList.add("articles");
   return el;
 }
 
@@ -81,21 +89,23 @@ function createArticleList(): HTMLUListElement {
 Factory function to create buttons for the paginator, the prevPage and nextPage
 inputs are used to determine wheter the buttons is disabled, e.g. if there are no pages to fetch.
 */
-function createPaginatorButtonsWithContainer(prevPage: IPage, nextPage: IPage): HTMLDivElement {
+function createPaginatorButtonsWithContainer(
+  prevPage: IPage,
+  nextPage: IPage
+): HTMLDivElement {
   const hasPrevPage = prevPage.nextPredicate(prevPage.pageNumber);
   const hasNextPage = nextPage.nextPredicate(nextPage.pageNumber);
-  const el = document.createElement('div');
-  el.classList.add('paginator-btns');
-  el.innerHTML =
-  `<button
-    ${!hasPrevPage ? 'disabled': ''}
-    class="paginator-prev-btn ${!hasPrevPage? 'paginator-btn-disabled': ''}"
+  const el = document.createElement("div");
+  el.classList.add("paginator-btns");
+  el.innerHTML = `<button
+    ${!hasPrevPage ? "disabled" : ""}
+    class="paginator-prev-btn ${!hasPrevPage ? "paginator-btn-disabled" : ""}"
     >
       Prev
   </button>
    <button
-    ${!hasNextPage ? 'disabled': ''}
-    class="paginator-next-btn ${!hasNextPage? 'paginator-btn-disabled': ''}"
+    ${!hasNextPage ? "disabled" : ""}
+    class="paginator-next-btn ${!hasNextPage ? "paginator-btn-disabled" : ""}"
   >
       Next
   </button>`;
@@ -103,13 +113,13 @@ function createPaginatorButtonsWithContainer(prevPage: IPage, nextPage: IPage): 
 }
 
 function getPaginatorButtonsContainer(): HTMLDivElement | null {
-  return document.querySelector('.paginator-btns') as HTMLDivElement;
+  return document.querySelector(".paginator-btns") as HTMLDivElement;
 }
 
 function getPaginatorButtons(container: HTMLDivElement): HTMLButtonElement[] {
   return [
-    container.querySelector('.paginator-prev-btn') as HTMLButtonElement,
-    container.querySelector('.paginator-next-btn') as HTMLButtonElement
+    container.querySelector(".paginator-prev-btn") as HTMLButtonElement,
+    container.querySelector(".paginator-next-btn") as HTMLButtonElement
   ];
 }
 
@@ -120,13 +130,12 @@ function createArticleListItem(
   articleExcerpt: string,
   imageSource: string | null
 ): HTMLLIElement {
-  const el =  document.createElement('li')
-  el.classList.add('article');
+  const el = document.createElement("li");
+  el.classList.add("article");
   const image = imageSource
-  ? `<img class="article-image" width="180" heigth="135" src="${imageSource}">`
-  : '';
-  el.innerHTML =
-      `${image}
+    ? `<img class="article-image" width="180" heigth="135" src="${imageSource}">`
+    : "";
+  el.innerHTML = `${image}
       <div class="article-text">
         <a class="article-title" href="${articleUrl}">${articleTitle}</a>
         <p class="article-date">${articleDate}</p>
@@ -140,7 +149,10 @@ function setUpPaginatorButtons(
   fetchArticlesFn: (pageNumber: number) => void
 ): void {
   // Create a new set of prev/next buttons for the paginator.
-  const buttonsContainer = createPaginatorButtonsWithContainer(prevPage, nextPage);
+  const buttonsContainer = createPaginatorButtonsWithContainer(
+    prevPage,
+    nextPage
+  );
   // Get the previous attached buttons if they exist.
   const previousButtonsContainer = getPaginatorButtonsContainer();
   // If it already exists swap the old buttons with the new buttons to reset their state.
@@ -155,8 +167,14 @@ function setUpPaginatorButtons(
   const buttons = getPaginatorButtons(buttonsContainer);
   const [prevButton, nextButton] = buttons;
   // Attach the event listeners.
-  prevButton.addEventListener('click', getButtonEventCb(prevPage, fetchArticlesFn));
-  nextButton.addEventListener('click', getButtonEventCb(nextPage, fetchArticlesFn));
+  prevButton.addEventListener(
+    "click",
+    getButtonEventCb(prevPage, fetchArticlesFn)
+  );
+  nextButton.addEventListener(
+    "click",
+    getButtonEventCb(nextPage, fetchArticlesFn)
+  );
 }
 
 /*
@@ -164,7 +182,7 @@ This function will generate the callback function for the paginator buttons
 */
 function getButtonEventCb(
   page: IPage,
-  fetchArticlesFn: (pageNumber: number) => void,
+  fetchArticlesFn: (pageNumber: number) => void
 ): () => void {
   return () => {
     if (page.nextPredicate(page.pageNumber)) {
@@ -180,5 +198,5 @@ function getButtonEventCb(
         fetchArticlesFn
       );
     }
-  }
+  };
 }

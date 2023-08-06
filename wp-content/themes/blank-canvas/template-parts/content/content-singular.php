@@ -3,6 +3,7 @@
 use Controller\DefaultPageController;
 use Data\Page\PageRepository;
 use Controller\HomeController;
+use Controller\PoetryController;
 use Views\Builders\PageBuilder;
 use Views\Services\PageService;
 
@@ -18,6 +19,7 @@ $current_url = parse_url(
 
 $controller = match ($current_url) {
   "/" => new HomeController,
+  "/poetry/" => new PoetryController($builder),
   default => new DefaultPageController($builder),
 };
 

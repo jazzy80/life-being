@@ -2,32 +2,37 @@
 
 namespace Data\Page;
 
+use Data\Conversion;
+use Domain\Models\Page;
 use Domain\Repositories\IPageRepository;
 use Utils\Utils;
-use WP_Post;
+
+use \WP_Post;
 
 class PageRepository implements IPageRepository
 {
-	public function get_current_page(): WP_Post|null
+	public function get_current_page(): Page|null
 	{
-		return get_post();
+		return Conversion::toDomain(get_post());
 	}
 
-	public function get_page_root_parent(WP_Post $page): \WP_Post
+	public function get_page_root_parent(Page $page): Page
 	{
-		if ($page->post_parent === 0) {
+		if ($page->get_post_parent() === 0) {
 			return $page;
 		}
 
-		return $this->get_page_root_parent(get_post($page->post_parent));
+		$parent_page = Conversion::toDomain(get_post($page->get_post_parent()));
+
+		return $this->get_page_root_parent($parent_page);
 	}
 
-	public function get_url_for_post(WP_Post $page): string
+	public function get_url_for_post(Page $page): string
 	{
 		return get_permalink($page);
 	}
 
-	public function get_featured_image(WP_Post $page): string|null
+	public function get_featured_image(Page $page): string|null
 	{
 		return get_the_post_thumbnail_url($page, 'large') ?: null;
 	}
@@ -48,8 +53,9 @@ class PageRepository implements IPageRepository
 	 *
 	 * @return WP_Post|null
 	 */
-	public function get_post_from_url(string $url): WP_Post|null
+	public function get_post_from_url(string $url): Page|null
 	{
-		return Utils::find_if(get_pages(), fn (WP_Post $page) => get_permalink($page) === $url);
+		$page = Utils::find_if(get_pages(), fn (WP_Post $page) => get_permalink($page) === $url);
+		return $page ?? Conversion::toDomain($page);
 	}
 }
