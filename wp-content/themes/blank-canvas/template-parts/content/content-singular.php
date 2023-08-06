@@ -1,19 +1,27 @@
 <?php
 
-use \data\page\PageRepository;
+use Controller\DefaultPageController;
+use Data\Page\PageRepository;
+use Controller\HomeController;
 use Views\Builders\PageBuilder;
-use \Views\TextBodyView;
+use Views\Services\PageService;
 
 $builder = new PageBuilder();
 $page_repository = new PageRepository();
-$current_page = $page_repository->get_current_page();
+$page_service = new PageService($page_repository);
 
-switch (strtolower($current_page->post_title)) {
-  case HOME_PAGE:
-    $builder->add_page_component(new TextBodyView());
-    echo $builder->build()->display();
-    break;
-}
+$current_url = parse_url(
+  $page_repository->get_url_for_post(
+    $page_repository->get_current_page()
+  )
+)["path"];
+
+$controller = match ($current_url) {
+  "/" => new HomeController,
+  default => new DefaultPageController($builder),
+};
+
+echo $controller->handle()->display();
 
 ?>
 <!-- Add the main script for the site -->

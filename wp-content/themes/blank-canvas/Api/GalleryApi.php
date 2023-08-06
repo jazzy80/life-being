@@ -30,14 +30,14 @@ class GalleryApi
 
 	public function get_gallery_images(WP_REST_Request $req): array
 	{
-		$page = filter_var($req->get_param('page'), FILTER_SANITIZE_STRING);
+		$page = filter_var($req->get_param('page'), FILTER_SANITIZE_STRING) . "/";
 
 		return $this->get_images_files($page);
 	}
 
 	private function get_images_files(string $page): array
 	{
-		$dir_path     = GalleryApi::GALLERY_DIR . $page . '/';
+		$dir_path     = GalleryApi::GALLERY_DIR . $page;
 		$dir_contents = glob($dir_path . '*');
 
 		// If there is no directory for images, return the featured image for the page
@@ -94,7 +94,7 @@ class GalleryApi
 	{
 		$page = $this->page_repository->get_post_from_url(BASE_URL . $page);
 		$featured_image = $this->page_repository->get_featured_image($page);
-		return $featured_image ? [GalleryApi::IMAGE_FILES_KEY => $featured_image] : [];
+		return $featured_image ? [GalleryApi::IMAGE_FILES_KEY => [$featured_image]] : [];
 	}
 
 	function strip_dirname_prefix(string $dirname): string

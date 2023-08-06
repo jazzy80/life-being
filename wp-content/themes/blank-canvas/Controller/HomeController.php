@@ -2,19 +2,13 @@
 
 namespace Controller;
 
-use Views\Builders\IPageBuilder;
 use \Views\IView;
+use \Views\TextBodyView;
 
-class HomeController extends IController
+class HomeController implements IController
 {
-    private IPageBuilder $builder;
-
-    public function __construct(IPageBuilder $builder)
-    {
-        $this->builder = $builder;
-    }
-
     public function handle(): IView
     {
+        return new TextBodyView();
     }
 }

@@ -6,5 +6,5 @@ use \Views\IView;
 
 interface IController
 {
-    function handle(): IView;
+    public function handle(): IView;
 }
