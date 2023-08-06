@@ -196,14 +196,6 @@ endif;
 function blank_canvas_enqueue()
 {
 	wp_enqueue_style('blank-canvas-styles', get_stylesheet_uri());
-	wp_enqueue_style(
-		'bootstrap',
-		'https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css'
-	);
-	wp_enqueue_script(
-		'bootstrap-js',
-		'https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js'
-	);
 }
 
 add_action('wp_enqueue_scripts', 'blank_canvas_enqueue', 11);

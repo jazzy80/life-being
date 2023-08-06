@@ -2,8 +2,8 @@
 
 namespace Data;
 
-use \WP_Post;
 use Domain\Models\Page;
+use WP_Post;
 
 class Conversion
 {
