@@ -14,7 +14,8 @@
 require_once __DIR__ . '/applicationconfig.php';
 
 //adding the api functions.
-require_once __DIR__ . '/Api/GalleryApi.php';
+require_once __DIR__ . '/Api/Gallery.php';
+require_once __DIR__ . '/Api/Article.php';
 require_once __DIR__ . '/Api/guestbook.php';
 require_once __DIR__ . '/Api/atelier.php';
 require_once __DIR__ . '/Api/products.php';

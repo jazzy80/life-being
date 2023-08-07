@@ -9,12 +9,12 @@ use Data\Page\PageRepository;
 use Domain\Repositories\IPageRepository;
 use WP_REST_Request;
 
-class GalleryApi {
+class Gallery {
 	const GALLERY_URL = '/gallery/';
-	const GALLERY_DIR = ROOT_DIR . GalleryApi::GALLERY_URL;
+	const GALLERY_DIR = ROOT_DIR . Gallery::GALLERY_URL;
 	const IMAGE_FILE_EXTENSIONS = [ 'jpg', 'jpeg', 'png' ];
 	const IMAGE_FILES_KEY = 'imageFiles';
-	const DEFAULT_IMAGE_DIR = GalleryApi::GALLERY_DIR . 'home/';
+	const DEFAULT_IMAGE_DIR = Gallery::GALLERY_DIR . 'home/';
 
 	private IPageRepository $page_repository;
 
@@ -28,17 +28,17 @@ class GalleryApi {
 	public function get_gallery_images( WP_REST_Request $req ): array {
 		$page_title = filter_var( $req->get_param( 'page' ), FILTER_SANITIZE_STRING ) . "/";
 
-		return $this->get_images_files( $page_title );
+		return [ Gallery::IMAGE_FILES_KEY => $this->get_images_files( $page_title ) ];
 	}
 
 	private function get_images_files( string $page_title ): array {
-		$dir_path     = GalleryApi::GALLERY_DIR . $page_title;
+		$dir_path     = Gallery::GALLERY_DIR . $page_title;
 		$dir_contents = glob( $dir_path . '*' );
 
 		// If there is no directory for images, return the featured image for the page
 		// or else the default image.
 		if ( ! $dir_contents ) {
-			return $this->get_featured_image( $page_title ) ?: $this->get_default_image() ?: $this->empty_result();
+			return $this->get_featured_image( $page_title ) ?: $this->get_default_image() ?: [];
 		}
 
 		$image_urls = array_map(
@@ -46,36 +46,28 @@ class GalleryApi {
 			$this->extract_images_from_dir_contents( $dir_contents )
 		);
 
-		return array(
-			// array_values is used to get rid of the numeric keys.
-			GalleryApi::IMAGE_FILES_KEY => array_values( $image_urls )
-		);
+		// array_values is used to get rid of the numeric keys.
+		return array_values( $image_urls );
 	}
 
 	private function extract_images_from_dir_contents( array $dir_contents ): array {
 		return array_filter( $dir_contents, function ( string $file ): bool {
 			$file_info = pathinfo( $file );
+
 			if ( array_key_exists( 'extension', $file_info ) ) {
 				$extension = strtolower( $file_info['extension'] );
 
-				return in_array( $extension, GalleryApi::IMAGE_FILE_EXTENSIONS );
+				return in_array( $extension, Gallery::IMAGE_FILE_EXTENSIONS );
 			}
 
 			return false;
 		} );
 	}
 
-	private function empty_result(): array {
-		return [ GalleryApi::IMAGE_FILES_KEY => [] ];
-	}
-
 	private function get_default_image(): array {
-		return
-			[
-				GalleryApi::IMAGE_FILES_KEY => array_map( [ $this, "strip_dirname_prefix" ],
-					glob( GalleryApi::DEFAULT_IMAGE_DIR . "*" )
-				)
-			];
+		return array_map( [ $this, "strip_dirname_prefix" ],
+			glob( Gallery::DEFAULT_IMAGE_DIR . "*" )
+		);
 	}
 
 	/**
@@ -91,7 +83,7 @@ class GalleryApi {
 			return [];
 		}
 
-		return $featured_image ? [ GalleryApi::IMAGE_FILES_KEY => [ $featured_image ] ] : [];
+		return $featured_image ? [ $featured_image ] : [];
 	}
 
 	function strip_dirname_prefix( string $dirname ): string {
@@ -102,6 +94,6 @@ class GalleryApi {
 add_action( 'rest_api_init', function () {
 	register_rest_route( 'api/', '/gallery-images/', array(
 		'methods'  => 'GET',
-		'callback' => [ new GalleryApi( new PageRepository() ), 'get_gallery_images' ],
+		'callback' => [ new Gallery( new PageRepository() ), 'get_gallery_images' ],
 	) );
 } );

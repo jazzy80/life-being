@@ -1,7 +1,7 @@
-import { IArticle } from "./interfaces/Iarticle";
-import { IPage } from "./interfaces/ipage";
-import { PreviousPage } from "./classes/previouspage";
-import { NextPage } from "./classes/nextpage";
+import {IArticle} from "./interfaces/Iarticle";
+import {IPage} from "./interfaces/ipage";
+import {PreviousPage} from "./classes/previouspage";
+import {NextPage} from "./classes/nextpage";
 
 /*
 Setup function, to generate a list page for articles with pagination,
@@ -200,3 +200,5 @@ function getButtonEventCb(
     }
   };
 }
+
+setUpArticles("/wp-json/api/articles");

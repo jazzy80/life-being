@@ -1,26 +1,27 @@
 <?php
 
+use Controller\ArticleController;
 use Controller\DefaultPageController;
-use Data\Page\PageRepository;
 use Controller\HomeController;
 use Controller\PoetryController;
+use Data\Page\PageRepository;
 use Views\Builders\PageBuilder;
 use Views\Services\PageService;
 
-$builder = new PageBuilder();
+$builder         = new PageBuilder();
 $page_repository = new PageRepository();
-$page_service = new PageService($page_repository);
+$page_service    = new PageService( $page_repository );
 
 $current_url = parse_url(
-  $page_repository->get_url_for_post(
-    $page_repository->get_current_page()
-  )
+	$page_repository->get_url_for_post(
+		$page_repository->get_current_page()
+	)
 )["path"];
 
-$controller = match ($current_url) {
-  "/" => new HomeController,
-  "/poetry/" => new PoetryController($builder),
-  default => new DefaultPageController($builder),
+$controller = match ( $current_url ) {
+	"/" => new HomeController,
+	"/being-blogs/", "/poetry/" => new ArticleController( $builder ),
+	default => new DefaultPageController( $builder ),
 };
 
 echo $controller->handle()->display();

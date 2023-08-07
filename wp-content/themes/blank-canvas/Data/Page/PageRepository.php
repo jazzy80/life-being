@@ -13,11 +13,12 @@ class PageRepository implements IPageRepository
 {
 	public function get_current_page(): Page|null
 	{
-		return Conversion::toDomain(get_post());
+		$post = get_post();
+		return $post ? Conversion::toDomain($post) : null;
 	}
 
 	public function get_pages(): array {
-		return array_map(fn(WP_Post $post) => Conversion::toDomain($post), $this->get_pages());
+		return array_map(fn(WP_Post $post) => Conversion::toDomain($post), get_pages());
 	}
 
 	public function get_page_root_parent(Page $page): Page

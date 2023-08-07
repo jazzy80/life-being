@@ -7,7 +7,7 @@ use Views\Builders\PageBuilder;
 use Views\JsFilesView;
 use Views\TextBodyView;
 
-class PoetryController implements IController
+class ArticleController implements IController
 {
     private PageBuilder $page_builder;
 
@@ -19,7 +19,7 @@ class PoetryController implements IController
     public function handle(): IView
     {
         return $this->page_builder
-            ->add_page_component(new JsFilesView(["/scripts/dist/poetrymain.js"]))
+            ->add_page_component(new JsFilesView(["/scripts/dist/articlesmain.js"]))
             ->add_page_component(new TextBodyView)
             ->build();
     }
