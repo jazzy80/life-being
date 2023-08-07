@@ -1,4 +1,4 @@
-import { Product as ApiProduct } from "../api/models/product";
+import { Product as ApiProduct } from "../api/models/Product";
 
 export function FromJSON(json: ApiProduct): Product {
   return {

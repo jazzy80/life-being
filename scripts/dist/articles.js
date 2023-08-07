@@ -1,57 +1,36 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setUpArticles = void 0;
-const previouspage_1 = require("./classes/previouspage");
-const nextpage_1 = require("./classes/nextpage");
-/*
-Setup function, to generate a list page for articles with pagination,
-the `url` param is used to fetch the articles from the backend.
-*/
-function setUpArticles(url) {
-    // fetch articles and use a callback func in the resulting promise.
-    fetchArticles(url, 0, (articles, count) => {
+const ArticleRepository_1 = require("./api/repositories/ArticleRepository");
+const PREVIOUS_BUTTON_NAME = "Vorige";
+const NEXT_BUTTON_NAME = "Volgende";
+const PREVIOUS_BUTTON_CLASS = "paginator-prev-btn";
+const NEXT_BUTTON_CLASS = "paginator-next-btn";
+const BUTTON_CONTAINER_CLASS = "paginator-btns";
+const BUTTON_DISABLE_CLASS = "paginator-btn-disabled";
+const ARTICLE_LIST_CLASS = "articles";
+// General state for the pagination.
+let pageNumber = 0;
+function setUpArticles(repository) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { articles, hasNext } = yield fetchArticles(repository);
         // From the articles create a list view in the DOM.
         createListFromArticles(articles);
-        const totalPages = Math.ceil(count / articles.length);
-        if (count > articles.length) {
-            // Add the event listeners for the buttons, clicking them will refectch articles from the next batch.
-            setUpPaginatorButtons(new previouspage_1.PreviousPage(0, totalPages), new nextpage_1.NextPage(0, totalPages), 
-            // refetch articles for the next or previous page, after a click.
-            (pageNumber) => fetchArticles(url, pageNumber, createListFromArticles));
-        }
+        // Add the event listeners for the buttons, clicking them will fetch articles from the next batch.
+        setPaginatorButtons(repository, hasNext);
     });
 }
-exports.setUpArticles = setUpArticles;
-function createListFromArticles(articles) {
-    const anchor = getDomAnchor();
-    // Get the article list if exists else create one and
-    // attach the list to the Dom via the anchor element.
-    // IIF pattern is used to avoid using a mutable variable.
-    const articleList = (document.querySelector(".articles") ||
-        createArticleList());
-    //  if the aricleList was created, it has no parent, in that case it needs to be atached to the DOM.
-    if (anchor && articleList.parentNode === null)
-        attachElementToAnchor(articleList, anchor);
-    // Make sure the list is empty at the start.
-    articleList.innerHTML = "";
-    // Fill the list with the actual articles.
-    articles.forEach((article) => {
-        const { date, excerpt, featured_image_url: imageUrl, title, url } = article;
-        const articleListElement = createArticleListItem(url, title, date, excerpt, imageUrl);
-        if (articleList)
-            articleList.appendChild(articleListElement);
-    });
-}
-function attachElementToAnchor(element, anchor) {
-    if (anchor) {
-        anchor.appendChild(element);
-    }
-}
-function fetchArticles(url, pageNumber, callBackFn) {
-    fetch(`${url}/${pageNumber}`)
-        .then((response) => response.json())
-        .then((data) => {
-        callBackFn(data.blogs, data.count);
+function fetchArticles(repository) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield repository.get_articles(pageNumber);
     });
 }
 function getDomAnchor() {
@@ -59,91 +38,81 @@ function getDomAnchor() {
 }
 function createArticleList() {
     const el = document.createElement("ul");
-    el.classList.add("articles");
+    el.classList.add(ARTICLE_LIST_CLASS);
     return el;
+}
+function createListFromArticles(articles) {
+    const anchor = getDomAnchor();
+    // Get the article list, if it was not previously created, create a new article list DOM element.
+    const articleList = (document.querySelector(`.${ARTICLE_LIST_CLASS}`) ||
+        createArticleList());
+    //  If the article list was created, it has no parent, in that case it needs to be attached to the DOM.
+    if (anchor && articleList.parentNode === null) {
+        anchor.appendChild(articleList);
+    }
+    // Make sure the list is empty at the start.
+    articleList.innerHTML = "";
+    // Fill the list with the actual articles.
+    articles.forEach((article) => {
+        const articleListElement = createArticleListItem(article);
+        if (articleList)
+            articleList.appendChild(articleListElement);
+    });
+}
+function createArticleListItem(article) {
+    const el = document.createElement("li");
+    el.classList.add(ARTICLE_LIST_CLASS);
+    const image = `<img class="article-image" src="${article.featuredImageUrl}" alt="" width="180">`;
+    el.innerHTML = `${image}
+      <div class="article-text">
+        <a class="article-title" href="${article.url}">${article.title}</a>
+        <p class="article-date">${article.date}</p>
+        <p class="article-excerpt">${article.excerpt}</p>`;
+    return el;
+}
+function createButtons() {
+    const el = document.createElement("div");
+    el.classList.add(BUTTON_CONTAINER_CLASS);
+    el.innerHTML = `<button class="${PREVIOUS_BUTTON_CLASS}">${PREVIOUS_BUTTON_NAME}</button>
+                    <button class="${NEXT_BUTTON_CLASS}">${NEXT_BUTTON_NAME}</button>`;
+    const anchor = getDomAnchor();
+    anchor.appendChild(el);
+    return el;
+}
+function disablePaginatorButtonWhen(button, predicate) {
+    if (predicate && !button.disabled) {
+        button.classList.add(BUTTON_DISABLE_CLASS);
+        button.disabled = true;
+    }
+    if (!predicate && button.disabled) {
+        button.classList.remove(BUTTON_DISABLE_CLASS);
+        button.disabled = false;
+    }
 }
 /*
 Factory function to create buttons for the paginator, the prevPage and nextPage
-inputs are used to determine wheter the buttons is disabled, e.g. if there are no pages to fetch.
+inputs are used to determine whether the buttons is disabled, e.g. if there are no pages to fetch.
 */
-function createPaginatorButtonsWithContainer(prevPage, nextPage) {
-    const hasPrevPage = prevPage.nextPredicate(prevPage.pageNumber);
-    const hasNextPage = nextPage.nextPredicate(nextPage.pageNumber);
-    const el = document.createElement("div");
-    el.classList.add("paginator-btns");
-    el.innerHTML = `<button
-    ${!hasPrevPage ? "disabled" : ""}
-    class="paginator-prev-btn ${!hasPrevPage ? "paginator-btn-disabled" : ""}"
-    >
-      Prev
-  </button>
-   <button
-    ${!hasNextPage ? "disabled" : ""}
-    class="paginator-next-btn ${!hasNextPage ? "paginator-btn-disabled" : ""}"
-  >
-      Next
-  </button>`;
-    return el;
-}
-function getPaginatorButtonsContainer() {
-    return document.querySelector(".paginator-btns");
-}
-function getPaginatorButtons(container) {
-    return [
-        container.querySelector(".paginator-prev-btn"),
-        container.querySelector(".paginator-next-btn")
-    ];
-}
-function createArticleListItem(articleUrl, articleTitle, articleDate, articleExcerpt, imageSource) {
-    const el = document.createElement("li");
-    el.classList.add("article");
-    const image = imageSource
-        ? `<img class="article-image" width="180" heigth="135" src="${imageSource}">`
-        : "";
-    el.innerHTML = `${image}
-      <div class="article-text">
-        <a class="article-title" href="${articleUrl}">${articleTitle}</a>
-        <p class="article-date">${articleDate}</p>
-        <p class="article-excerpt">${articleExcerpt}</p>`;
-    return el;
-}
-function setUpPaginatorButtons(prevPage, nextPage, fetchArticlesFn) {
-    // Create a new set of prev/next buttons for the paginator.
-    const buttonsContainer = createPaginatorButtonsWithContainer(prevPage, nextPage);
-    // Get the previous attached buttons if they exist.
-    const previousButtonsContainer = getPaginatorButtonsContainer();
-    // If it already exists swap the old buttons with the new buttons to reset their state.
-    // and previous attached eventlisteners.
-    if (previousButtonsContainer) {
-        const p = previousButtonsContainer.parentNode;
-        if (p)
-            p.replaceChild(buttonsContainer, previousButtonsContainer);
+function setPaginatorButtons(repository, hasNext) {
+    const hasPrevious = pageNumber > 0;
+    // Check if the buttons already exists, if they do use them else create and attach to the DOM.
+    const alreadyCreatedButtons = document.querySelector(`.${BUTTON_CONTAINER_CLASS}`);
+    const buttons = alreadyCreatedButtons ? alreadyCreatedButtons : createButtons();
+    const prevButton = buttons.querySelector(`.${PREVIOUS_BUTTON_CLASS}`);
+    const nextButton = buttons.querySelector(`.${NEXT_BUTTON_CLASS}`);
+    disablePaginatorButtonWhen(prevButton, !hasPrevious);
+    disablePaginatorButtonWhen(nextButton, !hasNext);
+    // Only add event listeners if the buttons were created.
+    if (!alreadyCreatedButtons) {
+        prevButton.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
+            pageNumber = pageNumber > 0 ? pageNumber - 1 : 0;
+            yield setUpArticles(repository);
+        }));
+        nextButton.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
+            pageNumber = hasNext ? pageNumber + 1 : pageNumber;
+            yield setUpArticles(repository);
+        }));
     }
-    // Else attach the new buttons to the DOM.
-    else
-        attachElementToAnchor(buttonsContainer, getDomAnchor());
-    // Get the individual buttons from its container.
-    const buttons = getPaginatorButtons(buttonsContainer);
-    const [prevButton, nextButton] = buttons;
-    // Attach the event listeners.
-    prevButton.addEventListener("click", getButtonEventCb(prevPage, fetchArticlesFn));
-    nextButton.addEventListener("click", getButtonEventCb(nextPage, fetchArticlesFn));
 }
-/*
-This function will generate the callback function for the paginator buttons
-*/
-function getButtonEventCb(page, fetchArticlesFn) {
-    return () => {
-        if (page.nextPredicate(page.pageNumber)) {
-            // If there is a next page available in the pagination.
-            const nextPageNumber = page.nextPage(page.pageNumber);
-            // Fetch the next batch of articles by the new pageNumber.
-            fetchArticlesFn(nextPageNumber);
-            // Update the eventlisteners with new the page information, so
-            // with the next click, the correct batch of articles will be fetched.
-            setUpPaginatorButtons(new previouspage_1.PreviousPage(nextPageNumber, page.totalPages), new nextpage_1.NextPage(nextPageNumber, page.totalPages), fetchArticlesFn);
-        }
-    };
-}
-setUpArticles("/wp-json/api/articles");
+setUpArticles(new ArticleRepository_1.ArticleRepository()).then(r => r);
 //# sourceMappingURL=articles.js.map

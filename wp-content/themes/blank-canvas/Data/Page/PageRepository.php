@@ -11,16 +11,27 @@ use WP_Post;
 
 class PageRepository implements IPageRepository
 {
+	/**
+	 * @return Page|null
+	 */
 	public function get_current_page(): Page|null
 	{
 		$post = get_post();
 		return $post ? Conversion::toDomain($post) : null;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_pages(): array {
 		return array_map(fn(WP_Post $post) => Conversion::toDomain($post), get_pages());
 	}
 
+	/**
+	 * @param Page $page
+	 *
+	 * @return Page
+	 */
 	public function get_page_root_parent(Page $page): Page
 	{
 		if ($page->get_post_parent() === 0) {
@@ -30,16 +41,6 @@ class PageRepository implements IPageRepository
 		$parent_page = Conversion::toDomain(get_post($page->get_post_parent()));
 
 		return $this->get_page_root_parent($parent_page);
-	}
-
-	public function get_url_for_post(Page $page): string|null
-	{
-		return get_permalink($page -> get_id()) ?: null;
-	}
-
-	public function get_featured_image(Page $page): string|null
-	{
-		return get_the_post_thumbnail_url($page->get_id(), 'large') ?: null;
 	}
 
 	/**

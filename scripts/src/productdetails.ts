@@ -1,5 +1,5 @@
-import { Api } from "./api/api";
-import { Product as ApiProduct } from "./api/models/product";
+import { Api } from "./api/Api";
+import { Product as ApiProduct } from "./api/models/Product";
 import { Product, FromJSON } from "./interfaces/product";
 
 const PRODUCT_DETAIL_CLASS = "product-detail";

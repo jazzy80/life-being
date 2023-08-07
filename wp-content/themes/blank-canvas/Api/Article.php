@@ -2,7 +2,6 @@
 
 namespace Api;
 
-use Data\Page\PageRepository;
 use Domain\Models\Page;
 use Domain\Repositories\IPageRepository;
 use WP_REST_Request;
@@ -19,7 +18,7 @@ class Article {
 	}
 
 	public function get_articles( WP_REST_Request $req ): array {
-		$page_number   = intval( filter_var( $req['page'], FILTER_SANITIZE_STRING ) );
+		$page_number   = intval( filter_var( $req->get_param('page'), FILTER_SANITIZE_STRING ) ) ?? 0;
 		$article_pages = array_map( fn( Page $page ) => $page->get_id(), array_filter(
 			$this->page_repository->get_pages(),
 			fn( Page $page ) => in_array( strtolower( $page->get_title() ), [
@@ -34,12 +33,15 @@ class Article {
 			fn( Page $page ) => in_array( $page->get_post_parent(), $article_pages )
 		);
 
+		$offset = $page_number * PAGINATION_SIZE;
+
 		// Get the articles for the specified `$page_number`.
-		$paginated_articles = array_slice( $articles, $page_number * PAGINATION_SIZE, PAGINATION_SIZE );
+		$paginated_articles = array_slice( $articles, $offset, PAGINATION_SIZE );
 
 		return [
 			'count' => count( $articles ),
-			'blogs' => array_reduce(
+			'has_next' => count($articles) > $offset + PAGINATION_SIZE,
+			'articles' => array_reduce(
 				$paginated_articles,
 				fn( array $acc, Page $article ) => array(
 					...$acc,
@@ -55,10 +57,3 @@ class Article {
 		];
 	}
 }
-
-add_action( 'rest_api_init', function () {
-	register_rest_route( 'api/', '/articles/(?P<page>\d+)/', array(
-		'methods'  => 'GET',
-		'callback' => [ new Article( new PageRepository() ), 'get_articles' ]
-	) );
-} );

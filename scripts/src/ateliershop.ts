@@ -1,5 +1,5 @@
-import { Api } from "./api/api";
-import { Product as ApiProduct } from "./api/models/product";
+import { Api } from "./api/Api";
+import { Product as ApiProduct } from "./api/models/Product";
 import { createLoader } from "./utils/createLoader";
 import { Product, FromJSON } from "./interfaces/product";
 

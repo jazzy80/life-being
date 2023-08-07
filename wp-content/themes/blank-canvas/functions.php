@@ -10,17 +10,31 @@
  * @since 1.0
  */
 
-//adding the configuration.
+use Api\Article;
+use Api\Gallery;
+use Data\Page\PageRepository;
+
+//Add the configuration for the application.
 require_once __DIR__ . '/applicationconfig.php';
 
-//adding the api functions.
-require_once __DIR__ . '/Api/Gallery.php';
-require_once __DIR__ . '/Api/Article.php';
-require_once __DIR__ . '/Api/guestbook.php';
-require_once __DIR__ . '/Api/atelier.php';
-require_once __DIR__ . '/Api/products.php';
-require_once __DIR__ . '/Api/product.php';
+// Register all rest api endpoints.
+function add_rest_endpoints(): void {
+	add_action( 'rest_api_init', function () {
+		register_rest_route( 'api/', '/articles/', array(
+			'methods'  => 'GET',
+			'callback' => [ new Article( new PageRepository() ), 'get_articles' ]
+		) );
+	} );
 
+	add_action( 'rest_api_init', function () {
+		register_rest_route( 'api/', '/gallery-images/', array(
+			'methods'  => 'GET',
+			'callback' => [ new Gallery( new PageRepository() ), 'get_gallery_images' ],
+		) );
+	} );
+}
+
+add_rest_endpoints();
 if (!function_exists('blank_canvas_setup')) :
 
 	/**

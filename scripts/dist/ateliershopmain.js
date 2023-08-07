@@ -13,9 +13,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Api = void 0;
 exports.Api = {
     baseUrl: "/wp-json/api/",
-    GET(url) {
+    GET(url, queryParams) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield fetch(`${this.baseUrl}${url}`);
+            const urlParams = queryParams ? `?${new URLSearchParams(queryParams)}` : "";
+            return yield fetch(`${this.baseUrl}${url}${urlParams}`);
         });
     }
 };
@@ -32,7 +33,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const api_1 = require("./api/api");
+const Api_1 = require("./api/Api");
 const createLoader_1 = require("./utils/createLoader");
 const product_1 = require("./interfaces/product");
 function init(category = "") {
@@ -104,7 +105,7 @@ function setUpPage(products, processed) {
 }
 function fetchProducts(page, category = "") {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield api_1.Api.GET(`products/?page=${page}&category=${category}`);
+        const response = yield Api_1.Api.GET(`products/?page=${page}&category=${category}`);
         const json = yield response.json();
         return {
             products: json.products.map(product_1.FromJSON),
@@ -171,7 +172,7 @@ function isLandscape(image) {
 }
 init();
 
-},{"./api/api":1,"./interfaces/product":3,"./utils/createLoader":4}],3:[function(require,module,exports){
+},{"./api/Api":1,"./interfaces/product":3,"./utils/createLoader":4}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FromJSON = void 0;

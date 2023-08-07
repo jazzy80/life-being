@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const api_1 = require("./api/api");
+const Api_1 = require("./api/Api");
 const product_1 = require("./interfaces/product");
 const PRODUCT_DETAIL_CLASS = "product-detail";
 const DETAIL_ROW_CLASS = "detail-row";
@@ -20,7 +20,7 @@ function init() {
     return __awaiter(this, void 0, void 0, function* () {
         const url = new URLSearchParams(document.location.search);
         const productId = url.get("product");
-        const [product, _] = yield api_1.Api.GET(`product/${productId}`).then((x) => x.json());
+        const [product, _] = yield Api_1.Api.GET(`product/${productId}`).then((x) => x.json());
         setUpPage(product_1.FromJSON(product));
     });
 }
