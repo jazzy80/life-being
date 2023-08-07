@@ -49,7 +49,7 @@ function init(category = "") {
         // Replace the old button with the clone.
         nextButton.replaceWith(newButton);
         // Spinning loader.
-        const loader = createLoader_1.createLoader();
+        const loader = (0, createLoader_1.createLoader)();
         // Loader is shown instead of the button.
         newButton.replaceWith(loader);
         const body = yield fetchProducts(0, category);
@@ -78,7 +78,7 @@ function init(category = "") {
         setFilterMenu(categories);
         // Setup the "More" button.
         newButton.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
-            const loader = createLoader_1.createLoader();
+            const loader = (0, createLoader_1.createLoader)();
             newButton.replaceWith(loader);
             const newResult = yield fetchProducts(++currentPage, category);
             processedImages.push(...(yield setUpPage(newResult.products, processedImages)));

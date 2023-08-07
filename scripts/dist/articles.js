@@ -17,6 +17,7 @@ const NEXT_BUTTON_CLASS = "paginator-next-btn";
 const BUTTON_CONTAINER_CLASS = "paginator-btns";
 const BUTTON_DISABLE_CLASS = "paginator-btn-disabled";
 const ARTICLE_LIST_CLASS = "articles";
+const ARTICLE_ITEM_CLASS = "article";
 // General state for the pagination.
 let pageNumber = 0;
 function setUpArticles(repository) {
@@ -61,7 +62,7 @@ function createListFromArticles(articles) {
 }
 function createArticleListItem(article) {
     const el = document.createElement("li");
-    el.classList.add(ARTICLE_LIST_CLASS);
+    el.classList.add(ARTICLE_ITEM_CLASS);
     const image = `<img class="article-image" src="${article.featuredImageUrl}" alt="" width="180">`;
     el.innerHTML = `${image}
       <div class="article-text">
@@ -97,7 +98,9 @@ function setPaginatorButtons(repository, hasNext) {
     const hasPrevious = pageNumber > 0;
     // Check if the buttons already exists, if they do use them else create and attach to the DOM.
     const alreadyCreatedButtons = document.querySelector(`.${BUTTON_CONTAINER_CLASS}`);
-    const buttons = alreadyCreatedButtons ? alreadyCreatedButtons : createButtons();
+    const buttons = alreadyCreatedButtons
+        ? alreadyCreatedButtons
+        : createButtons();
     const prevButton = buttons.querySelector(`.${PREVIOUS_BUTTON_CLASS}`);
     const nextButton = buttons.querySelector(`.${NEXT_BUTTON_CLASS}`);
     disablePaginatorButtonWhen(prevButton, !hasPrevious);
@@ -114,5 +117,5 @@ function setPaginatorButtons(repository, hasNext) {
         }));
     }
 }
-setUpArticles(new ArticleRepository_1.ArticleRepository()).then(r => r);
+setUpArticles(new ArticleRepository_1.ArticleRepository()).then((r) => r);
 //# sourceMappingURL=articles.js.map

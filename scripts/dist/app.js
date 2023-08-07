@@ -2,7 +2,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const slideshow_1 = require("./slideshow");
-slideshow_1.setUpSlideShow();
+(0, slideshow_1.setUpSlideShow)();
 
 },{"./slideshow":2}],2:[function(require,module,exports){
 "use strict";
