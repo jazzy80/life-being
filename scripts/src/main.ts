@@ -1,3 +1,4 @@
-import { setUpSlideShow } from "./slideshow";
+import {setUpSlideShow} from "./slideshow";
+import {GalleryImageRepository} from "./api/repositories/GalleryImageRepository";
 
-setUpSlideShow();
+setUpSlideShow(new GalleryImageRepository()).then(t => t);

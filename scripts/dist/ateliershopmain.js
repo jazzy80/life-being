@@ -11,12 +11,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Api = void 0;
+const baseUrl = "/wp-json/api/";
 exports.Api = {
-    baseUrl: "/wp-json/api/",
     GET(url, queryParams) {
         return __awaiter(this, void 0, void 0, function* () {
             const urlParams = queryParams ? `?${new URLSearchParams(queryParams)}` : "";
-            return yield fetch(`${this.baseUrl}${url}${urlParams}`);
+            return yield fetch(`${baseUrl}${url}${urlParams}`);
         });
     }
 };
@@ -49,7 +49,7 @@ function init(category = "") {
         // Replace the old button with the clone.
         nextButton.replaceWith(newButton);
         // Spinning loader.
-        const loader = (0, createLoader_1.createLoader)();
+        const loader = createLoader_1.createLoader();
         // Loader is shown instead of the button.
         newButton.replaceWith(loader);
         const body = yield fetchProducts(0, category);
@@ -78,7 +78,7 @@ function init(category = "") {
         setFilterMenu(categories);
         // Setup the "More" button.
         newButton.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
-            const loader = (0, createLoader_1.createLoader)();
+            const loader = createLoader_1.createLoader();
             newButton.replaceWith(loader);
             const newResult = yield fetchProducts(++currentPage, category);
             processedImages.push(...(yield setUpPage(newResult.products, processedImages)));

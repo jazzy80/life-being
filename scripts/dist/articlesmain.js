@@ -11,12 +11,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Api = void 0;
+const baseUrl = "/wp-json/api/";
 exports.Api = {
-    baseUrl: "/wp-json/api/",
     GET(url, queryParams) {
         return __awaiter(this, void 0, void 0, function* () {
             const urlParams = queryParams ? `?${new URLSearchParams(queryParams)}` : "";
-            return yield fetch(`${this.baseUrl}${url}${urlParams}`);
+            return yield fetch(`${baseUrl}${url}${urlParams}`);
         });
     }
 };
@@ -36,7 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ArticleRepository = void 0;
 const Api_1 = require("../Api");
 class ArticleRepository {
-    get_articles(pageNumber) {
+    getArticles(pageNumber) {
         return __awaiter(this, void 0, void 0, function* () {
             const resp = yield Api_1.Api.GET('articles/', { page: pageNumber.toString() });
             const json = yield resp.json();
@@ -91,7 +91,7 @@ function setUpArticles(repository) {
 }
 function fetchArticles(repository) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield repository.get_articles(pageNumber);
+        return yield repository.getArticles(pageNumber);
     });
 }
 function getDomAnchor() {

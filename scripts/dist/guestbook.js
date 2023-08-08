@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const textlengthvalidator_1 = require("./classes/textlengthvalidator");
-const alphanumvalidator_1 = require("./classes/alphanumvalidator");
-const compositevalidator_1 = require("./classes/compositevalidator");
+const textlengthvalidator_1 = require("./validators/textlengthvalidator");
+const alphanumvalidator_1 = require("./validators/alphanumvalidator");
+const compositevalidator_1 = require("./validators/compositevalidator");
 const overlay_1 = require("./utils/overlay");
 const ADDCOMMENT_SELECTOR = ".add-comment";
 const CANCELCOMMENT_SELECTOR = ".cancel-comment";
@@ -39,13 +39,13 @@ function getCommentForm() {
     return document.querySelector(GUESTBOOKFORM_SELECTOR);
 }
 function showCommentModal(form, fields) {
-    (0, overlay_1.addOverlay)();
+    overlay_1.addOverlay();
     showForm(form);
     resetForm(fields);
 }
 function removeCommentModal(form, fields) {
     hideForm(form);
-    (0, overlay_1.removeOverlay)();
+    overlay_1.removeOverlay();
     resetForm(fields);
 }
 function showForm(form) {
@@ -74,8 +74,9 @@ function submitComment(form, fields) {
     fetch(GUESTBOOK_POST_URL, {
         method: "POST",
         body: JSON.stringify(body)
-    }).then(() => {
+    }).then((resp) => {
         removeCommentModal(form, fields);
+        resp.json().then(data => console.log(data));
         location.reload();
     });
 }

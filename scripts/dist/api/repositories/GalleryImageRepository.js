@@ -9,27 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ArticleRepository = void 0;
+exports.GalleryImageRepository = void 0;
 const Api_1 = require("../Api");
-class ArticleRepository {
-    getArticles(pageNumber) {
+class GalleryImageRepository {
+    getImages(forPage) {
         return __awaiter(this, void 0, void 0, function* () {
-            const resp = yield Api_1.Api.GET('articles/', { page: pageNumber.toString() });
+            const resp = yield Api_1.Api.GET("gallery-images/", { page: forPage });
             const json = yield resp.json();
-            const articles = json.articles;
-            return {
-                count: json.count,
-                hasNext: json["has_next"],
-                articles: articles.map(a => ({
-                    title: a.title,
-                    date: a.date,
-                    url: a.url,
-                    excerpt: a.excerpt,
-                    featuredImageUrl: a.featured_image_url,
-                }))
-            };
+            return json["imageFiles"];
         });
     }
 }
-exports.ArticleRepository = ArticleRepository;
-//# sourceMappingURL=ArticleRepository.js.map
+exports.GalleryImageRepository = GalleryImageRepository;
+//# sourceMappingURL=GalleryImageRepository.js.map

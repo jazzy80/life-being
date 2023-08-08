@@ -1,63 +1,9 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AlphaNumValidator = void 0;
-const fieldvalidator_1 = require("../interfaces/fieldvalidator");
-class AlphaNumValidator extends fieldvalidator_1.FieldValidator {
-    constructor() {
-        super(...arguments);
-        this.errorMsg = 'Enkel alfa-numerieke tekens en "!?.,()" zijn toegestaan.\n';
-    }
-    validate(field) {
-        return /^[a-zA-Z0-9!?,.()'\n\r ]*$/.test(field.value);
-    }
-}
-exports.AlphaNumValidator = AlphaNumValidator;
-
-},{"../interfaces/fieldvalidator":5}],2:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CompositeValidator = void 0;
-const fieldvalidator_1 = require("../interfaces/fieldvalidator");
-class CompositeValidator extends fieldvalidator_1.FieldValidator {
-    constructor(...validators) {
-        super();
-        this.errorMsg = '';
-        this.validators = validators;
-    }
-    validate(field) {
-        return this.validators.every(v => v.validate(field));
-    }
-    getError(field) {
-        return this.validators.reduce((error, validator) => (`${error}${validator.getError(field)}`), '');
-    }
-}
-exports.CompositeValidator = CompositeValidator;
-
-},{"../interfaces/fieldvalidator":5}],3:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TextLengthValidator = void 0;
-const fieldvalidator_1 = require("../interfaces/fieldvalidator");
-class TextLengthValidator extends fieldvalidator_1.FieldValidator {
-    constructor(maxLength) {
-        super();
-        this.maxLength = maxLength;
-        this.errorMsg =
-            `Ingevoerde tekst moet tussen de 0 en ${this.maxLength} tekens bevatten.\n`;
-    }
-    validate(field) {
-        return 0 < field.value.length && field.value.length <= this.maxLength;
-    }
-}
-exports.TextLengthValidator = TextLengthValidator;
-
-},{"../interfaces/fieldvalidator":5}],4:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const textlengthvalidator_1 = require("./classes/textlengthvalidator");
-const alphanumvalidator_1 = require("./classes/alphanumvalidator");
-const compositevalidator_1 = require("./classes/compositevalidator");
+const textlengthvalidator_1 = require("./validators/textlengthvalidator");
+const alphanumvalidator_1 = require("./validators/alphanumvalidator");
+const compositevalidator_1 = require("./validators/compositevalidator");
 const overlay_1 = require("./utils/overlay");
 const ADDCOMMENT_SELECTOR = ".add-comment";
 const CANCELCOMMENT_SELECTOR = ".cancel-comment";
@@ -94,13 +40,13 @@ function getCommentForm() {
     return document.querySelector(GUESTBOOKFORM_SELECTOR);
 }
 function showCommentModal(form, fields) {
-    (0, overlay_1.addOverlay)();
+    overlay_1.addOverlay();
     showForm(form);
     resetForm(fields);
 }
 function removeCommentModal(form, fields) {
     hideForm(form);
-    (0, overlay_1.removeOverlay)();
+    overlay_1.removeOverlay();
     resetForm(fields);
 }
 function showForm(form) {
@@ -129,8 +75,9 @@ function submitComment(form, fields) {
     fetch(GUESTBOOK_POST_URL, {
         method: "POST",
         body: JSON.stringify(body)
-    }).then(() => {
+    }).then((resp) => {
         removeCommentModal(form, fields);
+        resp.json().then(data => console.log(data));
         location.reload();
     });
 }
@@ -158,7 +105,7 @@ function removeErrors() {
 }
 init();
 
-},{"./classes/alphanumvalidator":1,"./classes/compositevalidator":2,"./classes/textlengthvalidator":3,"./utils/overlay":7}],5:[function(require,module,exports){
+},{"./utils/overlay":3,"./validators/alphanumvalidator":4,"./validators/compositevalidator":5,"./validators/textlengthvalidator":6}],2:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FieldValidator = void 0;
@@ -169,11 +116,7 @@ class FieldValidator {
 }
 exports.FieldValidator = FieldValidator;
 
-},{}],6:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-},{}],7:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeOverlay = exports.addOverlay = void 0;
@@ -199,4 +142,58 @@ function removeOverlay() {
 }
 exports.removeOverlay = removeOverlay;
 
-},{}]},{},[4,5,1,2,3,6,7]);
+},{}],4:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AlphaNumValidator = void 0;
+const fieldvalidator_1 = require("../interfaces/fieldvalidator");
+class AlphaNumValidator extends fieldvalidator_1.FieldValidator {
+    constructor() {
+        super(...arguments);
+        this.errorMsg = 'Enkel alfa-numerieke tekens en "!?.,()" zijn toegestaan.\n';
+    }
+    validate(field) {
+        return /^[a-zA-Z0-9!?,.()'\n\r ]*$/.test(field.value);
+    }
+}
+exports.AlphaNumValidator = AlphaNumValidator;
+
+},{"../interfaces/fieldvalidator":2}],5:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CompositeValidator = void 0;
+const fieldvalidator_1 = require("../interfaces/fieldvalidator");
+class CompositeValidator extends fieldvalidator_1.FieldValidator {
+    constructor(...validators) {
+        super();
+        this.errorMsg = '';
+        this.validators = validators;
+    }
+    validate(field) {
+        return this.validators.every(v => v.validate(field));
+    }
+    getError(field) {
+        return this.validators.reduce((error, validator) => (`${error}${validator.getError(field)}`), '');
+    }
+}
+exports.CompositeValidator = CompositeValidator;
+
+},{"../interfaces/fieldvalidator":2}],6:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TextLengthValidator = void 0;
+const fieldvalidator_1 = require("../interfaces/fieldvalidator");
+class TextLengthValidator extends fieldvalidator_1.FieldValidator {
+    constructor(maxLength) {
+        super();
+        this.maxLength = maxLength;
+        this.errorMsg =
+            `Ingevoerde tekst moet tussen de 0 en ${this.maxLength} tekens bevatten.\n`;
+    }
+    validate(field) {
+        return 0 < field.value.length && field.value.length <= this.maxLength;
+    }
+}
+exports.TextLengthValidator = TextLengthValidator;
+
+},{"../interfaces/fieldvalidator":2}]},{},[1]);

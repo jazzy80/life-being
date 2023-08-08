@@ -24,7 +24,7 @@ async function setUpArticles(repository: ArticleRepository): Promise<void> {
 }
 
 async function fetchArticles(repository: ArticleRepository): Promise<Articles> {
-  return await repository.get_articles(pageNumber);
+  return await repository.getArticles(pageNumber);
 }
 
 function getDomAnchor(): HTMLDivElement {

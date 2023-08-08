@@ -8,7 +8,7 @@ class GuestBookModel {
 
   function get_all_entries(): array {
     $result = $this -> db_client -> get_results(
-      'SELECT * FROM wp_guestbook ORDER BY created_on DESC LIMIT 15',
+      'SELECT * FROM "wp_guestbook" ORDER BY created_on DESC LIMIT 15',
       OBJECT
     );
     return array_map(

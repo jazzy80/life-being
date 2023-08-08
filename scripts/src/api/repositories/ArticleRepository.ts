@@ -11,7 +11,7 @@ interface APIArticle {
 }
 
 export class ArticleRepository implements IArticleRepository {
-    async get_articles(pageNumber: number): Promise<Articles> {
+    async getArticles(pageNumber: number): Promise<Articles> {
         const resp = await Api.GET('articles/', {page: pageNumber.toString()});
         const json = await resp.json()
         const articles: APIArticle[] = json.articles;

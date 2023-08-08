@@ -1,7 +1,7 @@
 import { FieldValidator } from "./interfaces/fieldvalidator";
-import { TextLengthValidator } from "./classes/textlengthvalidator";
-import { AlphaNumValidator } from "./classes/alphanumvalidator";
-import { CompositeValidator } from "./classes/compositevalidator";
+import { TextLengthValidator } from "./validators/textlengthvalidator";
+import { AlphaNumValidator } from "./validators/alphanumvalidator";
+import { CompositeValidator } from "./validators/compositevalidator";
 import { FormField } from "./types/formfield";
 import { addOverlay, removeOverlay } from "./utils/overlay";
 
@@ -105,8 +105,9 @@ function submitComment(form: HTMLFormElement, fields: FormField[]): void {
   fetch(GUESTBOOK_POST_URL, {
     method: "POST",
     body: JSON.stringify(body)
-  }).then(() => {
+  }).then((resp) => {
     removeCommentModal(form, fields);
+    resp.json().then(data => console.log(data));
     location.reload();
   });
 }

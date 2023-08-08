@@ -4,8 +4,8 @@ namespace Views\Services;
 
 use Domain\Repositories\IPageRepository;
 use Domain\Services\IPageService;
-use Views\ViewModels\MenuItemViewModel;
 use Utils\Utils;
+use Views\ViewModels\MenuItemViewModel;
 
 class PageService implements IPageService {
 	private IPageRepository $repository;
@@ -19,9 +19,12 @@ class PageService implements IPageService {
 		$root_menu_items            = array_filter( $menu_items, fn( $item ) => $item->menu_item_parent === "0" );
 		$child_menu_items           = array_filter( $menu_items, fn( $item ) => $item->menu_item_parent !== "0" );
 		$grouped_children_by_parent = Utils::group_by( $child_menu_items, fn( $child ) => $child->menu_item_parent );
-		$current_url                = $this->repository->get_current_page()->get_url();
 
-		function loop( array $menu_items, string $current_url, array $result, array $grouped_children_by_parent ): array {
+		// The current page can be null(i.e. a 404 page does not exist).
+		$current_url                = $this->repository->get_current_page()?->get_url();
+
+		function loop( array $menu_items, string|null $current_url, array $result, array $grouped_children_by_parent
+		): array {
 			if ( count( $menu_items ) === 0 ) {
 				return $result;
 			}

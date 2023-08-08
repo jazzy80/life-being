@@ -31,7 +31,7 @@ function setUpArticles(repository) {
 }
 function fetchArticles(repository) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield repository.get_articles(pageNumber);
+        return yield repository.getArticles(pageNumber);
     });
 }
 function getDomAnchor() {

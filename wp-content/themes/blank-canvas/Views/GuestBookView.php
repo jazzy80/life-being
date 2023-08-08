@@ -1,6 +1,8 @@
 <?php
 namespace Views;
-class GuestBook implements IView {
+use Domain\Models\GuestBookEntry;
+
+class GuestBookView implements IView {
   private array $guest_book_entries;
 
   public function __construct($guest_book_entries) {
@@ -28,14 +30,14 @@ class GuestBook implements IView {
   private function generate_guestbook_entries(): string {
     return array_reduce(
       $this -> guest_book_entries,
-      function(string $html, \data\GuestBookEntry $entry): string {
+      function(string $html, GuestBookEntry $entry): string {
         return $html . '<li class="comment">
           <div class="row guestbook-header">
-            <p class="guest-name">' . $entry -> name . '</p>
-            <p class="comment-date">' .  $entry -> date  . '</p>
+            <p class="guest-name">' . $entry -> get_name() . '</p>
+            <p class="comment-date">' .  date_format($entry -> get_created_on(), "Y-m-d")  . '</p>
           </div>
           <div class="row text-body">
-            <p class="comment-text">' . $entry -> text_body . '</p>
+            <p class="comment-text">' . $entry -> get_text_body() . '</p>
           </div>
         </li>
         <hr>';
