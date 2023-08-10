@@ -1,5 +1,5 @@
-import { FieldValidator } from '../interfaces/fieldvalidator';
-import { FormField } from '../types/formfield';
+import { FieldValidator } from './FieldValidator';
+import { FormField } from '../types/FormField';
 
 export class CompositeValidator extends FieldValidator {
   private validators: Array<FieldValidator>;

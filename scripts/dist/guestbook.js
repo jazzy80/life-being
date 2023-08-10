@@ -1,42 +1,53 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const textlengthvalidator_1 = require("./validators/textlengthvalidator");
-const alphanumvalidator_1 = require("./validators/alphanumvalidator");
-const compositevalidator_1 = require("./validators/compositevalidator");
+const TextLengthValidator_1 = require("./validators/TextLengthValidator");
+const AlphanumericValidator_1 = require("./validators/AlphanumericValidator");
+const CompositeValidator_1 = require("./validators/CompositeValidator");
 const overlay_1 = require("./utils/overlay");
-const ADDCOMMENT_SELECTOR = ".add-comment";
-const CANCELCOMMENT_SELECTOR = ".cancel-comment";
-const SUBMITCOMMENT_SELECTOR = ".submit-comment";
-const GUESTBOOKFORM_SELECTOR = ".guestbook-form";
+const GuestBookRepository_1 = require("./api/repositories/GuestBookRepository");
+const ADD_COMMENT_SELECTOR = ".add-comment";
+const CANCEL_COMMENT_SELECTOR = ".cancel-comment";
+const SUBMIT_COMMENT_SELECTOR = ".submit-comment";
+const GUEST_BOOK_FORM_SELECTOR = ".guestbook-form";
 const ERROR = "error";
 const ERROR_COLOR = "red";
 const NEUTRAL_COLOR = "black";
-const GUESTBOOK_POST_URL = "/wp-json/api/guestbook/";
-const TEXTMAXLENGTH = 200;
+const TEXT_MAX_LENGTH = 200;
 function init() {
     const form = getCommentForm();
     const nameField = document.querySelector(".input-name");
     const commentField = document.querySelector(".comment-text");
     const formFields = [nameField, commentField];
-    const addCommentBtn = document.querySelector(ADDCOMMENT_SELECTOR);
+    const addCommentBtn = document.querySelector(ADD_COMMENT_SELECTOR);
     addCommentBtn.addEventListener("click", (e) => {
         e.preventDefault();
         showCommentModal(form, formFields);
     });
-    const cancelCommentBtn = document.querySelector(CANCELCOMMENT_SELECTOR);
+    const cancelCommentBtn = document.querySelector(CANCEL_COMMENT_SELECTOR);
     cancelCommentBtn.addEventListener("click", (e) => {
         e.preventDefault();
         removeCommentModal(form, formFields);
     });
-    const submitCommentBtn = document.querySelector(SUBMITCOMMENT_SELECTOR);
-    submitCommentBtn.addEventListener("click", (e) => {
+    const submitCommentBtn = document.querySelector(SUBMIT_COMMENT_SELECTOR);
+    submitCommentBtn.addEventListener("click", (e) => __awaiter(this, void 0, void 0, function* () {
         removeErrors();
         e.preventDefault();
-        validateFormFields(form, formFields);
-    });
+        if (validateFormFields(formFields)) {
+            yield submitComment(form, formFields);
+        }
+    }));
 }
 function getCommentForm() {
-    return document.querySelector(GUESTBOOKFORM_SELECTOR);
+    return document.querySelector(GUEST_BOOK_FORM_SELECTOR);
 }
 function showCommentModal(form, fields) {
     overlay_1.addOverlay();
@@ -54,12 +65,13 @@ function showForm(form) {
 function hideForm(form) {
     form.style.display = "none";
 }
-function validateFormFields(form, fields) {
+function validateFormFields(fields) {
     const guestBookValidator = createGuestBookValidator();
     const invalidFields = fields.filter((field) => !guestBookValidator.validate(field));
     if (invalidFields.length === 0)
-        return submitComment(form, fields);
+        return true;
     generateErrors(guestBookValidator, invalidFields);
+    return false;
 }
 function generateErrors(validator, fields) {
     fields.forEach((field) => {
@@ -67,16 +79,15 @@ function generateErrors(validator, fields) {
     });
 }
 function createGuestBookValidator() {
-    return new compositevalidator_1.CompositeValidator(new textlengthvalidator_1.TextLengthValidator(TEXTMAXLENGTH), new alphanumvalidator_1.AlphaNumValidator());
+    return new CompositeValidator_1.CompositeValidator(new TextLengthValidator_1.TextLengthValidator(TEXT_MAX_LENGTH), new AlphanumericValidator_1.AlphanumericValidator());
 }
 function submitComment(form, fields) {
-    const body = fields.reduce((acc, field) => (Object.assign({ [field.name]: field.value }, acc)), {});
-    fetch(GUESTBOOK_POST_URL, {
-        method: "POST",
-        body: JSON.stringify(body)
-    }).then((resp) => {
+    return __awaiter(this, void 0, void 0, function* () {
+        // Process the form fields into an object with the field name as the key and the field value as the object's value.
+        const keyValueFields = fields.reduce((result, field) => (Object.assign(Object.assign({}, result), { [field.name]: field.value })), {});
+        const guestBookEntry = { name: keyValueFields["name"], comment: keyValueFields["comment"] };
+        yield new GuestBookRepository_1.GuestBookRepository().submitGuestBookEntry(guestBookEntry);
         removeCommentModal(form, fields);
-        resp.json().then(data => console.log(data));
         location.reload();
     });
 }

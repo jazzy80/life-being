@@ -8,17 +8,17 @@ class GuestBookEntry {
 
 	private string $name;
 	private DateTimeInterface $created_on;
-	private string $text_body;
+	private string $comment;
 
 	/**
 	 * @param string $name
 	 * @param DateTimeInterface $created_on
-	 * @param string $text_body
+	 * @param string $comment
 	 */
-	public function __construct( string $name, DateTimeInterface $created_on, string $text_body ) {
+	public function __construct( string $name, DateTimeInterface $created_on, string $comment ) {
 		$this->name       = $name;
 		$this->created_on = $created_on;
-		$this->text_body  = $text_body;
+		$this->comment  = $comment;
 	}
 
 	public function get_name(): string {
@@ -29,7 +29,7 @@ class GuestBookEntry {
 		return $this->created_on;
 	}
 
-	public function get_text_body(): string {
-		return $this->text_body;
+	public function get_comment(): string {
+		return $this->comment;
 	}
 }

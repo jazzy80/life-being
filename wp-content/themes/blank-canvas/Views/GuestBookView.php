@@ -37,7 +37,7 @@ class GuestBookView implements IView {
             <p class="comment-date">' .  date_format($entry -> get_created_on(), "Y-m-d")  . '</p>
           </div>
           <div class="row text-body">
-            <p class="comment-text">' . $entry -> get_text_body() . '</p>
+            <p class="comment-text">' . $entry -> get_comment() . '</p>
           </div>
         </li>
         <hr>';

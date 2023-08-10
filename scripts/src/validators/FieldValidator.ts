@@ -1,4 +1,4 @@
-import { FormField } from '../types/formfield';
+import { FormField } from '../types/FormField';
 
 export abstract class FieldValidator {
   protected abstract errorMsg: string;

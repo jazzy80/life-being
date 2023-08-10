@@ -22,7 +22,7 @@ class GuestBookRepository implements IGuestBookRepository {
 	 */
 	function get_all_entries(): array {
 		$entries = $this->db_client->get_results(
-			'SELECT * FROM wp_guestbook ORDER BY created_on DESC LIMIT 15',
+			'SELECT name, created_on, text_body FROM wp_guestbook ORDER BY created_on DESC LIMIT 15',
 		);
 
 		return array_map(
@@ -35,8 +35,14 @@ class GuestBookRepository implements IGuestBookRepository {
 		);
 	}
 
-	public function create_guestbook_entry( string $name, string $text ): void {
-		$this->db_client->get_results( $this->db_client->prepare(
+	/**
+	 * @param string $name
+	 * @param string $text
+	 *
+	 * @return bool
+	 */
+	public function create_guestbook_entry( string $name, string $text ): bool{
+		return $this->db_client->query( $this->db_client->prepare(
 			'INSERT INTO wp_guestbook (name, text_body) VALUES (%s, %s)',
 			array( $name, $text )
 		) );

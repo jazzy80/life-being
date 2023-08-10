@@ -15,7 +15,7 @@ interface IGuestBookRepository {
 	 * @param string $name
 	 * @param string $text
 	 *
-	 * @return void
+	 * @return bool
 	 */
-	function create_guestbook_entry(string $name, string $text): void;
+	function create_guestbook_entry(string $name, string $text): bool;
 }

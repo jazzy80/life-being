@@ -1,7 +1,7 @@
-import { FieldValidator } from '../interfaces/fieldvalidator';
-import { FormField } from '../types/formfield';
+import { FieldValidator } from './FieldValidator';
+import { FormField } from '../types/FormField';
 
-export class AlphaNumValidator extends FieldValidator {
+export class AlphanumericValidator extends FieldValidator {
   protected errorMsg =
     'Enkel alfa-numerieke tekens en "!?.,()" zijn toegestaan.\n';
 

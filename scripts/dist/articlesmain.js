@@ -18,6 +18,11 @@ exports.Api = {
             const urlParams = queryParams ? `?${new URLSearchParams(queryParams)}` : "";
             return yield fetch(`${baseUrl}${url}${urlParams}`);
         });
+    },
+    POST(url, dataBody) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield fetch(`${baseUrl}${url}`, { method: "POST", body: dataBody });
+        });
     }
 };
 
