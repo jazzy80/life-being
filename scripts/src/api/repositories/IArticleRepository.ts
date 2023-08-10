@@ -1,5 +1,5 @@
-import {Article} from "../models/Article";
+import { Articles } from "../models/Articles";
 
 export interface IArticleRepository {
-    getArticles(pageNumber: number): Promise<{count: number, hasNext: Boolean, articles: Article[]}>;
+  getArticles(pageNumber: number): Promise<Articles>;
 }

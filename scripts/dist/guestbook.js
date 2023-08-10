@@ -50,13 +50,13 @@ function getCommentForm() {
     return document.querySelector(GUEST_BOOK_FORM_SELECTOR);
 }
 function showCommentModal(form, fields) {
-    overlay_1.addOverlay();
+    (0, overlay_1.addOverlay)();
     showForm(form);
     resetForm(fields);
 }
 function removeCommentModal(form, fields) {
     hideForm(form);
-    overlay_1.removeOverlay();
+    (0, overlay_1.removeOverlay)();
     resetForm(fields);
 }
 function showForm(form) {
