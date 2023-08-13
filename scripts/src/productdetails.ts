@@ -1,6 +1,6 @@
 import { Api } from "./api/Api";
-import { Product as ApiProduct } from "./api/models/Product";
-import { Product, FromJSON } from "./interfaces/product";
+import { Product } from "./api/models/Product";
+import { ApiProduct, FromJSON } from "./interfaces/product";
 
 const PRODUCT_DETAIL_CLASS = "product-detail";
 const DETAIL_ROW_CLASS = "detail-row";
@@ -42,7 +42,7 @@ function createProductRow(product: Product): Promise<HTMLImageElement> {
     productDetails.append(productName, price);
     row.before(productDetails, image);
     const category = document.createElement("p");
-    category.innerHTML = product.categoryName ?? "";
+    category.innerHTML = product.categories[0].categoryName ?? "";
     const description = document.createElement("p");
     description.innerHTML = product.description;
     const details = document.createElement("p");

@@ -1,6 +1,7 @@
 <?php
 
 use Controller\ArticleController;
+use Controller\AtelierShopController;
 use Controller\DefaultPageController;
 use Controller\GuestBookController;
 use Controller\HomeController;
@@ -22,6 +23,7 @@ $controller = match ( $current_url ) {
 	"/" => new HomeController,
 	"/being-blogs/", "/poetry/" => new ArticleController( $builder ),
 	"/guestbook/" => new GuestBookController( $builder, new GuestBookRepository( $wpdb ) ),
+    "/life-being-atelier-shop/" => new AtelierShopController ( $builder),
 	default => new DefaultPageController( $builder ),
 };
 

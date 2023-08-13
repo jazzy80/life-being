@@ -13,8 +13,10 @@
 use Api\Article;
 use Api\Gallery;
 use Api\Guestbook;
+use Api\Product;
 use Data\GuestBook\GuestBookRepository;
 use Data\Page\PageRepository;
+use Data\Product\ProductRepository;
 
 //Add the configuration for the application.
 require_once __DIR__ . '/applicationconfig.php';
@@ -23,21 +25,30 @@ require_once __DIR__ . '/applicationconfig.php';
 function add_rest_endpoints(): void {
 	add_action( 'rest_api_init', function () {
 		register_rest_route( 'api', '/articles/', array(
-			'methods'  => WP_REST_Server::READABLE,
-			'callback' => [ new Article( new PageRepository() ), 'get_articles' ],
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => [ new Article( new PageRepository() ), 'get_articles' ],
 			'permission_callback' => '__return_true',
 		) );
 
 		register_rest_route( 'api', '/gallery-images/', array(
-			'methods'  => WP_REST_Server::READABLE,
-			'callback' => [ new Gallery( new PageRepository() ), 'get_gallery_images' ],
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => [ new Gallery( new PageRepository() ), 'get_gallery_images' ],
 			'permission_callback' => '__return_true',
 		) );
 
 		global $wpdb;
 		register_rest_route( 'api', '/guestbook/', array(
-			'methods'  => WP_REST_Server::CREATABLE,
-			'callback' => [ new Guestbook( new GuestBookRepository($wpdb) ), 'create_guestbook_entry' ],
+			'methods'             => WP_REST_Server::CREATABLE,
+			'callback'            => [ new Guestbook( new GuestBookRepository( $wpdb ) ), 'create_guestbook_entry' ],
+			'permission_callback' => '__return_true',
+		) );
+
+		register_rest_route( 'api/', '/products/', array(
+			'methods'             => WP_REST_SERVER::READABLE,
+			'callback'            => [
+				new Product( new ProductRepository( $wpdb ) ),
+				'get_products'
+			],
 			'permission_callback' => '__return_true',
 		) );
 	} );
@@ -56,14 +67,14 @@ if ( ! function_exists( 'blank_canvas_setup' ) ) :
 	function blank_canvas_setup() {
 
 		// Add support for editor styles.
-		add_theme_support( 'editor-styles' );
+		add_theme_support( 'editor - styles' );
 
 		// Enqueue editor styles.
-		add_editor_style( 'variables.css' );
+		add_editor_style( 'variables . css' );
 
 		// Editor color palette.
 		$colors_theme_mod = get_theme_mod( 'custom_colors_active' );
-		$primary          = ( ! empty( $colors_theme_mod ) && 'default' === $colors_theme_mod || empty( get_theme_mod( 'seedlet_--global--color-primary' ) ) ) ? '#000000' : get_theme_mod( 'seedlet_--global--color-primary' );
+		$primary          = ( ! empty( $colors_theme_mod ) && 'default' === $colors_theme_mod || empty( get_theme_mod( 'seedlet_ --global-- color - primary' ) ) ) ? '#000000' : get_theme_mod( 'seedlet_--global--color-primary' );
 		$secondary        = ( ! empty( $colors_theme_mod ) && 'default' === $colors_theme_mod || empty( get_theme_mod( 'seedlet_--global--color-secondary' ) ) ) ? '#007cba' : get_theme_mod( 'seedlet_--global--color-secondary' );
 		$foreground       = ( ! empty( $colors_theme_mod ) && 'default' === $colors_theme_mod || empty( get_theme_mod( 'seedlet_--global--color-foreground' ) ) ) ? '#333333' : get_theme_mod( 'seedlet_--global--color-foreground' );
 		$tertiary         = ( ! empty( $colors_theme_mod ) && 'default' === $colors_theme_mod || empty( get_theme_mod( 'seedlet_--global--color-tertiary' ) ) ) ? '#FAFAFA' : get_theme_mod( 'seedlet_--global--color-tertiary' );

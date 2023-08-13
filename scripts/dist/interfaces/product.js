@@ -8,10 +8,12 @@ function FromJSON(json) {
         description: json.description,
         price: json.price,
         imageUrl: json.image_url,
-        categoryName: json.category_name,
-        categorySlug: json.category_slug,
-        categoryDescription: json.category_description,
-        detailText: json.detail_text
+        detailText: json.detail_text,
+        categories: json.categories.map(c => ({
+            categoryName: c.name,
+            categoryDescription: c.description,
+            categorySlug: c.slug
+        }))
     };
 }
 exports.FromJSON = FromJSON;

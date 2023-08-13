@@ -44,7 +44,7 @@ function createProductRow(product) {
         productDetails.append(productName, price);
         row.before(productDetails, image);
         const category = document.createElement("p");
-        category.innerHTML = (_a = product.categoryName) !== null && _a !== void 0 ? _a : "";
+        category.innerHTML = (_a = product.categories[0].categoryName) !== null && _a !== void 0 ? _a : "";
         const description = document.createElement("p");
         description.innerHTML = product.description;
         const details = document.createElement("p");

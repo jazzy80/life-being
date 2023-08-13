@@ -74,10 +74,7 @@ function init(category = "") {
         const categories = new Set([
             ["Alles", ""],
             ...body.products
-                .map((p) => [p.categoryName, p.categorySlug, p.categoryDescription])
-                .filter(([name, _]) => Boolean(name))
-            // JSON.stringify is used to ensure all entries are unique for the Set.
-            // In JS ["x"] != ["x"].
+                .reduce((acc, product) => [...acc, ...product.categories.filter(c => !!c.categoryName).map(c => [c.categoryName, c.categorySlug, c.categoryDescription])], [])
         ].map((x) => JSON.stringify(x)));
         // Use the categories to populate the categories select filter box.
         setFilterMenu(categories);
@@ -188,10 +185,12 @@ function FromJSON(json) {
         description: json.description,
         price: json.price,
         imageUrl: json.image_url,
-        categoryName: json.category_name,
-        categorySlug: json.category_slug,
-        categoryDescription: json.category_description,
-        detailText: json.detail_text
+        detailText: json.detail_text,
+        categories: json.categories.map(c => ({
+            categoryName: c.name,
+            categoryDescription: c.description,
+            categorySlug: c.slug
+        }))
     };
 }
 exports.FromJSON = FromJSON;

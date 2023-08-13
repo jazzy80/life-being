@@ -30,7 +30,7 @@ class Article {
 
 		$articles = array_filter(
 			$this->page_repository->get_pages(),
-			fn( Page $page ) => in_array( $page->get_post_parent(), $article_pages )
+			fn( Page $page ) => in_array( $page->get_post_parent(), $article_pages, true )
 		);
 
 		$offset = $page_number * PAGINATION_SIZE;

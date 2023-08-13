@@ -45,10 +45,7 @@ function init(category = "") {
         const categories = new Set([
             ["Alles", ""],
             ...body.products
-                .map((p) => [p.categoryName, p.categorySlug, p.categoryDescription])
-                .filter(([name, _]) => Boolean(name))
-            // JSON.stringify is used to ensure all entries are unique for the Set.
-            // In JS ["x"] != ["x"].
+                .reduce((acc, product) => [...acc, ...product.categories.filter(c => !!c.categoryName).map(c => [c.categoryName, c.categorySlug, c.categoryDescription])], [])
         ].map((x) => JSON.stringify(x)));
         // Use the categories to populate the categories select filter box.
         setFilterMenu(categories);
