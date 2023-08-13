@@ -51,6 +51,15 @@ function add_rest_endpoints(): void {
 			],
 			'permission_callback' => '__return_true',
 		) );
+
+		register_rest_route( 'api/', '/product/(?P<id>\d+)', array(
+			'methods'             => WP_REST_SERVER::READABLE,
+			'callback'            => [
+				new Product( new ProductRepository( $wpdb ) ),
+				'get_single_product'
+			],
+			'permission_callback' => '__return_true',
+		) );
 	} );
 }
 

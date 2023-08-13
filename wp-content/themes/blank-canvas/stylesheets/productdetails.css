@@ -17,6 +17,12 @@
   font-size: 1.2rem;
 }
 
+.details-text pre {
+  margin-top: 3rem;
+  overflow: hidden;
+  font-size: 0.9rem !important;
+}
+
 .detail-row {
   display: flex;
   flex-direction: column;

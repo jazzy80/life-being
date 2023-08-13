@@ -5,6 +5,8 @@ namespace Domain\Models;
 use Serializable;
 
 class Product {
+	private int $id;
+
 	private ?string $name;
 
 	private ?string $description;
@@ -18,6 +20,7 @@ class Product {
 	private array $categories;
 
 	/**
+	 * @param int $id
 	 * @param string|null $name
 	 * @param string|null $description
 	 * @param float|null $price
@@ -26,15 +29,20 @@ class Product {
 	 * @param array<Category> $categories
 	 */
 	public function __construct(
-		?string $name, ?string $description, ?float $price, ?string $image,
+		int $id, ?string $name, ?string $description, ?float $price, ?string $image,
 		?string $detail_text, array $categories
 	) {
+		$this->id          = $id;
 		$this->name        = $name;
 		$this->description = $description;
 		$this->price       = $price;
 		$this->image       = $image;
 		$this->detail_text = $detail_text;
 		$this->categories  = $categories;
+	}
+
+	public function get_id(): int {
+		return $this->id;
 	}
 
 	public function get_name(): ?string {
@@ -63,12 +71,13 @@ class Product {
 
 	public function to_json(): array {
 		return [
-			"name"=> $this->name,
-			"description"=> $this->description,
-			"price"=> $this->price,
-			"image_url"=> $this->image,
-			"detail_text"=>$this->detail_text,
-			"categories"=> array_map(fn(Category $category) => $category->to_json(),
+			"id"          => $this->id,
+			"name"        => $this->name,
+			"description" => $this->description,
+			"price"       => $this->price,
+			"image_url"   => $this->image,
+			"detail_text" => $this->detail_text,
+			"categories"  => array_map( fn( Category $category ) => $category->to_json(),
 				$this->categories
 			),
 		];

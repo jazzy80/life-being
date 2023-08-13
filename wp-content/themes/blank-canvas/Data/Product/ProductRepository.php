@@ -52,19 +52,19 @@ class ProductRepository implements IProductRepository {
 		$grouped_products = Utils::group_by( $raw_products, fn( object $o ) => $o->id );
 		return array_map(
 			fn( array $products ) => new Product(
+				$products[0]->id,
 				$products[0]->name,
 				$products[0]->description,
 				$products[0]->price,
 				$products[0]->image_url,
-				$products[0]->detail_text,
-				$products[0]->category_id ? array_map(
-					fn( object $product ) => new Category(
-						$product->category_name,
-						$product->category_slug,
-						$product->category_description,
-					)
-					, $products
-				) : []
+				$products[0]->detail_text, $products[0]->category_id ? array_map(
+				fn( object $product ) => new Category(
+					$product->category_name,
+					$product->category_slug,
+					$product->category_description,
+				)
+				, $products
+			) : []
 			),
 			array_values( $grouped_products )
 		);

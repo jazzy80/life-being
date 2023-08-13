@@ -20,7 +20,7 @@ function init() {
     return __awaiter(this, void 0, void 0, function* () {
         const url = new URLSearchParams(document.location.search);
         const productId = url.get("product");
-        const [product, _] = yield Api_1.Api.GET(`product/${productId}`).then((x) => x.json());
+        const product = yield Api_1.Api.GET(`product/${productId}`).then((x) => x.json()).then(body => body["product"]);
         setUpPage((0, product_1.FromJSON)(product));
     });
 }
@@ -47,8 +47,9 @@ function createProductRow(product) {
         category.innerHTML = (_a = product.categories[0].categoryName) !== null && _a !== void 0 ? _a : "";
         const description = document.createElement("p");
         description.innerHTML = product.description;
-        const details = document.createElement("p");
-        details.innerHTML = (_b = product.detailText) !== null && _b !== void 0 ? _b : "";
+        const details = document.createElement("span");
+        details.classList.add('details-text');
+        details.innerHTML = `<pre> ${(_b = product.detailText) !== null && _b !== void 0 ? _b : ""} </pre>`;
         const buyButton = document.createElement("button");
         buyButton.classList.add(BUY_BTN_CLASS);
         buyButton.innerHTML = BUY_STRING;

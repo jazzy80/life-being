@@ -11,9 +11,9 @@ const PRODUCT_DETAIL_IMAGE_CLASS = "product-detail-image";
 async function init(): Promise<void> {
   const url = new URLSearchParams(document.location.search);
   const productId = url.get("product");
-  const [product, _]: ApiProduct[] = await Api.GET(`product/${productId}`).then(
+  const product: ApiProduct = await Api.GET(`product/${productId}`).then(
     (x) => x.json()
-  );
+  ).then(body => body["product"]);
   setUpPage(FromJSON(product));
 }
 
@@ -45,8 +45,9 @@ function createProductRow(product: Product): Promise<HTMLImageElement> {
     category.innerHTML = product.categories[0].categoryName ?? "";
     const description = document.createElement("p");
     description.innerHTML = product.description;
-    const details = document.createElement("p");
-    details.innerHTML = product.detailText ?? "";
+    const details = document.createElement("span");
+    details.classList.add('details-text');
+    details.innerHTML = `<pre> ${product.detailText ?? ""} </pre>`;
     const buyButton = document.createElement("button");
     buyButton.classList.add(BUY_BTN_CLASS);
     buyButton.innerHTML = BUY_STRING;

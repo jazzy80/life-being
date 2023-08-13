@@ -5,6 +5,7 @@ use Controller\AtelierShopController;
 use Controller\DefaultPageController;
 use Controller\GuestBookController;
 use Controller\HomeController;
+use Controller\ProductDetailsController;
 use Data\GuestBook\GuestBookRepository;
 use Data\Page\PageRepository;
 use Views\Builders\PageBuilder;
@@ -24,6 +25,7 @@ $controller = match ( $current_url ) {
 	"/being-blogs/", "/poetry/" => new ArticleController( $builder ),
 	"/guestbook/" => new GuestBookController( $builder, new GuestBookRepository( $wpdb ) ),
     "/life-being-atelier-shop/" => new AtelierShopController ( $builder),
+    "/product-details/" => new ProductDetailsController ( $builder ),
 	default => new DefaultPageController( $builder ),
 };
 

@@ -4,6 +4,8 @@ namespace Api;
 
 use Domain\Models\Category;
 use Domain\Repositories\IProductRepository;
+use Utils\Utils;
+use WP_Error;
 use WP_REST_Request;
 
 class Product {
@@ -15,6 +17,25 @@ class Product {
 	 */
 	public function __construct( IProductRepository $repository ) {
 		$this->repository = $repository;
+	}
+
+	/**
+	 * @param WP_REST_Request $req
+	 *
+	 * @return WP_Error|array A single product in an associative array.
+	 *     A single product in an associative array or an error if product is not found.
+	 */
+	public function get_single_product(WP_REST_Request $req): WP_Error | array {
+		$id = $req->get_param("id");
+		$products = $this->repository->get_products();
+		$product = Utils::find_if($products, fn(\Domain\Models\Product $product) => $product->get_id() == $id);
+
+		if ($product === null) {
+			return new WP_Error("", "Product with id: $id not found", ["status" => 404]);
+		}
+		return [
+			"product" => $product->to_json()
+		];
 	}
 
 	/**
