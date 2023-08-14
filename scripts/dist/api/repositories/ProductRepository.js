@@ -19,9 +19,9 @@ class ProductRepository {
             return this.toCommon(product);
         });
     }
-    getProducts() {
+    getProducts(page, category) {
         return __awaiter(this, void 0, void 0, function* () {
-            const resp = yield Api_1.Api.GET('products/');
+            const resp = yield Api_1.Api.GET('products/', { page: page.toString(), category: category !== null && category !== void 0 ? category : "" });
             const products = yield resp.json();
             return {
                 count: parseInt(products.count),
