@@ -47,13 +47,21 @@ function createProductRow(product) {
         category.innerHTML = (_a = product.categories[0].categoryName) !== null && _a !== void 0 ? _a : "";
         const description = document.createElement("p");
         description.innerHTML = product.description;
+<<<<<<< HEAD
         const details = document.createElement("span");
         details.classList.add('details-text');
         details.innerHTML = `<pre> ${(_b = product.detailText) !== null && _b !== void 0 ? _b : ""} </pre>`;
+=======
+        const details = document.createElement("p");
+        details.innerHTML = (_b = product.detailText) !== null && _b !== void 0 ? _b : "";
+        const productOptions = document.createElement("form");
+        productOptions.innerHTML = `<label>Kies jouw opties:</label><input type="checkbox">Met Lijst</input>
+     <input type="checkbox">Fine Arts</input>`;
+>>>>>>> origin/ateliershop-details-page
         const buyButton = document.createElement("button");
         buyButton.classList.add(BUY_BTN_CLASS);
         buyButton.innerHTML = BUY_STRING;
-        row.append(category, description, details, buyButton);
+        row.append(category, description, details, productOptions, buyButton);
     });
 }
 //# sourceMappingURL=productdetails.js.map

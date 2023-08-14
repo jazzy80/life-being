@@ -48,9 +48,12 @@ function createProductRow(product: Product): Promise<HTMLImageElement> {
     const details = document.createElement("span");
     details.classList.add('details-text');
     details.innerHTML = `<pre> ${product.detailText ?? ""} </pre>`;
+    const productOptions = document.createElement("form");
+    productOptions.innerHTML = `<label>Kies jouw opties:</label><input type="checkbox">Met Lijst</input>
+     <input type="checkbox">Fine Arts</input>`;
     const buyButton = document.createElement("button");
     buyButton.classList.add(BUY_BTN_CLASS);
     buyButton.innerHTML = BUY_STRING;
-    row.append(category, description, details, buyButton);
+    row.append(category, description, details, productOptions, buyButton);
   });
 }
