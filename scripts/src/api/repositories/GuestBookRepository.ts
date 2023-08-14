@@ -1,4 +1,4 @@
-import {IGuestBookRepository} from "./IGuestBookRepository";
+import {IGuestBookRepository} from "./interfaces/IGuestBookRepository";
 import {GuestBookEntry} from "../models/GuestBookEntry";
 import {Api} from "../Api";
 

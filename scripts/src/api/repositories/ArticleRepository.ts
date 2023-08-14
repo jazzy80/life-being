@@ -1,4 +1,4 @@
-import {IArticleRepository} from "./IArticleRepository";
+import {IArticleRepository} from "./interfaces/IArticleRepository";
 import {Api} from "../Api";
 import {Articles} from "../models/Articles";
 

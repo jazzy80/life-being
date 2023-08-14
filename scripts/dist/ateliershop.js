@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const Api_1 = require("./api/Api");
 const createLoader_1 = require("./utils/createLoader");
-const product_1 = require("./interfaces/product");
 function init(category = "") {
     return __awaiter(this, void 0, void 0, function* () {
         const imageContainer = document.querySelector(".ateliershop-images");
@@ -25,7 +24,7 @@ function init(category = "") {
         // Replace the old button with the clone.
         nextButton.replaceWith(newButton);
         // Spinning loader.
-        const loader = (0, createLoader_1.createLoader)();
+        const loader = createLoader_1.createLoader();
         // Loader is shown instead of the button.
         newButton.replaceWith(loader);
         const body = yield fetchProducts(0, category);
@@ -51,7 +50,7 @@ function init(category = "") {
         setFilterMenu(categories);
         // Setup the "More" button.
         newButton.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
-            const loader = (0, createLoader_1.createLoader)();
+            const loader = createLoader_1.createLoader();
             newButton.replaceWith(loader);
             const newResult = yield fetchProducts(++currentPage, category);
             processedImages.push(...(yield setUpPage(newResult.products, processedImages)));
@@ -81,7 +80,7 @@ function fetchProducts(page, category = "") {
         const response = yield Api_1.Api.GET(`products/?page=${page}&category=${category}`);
         const json = yield response.json();
         return {
-            products: json.products.map(product_1.FromJSON),
+            products: json.products.map(FromJSON),
             count: json.count,
             paginationSize: json.paginationSize
         };

@@ -1,10 +1,10 @@
-import {Api} from "./api/Api";
 import {createLoader} from "./utils/createLoader";
-import {FromJSON} from "./interfaces/product";
 import {Product} from "./api/models/Product";
-import {Category} from "./api/models/Category";
+import {Products} from "./api/models/Products";
+import {IProductRepository} from "./api/repositories/interfaces/IProductRepository";
+import {ProductRepository} from "./api/repositories/ProductRepository";
 
-async function init(category = ""): Promise<void> {
+async function init(repository: IProductRepository, category = ""): Promise<void> {
     const imageContainer = document.querySelector(
         ".ateliershop-images"
     ) as HTMLDivElement;
@@ -13,7 +13,7 @@ async function init(category = ""): Promise<void> {
     const nextButton = document.querySelector(
         ".shop-next-btn"
     ) as HTMLButtonElement;
-    // A button is cloned to reset all eventlisteners on it.
+    // A button is cloned to reset all event listeners on it.
     const newButton = document.createElement("button");
     newButton.textContent = nextButton.innerText;
     newButton.classList.add("shop-next-btn");
@@ -23,7 +23,7 @@ async function init(category = ""): Promise<void> {
     const loader = createLoader();
     // Loader is shown instead of the button.
     newButton.replaceWith(loader);
-    const body = await fetchProducts(0, category);
+    const body = await fetchProducts(repository, 0, category);
 
     // Calculate the total pages of products.
     const amountOfPages =
@@ -47,18 +47,18 @@ async function init(category = ""): Promise<void> {
         [
             ["Alles", ""],
             ...body.products
-                .reduce((acc: string[][], product) => [...acc, ...product.categories.filter(c=> !!c.categoryName).map(c => [c.categoryName, c.categorySlug, c.categoryDescription])], [])
+                .reduce((acc: string[][], product) => [...acc, ...product.categories.filter(c => !!c.categoryName).map(c => [c.categoryName, c.categorySlug, c.categoryDescription])], [])
         ].map((x) => JSON.stringify(x))
     );
 
     // Use the categories to populate the categories select filter box.
-    setFilterMenu(categories);
+    setFilterMenu(repository, categories);
 
     // Setup the "More" button.
     newButton.addEventListener("click", async () => {
         const loader = createLoader();
         newButton.replaceWith(loader);
-        const newResult = await fetchProducts(++currentPage, category);
+        const newResult = await fetchProducts(repository, ++currentPage, category);
         processedImages.push(
             ...(await setUpPage(newResult.products, processedImages))
         );
@@ -92,26 +92,21 @@ async function setUpPage(
 }
 
 async function fetchProducts(
+    repository: IProductRepository,
     page: number,
     category = ""
-): Promise<{ products: Product[]; count: number; paginationSize: number }> {
-    const response = await Api.GET(`products/?page=${page}&category=${category}`);
-    const json = await response.json();
-    return {
-        products: json.products.map(FromJSON),
-        count: json.count,
-        paginationSize: json.paginationSize
-    };
+): Promise<Products> {
+    return await repository.getProducts(page, category);
 }
 
-function setFilterMenu(categories: Set<string>): void {
+function setFilterMenu(repository: IProductRepository, categories: Set<string>): void {
     const filterMenu = document.querySelector("select") as HTMLSelectElement;
     if (filterMenu.querySelector("option")) return;
     if (filterMenu.parentElement)
         filterMenu.parentElement.style.visibility = "visible";
 
     filterMenu.addEventListener("change", () => {
-        init(filterMenu.value);
+        init(repository, filterMenu.value);
     });
     Array.from(categories)
         .map((json) => JSON.parse(json))
@@ -165,4 +160,4 @@ function isLandscape(image: HTMLImageElement): boolean {
     return image.height < image.width;
 }
 
-init();
+init(new ProductRepository()).then(r => r);

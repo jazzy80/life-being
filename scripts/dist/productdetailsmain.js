@@ -11,38 +11,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Api = void 0;
+const baseUrl = "/wp-json/api/";
 exports.Api = {
-    baseUrl: "/wp-json/api/",
-    GET(url) {
+    GET(url, queryParams) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield fetch(`${this.baseUrl}${url}`);
+            const urlParams = queryParams ? `?${new URLSearchParams(queryParams)}` : "";
+            return yield fetch(`${baseUrl}${url}${urlParams}`);
+        });
+    },
+    POST(url, dataBody) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield fetch(`${baseUrl}${url}`, { method: "POST", body: dataBody });
         });
     }
 };
 
 },{}],2:[function(require,module,exports){
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Api = void 0;
-exports.Api = {
-    baseUrl: "/wp-json/api/",
-    GET(url) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield fetch(`${this.baseUrl}${url}`);
-        });
-    }
-};
-
-},{}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FromJSON = void 0;
@@ -53,15 +37,17 @@ function FromJSON(json) {
         description: json.description,
         price: json.price,
         imageUrl: json.image_url,
-        categoryName: json.category_name,
-        categorySlug: json.category_slug,
-        categoryDescription: json.category_description,
-        detailText: json.detail_text
+        detailText: json.detail_text,
+        categories: json.categories.map(c => ({
+            categoryName: c.name,
+            categoryDescription: c.description,
+            categorySlug: c.slug
+        }))
     };
 }
 exports.FromJSON = FromJSON;
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -73,7 +59,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const api_1 = require("./api/api");
+const Api_1 = require("./api/Api");
 const product_1 = require("./interfaces/product");
 const PRODUCT_DETAIL_CLASS = "product-detail";
 const DETAIL_ROW_CLASS = "detail-row";
@@ -84,8 +70,8 @@ function init() {
     return __awaiter(this, void 0, void 0, function* () {
         const url = new URLSearchParams(document.location.search);
         const productId = url.get("product");
-        const [product, _] = yield api_1.Api.GET(`product/${productId}`).then((x) => x.json());
-        setUpPage((0, product_1.FromJSON)(product));
+        const product = yield Api_1.Api.GET(`product/${productId}`).then((x) => x.json()).then(body => body["product"]);
+        setUpPage(product_1.FromJSON(product));
     });
 }
 function setUpPage(product) {
@@ -108,11 +94,12 @@ function createProductRow(product) {
         productDetails.append(productName, price);
         row.before(productDetails, image);
         const category = document.createElement("p");
-        category.innerHTML = (_a = product.categoryName) !== null && _a !== void 0 ? _a : "";
+        category.innerHTML = (_a = product.categories[0].categoryName) !== null && _a !== void 0 ? _a : "";
         const description = document.createElement("p");
         description.innerHTML = product.description;
-        const details = document.createElement("p");
-        details.innerHTML = (_b = product.detailText) !== null && _b !== void 0 ? _b : "";
+        const details = document.createElement("span");
+        details.classList.add('details-text');
+        details.innerHTML = `<pre> ${(_b = product.detailText) !== null && _b !== void 0 ? _b : ""} </pre>`;
         const productOptions = document.createElement("form");
         productOptions.innerHTML = `<label>Kies jouw opties:</label><input type="checkbox">Met Lijst</input>
      <input type="checkbox">Fine Arts</input>`;
@@ -123,4 +110,4 @@ function createProductRow(product) {
     });
 }
 
-},{"./api/api":1,"./interfaces/product":3}]},{},[4,3,2]);
+},{"./api/Api":1,"./interfaces/product":2}]},{},[3]);

@@ -1,4 +1,4 @@
-import {IGalleryImageRepository} from "./IGalleryImageRepository";
+import {IGalleryImageRepository} from "./interfaces/IGalleryImageRepository";
 import {Api} from "../Api";
 
 export class GalleryImageRepository implements IGalleryImageRepository {

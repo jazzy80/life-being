@@ -1,7 +1,7 @@
 import { Article } from "./api/models/Article";
 import { ArticleRepository } from "./api/repositories/ArticleRepository";
 import { Articles } from "./api/models/Articles";
-import { IArticleRepository } from "./api/repositories/IArticleRepository";
+import { IArticleRepository } from "./api/repositories/interfaces/IArticleRepository";
 
 const PREVIOUS_BUTTON_NAME = "Vorige";
 const NEXT_BUTTON_NAME = "Volgende";
