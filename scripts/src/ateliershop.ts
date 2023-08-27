@@ -89,7 +89,7 @@ class AtelierShop {
                 return !this.isLandscape(image);
             })
         )
-            updatedImages.forEach(this.addBorderToProduct);
+            updatedImages.forEach((image) => this.addBorderToProduct(image));
 
         images.forEach((c) => imageContainer.appendChild(c));
         return updatedImages;

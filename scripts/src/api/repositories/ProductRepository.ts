@@ -11,12 +11,19 @@ interface ApiProduct {
     image_url: string,
     detail_text: string,
     categories: ApiCategory[],
+    product_options: ApiProductOption[],
 }
 
 interface ApiCategory {
     name: string,
     slug: string,
     description: string,
+}
+
+interface ApiProductOption {
+    id: number,
+    name: string,
+    price: number,
 }
 
 interface ApiProducts {
@@ -27,7 +34,7 @@ interface ApiProducts {
 
 export class ProductRepository implements IProductRepository {
     async getProductById(id: number): Promise<Product> {
-        const resp = await Api.GET(`product/${id}/`);
+        const resp = await Api.GET(`products/${id}/`);
         const {product}: { product: ApiProduct } = await resp.json();
         return this.toCommon(product);
     }
@@ -60,7 +67,15 @@ export class ProductRepository implements IProductRepository {
                         categoryDescription:
                         c.description, categorySlug: c.slug
                     }
-                ))
+                )),
+            productOptions: product.product_options
+                .map(option => (
+                    {
+                        id: option.id,
+                        name: option.name,
+                        price: option.price
+                    }
+                )),
         };
     }
 

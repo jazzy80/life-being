@@ -1,4 +1,5 @@
 import {Category} from "./Category";
+import {ProductOption} from "./ProductOption";
 
 export interface Product {
   id: number;
@@ -8,4 +9,5 @@ export interface Product {
   imageUrl: string;
   detailText: string | undefined;
   categories: Category[],
+  productOptions: ProductOption[],
 }

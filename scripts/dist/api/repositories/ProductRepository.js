@@ -14,7 +14,7 @@ const Api_1 = require("../Api");
 class ProductRepository {
     getProductById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const resp = yield Api_1.Api.GET(`product/${id}/`);
+            const resp = yield Api_1.Api.GET(`products/${id}/`);
             const { product } = yield resp.json();
             return this.toCommon(product);
         });
@@ -42,7 +42,13 @@ class ProductRepository {
                 .map(c => ({
                 categoryName: c.name,
                 categoryDescription: c.description, categorySlug: c.slug
-            }))
+            })),
+            productOptions: product.product_options
+                .map(option => ({
+                id: option.id,
+                name: option.name,
+                price: option.price
+            })),
         };
     }
 }
