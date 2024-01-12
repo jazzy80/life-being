@@ -2,8 +2,7 @@
 
 namespace Domain\Exceptions;
 
-class ProductDoesNotExist {
+use WpOrg\Requests\Exception;
 
-	public function __construct() {
-	}
+class ProductDoesNotExist extends Exception {
 }

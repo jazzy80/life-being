@@ -19,22 +19,15 @@ class Product {
 		$this->repository = $repository;
 	}
 
-	/**
-	 * @param WP_REST_Request $req
-	 *
-	 * @return WP_Error|array A single product in an associative array.
-	 *     A single product in an associative array or an error if product is not found.
-	 */
-	public function get_single_product(WP_REST_Request $req): WP_Error | array {
-		$id = $req->get_param("id");
+	public function get_product_by_id(WP_REST_Request $req): array | WP_Error {
+		$id = intval($req->get_param("id"));
 		$products = $this->repository->get_products();
-		$product = Utils::find_if($products, fn(\Domain\Models\Product $product) => $product->get_id() == $id);
-
-		if ($product === null) {
-			return new WP_Error("", "Product with id: $id not found", ["status" => 404]);
+		$found_product = Utils::find_if($products, fn(\Domain\Models\Product $product) => $product->get_id() === $id);
+		if ($found_product === null) {
+			return new WP_Error("", "Could not find a product with id: $id");
 		}
 		return [
-			"product" => $product->to_json()
+			"product" => $found_product->to_json()
 		];
 	}
 
