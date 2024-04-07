@@ -109,11 +109,10 @@ class AtelierShop {
         imageFrame.classList.add("image-frame");
         const image = new Image();
         image.classList.add("product-image");
-        const name = document.createElement("a");
+        const name = document.createElement("span");
         name.classList.add("product-name");
         const description = document.createElement("p");
         description.classList.add("product-description");
-        name.href = `/product-details/?product=${product.id}`;
         name.append(document.createTextNode(product.name));
         description.innerHTML = product.description;
         const productTextContainer = document.createElement("div");

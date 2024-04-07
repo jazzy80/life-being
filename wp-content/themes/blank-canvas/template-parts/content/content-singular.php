@@ -1,6 +1,7 @@
 <?php
 
 use Controller\ArticleController;
+use Controller\AtelierController;
 use Controller\DefaultPageController;
 use Controller\GuestBookController;
 use Controller\HomeController;
@@ -23,6 +24,7 @@ $product_id = explode("=", $_SERVER['QUERY_STRING'])[1];
 $controller = match ($current_url) {
 	"/" => new HomeController,
 	"/being-blogs/", "/poetry/" => new ArticleController($builder),
+	"/life-being-atelier/" => new AtelierController($builder),
 	"/guestbook/" => new GuestBookController($builder, new GuestBookRepository($wpdb)),
 	default => new DefaultPageController($builder),
 };

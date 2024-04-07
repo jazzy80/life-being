@@ -2,24 +2,27 @@
 
 namespace Controller;
 
-use Views\AtelierShopView;
+use Views\AtelierView;
 use Views\Builders\PageBuilder;
 use Views\IView;
 use Views\JsFilesView;
 
-class AtelierShopController implements IController {
+class AtelierController implements IController
+{
 	private PageBuilder $builder;
 
 	/**
 	 * @param PageBuilder $builder
 	 */
-	public function __construct( PageBuilder $builder ) {
+	public function __construct(PageBuilder $builder)
+	{
 		$this->builder = $builder;
 	}
 
-	public function handle(): IView {
+	public function handle(): IView
+	{
 		return $this->builder
-			->add_page_component(new AtelierShopView())
+			->add_page_component(new AtelierView())
 			->add_page_component(new JsFilesView(["/scripts/dist/ateliershopmain.js"]))
 			->build();
 	}

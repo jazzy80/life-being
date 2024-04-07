@@ -15,10 +15,6 @@
   font-size: 15pt;
 }
 
-.ateliershop-text a {
-  color: var(--lower-navbar-link-color);
-}
-
 .product-text {
   display: flex;
   flex-direction: column;
@@ -76,7 +72,6 @@
   min-width: 25vw;
   text-align: center;
   border-bottom: 0;
-  color: #a072c1;
   margin: 0 !important;
 }
 
