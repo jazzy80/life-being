@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="being_you_db@localhost" uuid="797f101b-dc99-4d28-858b-227fae8febb1">
+      <driver-ref>mariadb</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mariadb://localhost:3306/being_you_db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+  </component>
+</project>

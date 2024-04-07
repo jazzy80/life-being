@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The template for displaying 404 pages (not found)
  *
@@ -11,19 +12,21 @@
 get_header();
 ?>
 
-	<section id="primary" class="content-area">
-		<main id="main" class="site-main default-max-width" role="main">
+<section id="primary" class="content-area">
+	<main id="main" class="site-main default-max-width" role="main">
 
-			<div class="error-404 not-found">
-				<header class="page-header">
-					<h1 class="page-title"><?php _e('De ingevoerde url bestaat helaas niet'); ?></h1>
-				</header><!-- .page-header -->
+		<div class="entry-content not-found">
+			<header class="page-header">
+				<h1 class="page-title"><?php _e('De ingevoerde url bestaat helaas niet'); ?></h1>
+				<a href="/"><?php _e('Naar "Be Home"') ?></a>
+			</header><!-- .page-header -->
 
-				</div><!-- .page-content -->
-			</div><!-- .error-404 -->
+		</div><!-- .page-content -->
+		</div><!-- .error-404 -->
 
-		</main><!-- #main -->
-	</section><!-- #primary -->
+	</main><!-- #main -->
+</section><!-- #primary -->
+<script src="/scripts/dist/app.js"></script>
 
 <?php
 get_footer();

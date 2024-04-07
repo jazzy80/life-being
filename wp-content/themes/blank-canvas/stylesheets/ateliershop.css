@@ -1,5 +1,5 @@
 .ateliershop-container {
-  background-color: #486648;
+  background-color: var(--secondary-background-color);
   border-radius: 2rem;
   display: flex;
   flex-direction: column;
@@ -75,6 +75,8 @@
   font-size: clamp(1.3rem, 5vw, 1.6rem);
   min-width: 25vw;
   text-align: center;
+  border-bottom: 0;
+  color: #a072c1;
   margin: 0 !important;
 }
 

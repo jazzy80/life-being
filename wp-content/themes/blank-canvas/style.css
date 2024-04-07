@@ -67,6 +67,7 @@ Modified and used as a block pattern image.
 @import "stylesheets/atelierhome.css";
 @import "stylesheets/ateliershop.css";
 @import "stylesheets/loader.css";
+@import "stylesheets/productdetails.css";
 
 /* Remove extra margin from articles on single post pages. */
 

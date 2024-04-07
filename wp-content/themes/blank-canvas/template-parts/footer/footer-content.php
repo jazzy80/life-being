@@ -1,4 +1,7 @@
 <?php
-$footer = new \views\FooterView;
-echo $footer -> display();
-?>
+
+/**
+ * Script responsible for generating the footer.
+ */
+$footer = new \Views\FooterView;
+echo $footer->display();
